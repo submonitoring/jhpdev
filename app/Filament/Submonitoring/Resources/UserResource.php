@@ -107,15 +107,21 @@ class UserResource extends Resource
                     Grid::make(4)
                         ->schema([
 
-                            ToggleButtons::make('panel')
+                            TextInput::make('email')
+                                ->email()
+                                ->required()
+                                ->label('Email'),
+                        ]),
+
+                    Grid::make(4)
+                        ->schema([
+
+                            ToggleButtons::make('panel_role_id')
                                 ->label('Panel')
                                 ->required()
                                 ->inline()
                                 // ->multiple()
                                 ->options(PanelRole::where('is_active', true)->pluck('panel_role', 'id')),
-
-                            Hidden::make('panel_role_id')
-                                ->default(1)
                         ]),
 
                 ])
@@ -235,7 +241,7 @@ class UserResource extends Resource
 
                 ColumnGroup::make('Panel', [
 
-                    TextColumn::make('panel')
+                    TextColumn::make('panel_role_id')
                         ->label('Panel')
                         ->searchable(isIndividual: true, isGlobal: false)
                         ->copyable()

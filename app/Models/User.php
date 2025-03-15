@@ -153,7 +153,6 @@ class User extends Authenticatable implements FilamentUser
             'canrestore_id' => 'array',
             'canrestoreany_id' => 'array',
             'canreorder_id' => 'array',
-            'panel_role_id' => 'array',
         ];
     }
 

@@ -5,9 +5,11 @@ export default defineConfig({
     plugins: [
         laravel({
             input: [
+                'resources/css/filament/jhp/theme.css',
+                'resources/css/filament/jhpadmin/theme.css',
+                'resources/css/filament/submonitoring/theme.css',
                 'resources/css/app.css',
                 'resources/js/app.js',
-                'vendor/tomatophp/filament-simple-theme/resources/css/theme.css'
             ],
             refresh: true,
         }),

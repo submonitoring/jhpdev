@@ -197,7 +197,7 @@ class SubmonitoringPanelProvider extends PanelProvider
                         force: false, // force the user to enable 2FA before they can use the application (default = false)
                         // action: CustomTwoFactorPage::class // optionally, use a custom 2FA page
                     ),
-                FilamentSimpleThemePlugin::make(),
+                // FilamentSimpleThemePlugin::make(),
                 QuickCreatePlugin::make(),
                 // StickyHeaderPlugin::make(),
                 // ->floating(),
