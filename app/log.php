@@ -2,6 +2,7 @@
 
 namespace App;
 
+use Illuminate\Database\Eloquent\Concerns\HasUlids;
 use Illuminate\Support\Facades\Auth;
 use Kenepa\ResourceLock\Models\Concerns\HasLocks;
 use Spatie\Activitylog\LogOptions;
@@ -11,6 +12,7 @@ trait log
 {
     use LogsActivity;
     use HasLocks;
+    use HasUlids;
 
     public function getActivitylogOptions(): LogOptions
     {
@@ -37,5 +39,18 @@ trait log
                 $model->updated_by = $user->username;
             });
         }
+    }
+
+    public function uniqueIds()
+    {
+        // Tell Laravel you want to use ULID for your secondary 'ulid' column instead
+        return [
+            'unique',
+        ];
+    }
+
+    public function getRouteKeyName()
+    {
+        return 'unique';
     }
 }
