@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "d24369a79706e353e569a18d13405bb6",
+    "content-hash": "8b8403d83b332f6f308dbe3ade2d97bd",
     "packages": [
         {
             "name": "anourvalar/eloquent-serialize",
@@ -8434,16 +8434,16 @@
         },
         {
             "name": "psy/psysh",
-            "version": "v0.12.7",
+            "version": "v0.12.8",
             "source": {
                 "type": "git",
                 "url": "https://github.com/bobthecow/psysh.git",
-                "reference": "d73fa3c74918ef4522bb8a3bf9cab39161c4b57c"
+                "reference": "85057ceedee50c49d4f6ecaff73ee96adb3b3625"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/bobthecow/psysh/zipball/d73fa3c74918ef4522bb8a3bf9cab39161c4b57c",
-                "reference": "d73fa3c74918ef4522bb8a3bf9cab39161c4b57c",
+                "url": "https://api.github.com/repos/bobthecow/psysh/zipball/85057ceedee50c49d4f6ecaff73ee96adb3b3625",
+                "reference": "85057ceedee50c49d4f6ecaff73ee96adb3b3625",
                 "shasum": ""
             },
             "require": {
@@ -8507,9 +8507,9 @@
             ],
             "support": {
                 "issues": "https://github.com/bobthecow/psysh/issues",
-                "source": "https://github.com/bobthecow/psysh/tree/v0.12.7"
+                "source": "https://github.com/bobthecow/psysh/tree/v0.12.8"
             },
-            "time": "2024-12-10T01:58:33+00:00"
+            "time": "2025-03-16T03:05:19+00:00"
         },
         {
             "name": "pxlrbt/filament-excel",
@@ -13659,16 +13659,16 @@
         },
         {
             "name": "tapp/filament-google-autocomplete-field",
-            "version": "v1.0.10",
+            "version": "v1.0.11",
             "source": {
                 "type": "git",
                 "url": "https://github.com/TappNetwork/filament-google-autocomplete-field.git",
-                "reference": "a8dbd2f1b98464609ff16cef0912797255aebfeb"
+                "reference": "eba876e65ecaa9c108633a6917ac6e3348fcb560"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/TappNetwork/filament-google-autocomplete-field/zipball/a8dbd2f1b98464609ff16cef0912797255aebfeb",
-                "reference": "a8dbd2f1b98464609ff16cef0912797255aebfeb",
+                "url": "https://api.github.com/repos/TappNetwork/filament-google-autocomplete-field/zipball/eba876e65ecaa9c108633a6917ac6e3348fcb560",
+                "reference": "eba876e65ecaa9c108633a6917ac6e3348fcb560",
                 "shasum": ""
             },
             "require": {
@@ -13730,7 +13730,7 @@
             ],
             "support": {
                 "issues": "https://github.com/TappNetwork/filament-google-autocomplete-field/issues",
-                "source": "https://github.com/TappNetwork/filament-google-autocomplete-field/tree/v1.0.10"
+                "source": "https://github.com/TappNetwork/filament-google-autocomplete-field/tree/v1.0.11"
             },
             "funding": [
                 {
@@ -13738,7 +13738,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2025-03-10T16:15:33+00:00"
+            "time": "2025-03-15T20:57:57+00:00"
         },
         {
             "name": "tijsverkoyen/css-to-inline-styles",
@@ -14276,68 +14276,6 @@
                 }
             ],
             "time": "2025-02-26T03:03:24+00:00"
-        },
-        {
-            "name": "tomatophp/filament-simple-theme",
-            "version": "v1.0.2",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/tomatophp/filament-simple-theme.git",
-                "reference": "1853b0936706be2c4279fd288e5a2315f145d5eb"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/tomatophp/filament-simple-theme/zipball/1853b0936706be2c4279fd288e5a2315f145d5eb",
-                "reference": "1853b0936706be2c4279fd288e5a2315f145d5eb",
-                "shasum": ""
-            },
-            "require": {
-                "filament/filament": "^3.0",
-                "php": "^8.1",
-                "tomatophp/console-helpers": "^1.1"
-            },
-            "type": "library",
-            "extra": {
-                "laravel": {
-                    "providers": [
-                        "TomatoPHP\\FilamentSimpleTheme\\FilamentSimpleThemeServiceProvider"
-                    ]
-                }
-            },
-            "autoload": {
-                "psr-4": {
-                    "TomatoPHP\\FilamentSimpleTheme\\": "src/"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Fady Mondy",
-                    "email": "info@3x1.io"
-                }
-            ],
-            "description": "A simple theme for FilamentPHP with custom user menu in sidebar",
-            "keywords": [
-                "filament",
-                "filament-theme",
-                "filament-theme-simple",
-                "laravel",
-                "php"
-            ],
-            "support": {
-                "issues": "https://github.com/tomatophp/filament-simple-theme/issues",
-                "source": "https://github.com/tomatophp/filament-simple-theme/tree/v1.0.2"
-            },
-            "funding": [
-                {
-                    "url": "https://github.com/3x1io",
-                    "type": "github"
-                }
-            ],
-            "time": "2024-12-01T18:30:33+00:00"
         },
         {
             "name": "ueberdosis/tiptap-php",
@@ -15282,16 +15220,16 @@
         },
         {
             "name": "filp/whoops",
-            "version": "2.17.0",
+            "version": "2.18.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/filp/whoops.git",
-                "reference": "075bc0c26631110584175de6523ab3f1652eb28e"
+                "reference": "a7de6c3c6c3c022f5cfc337f8ede6a14460cf77e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/filp/whoops/zipball/075bc0c26631110584175de6523ab3f1652eb28e",
-                "reference": "075bc0c26631110584175de6523ab3f1652eb28e",
+                "url": "https://api.github.com/repos/filp/whoops/zipball/a7de6c3c6c3c022f5cfc337f8ede6a14460cf77e",
+                "reference": "a7de6c3c6c3c022f5cfc337f8ede6a14460cf77e",
                 "shasum": ""
             },
             "require": {
@@ -15341,7 +15279,7 @@
             ],
             "support": {
                 "issues": "https://github.com/filp/whoops/issues",
-                "source": "https://github.com/filp/whoops/tree/2.17.0"
+                "source": "https://github.com/filp/whoops/tree/2.18.0"
             },
             "funding": [
                 {
@@ -15349,7 +15287,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2025-01-25T12:00:00+00:00"
+            "time": "2025-03-15T12:00:00+00:00"
         },
         {
             "name": "hamcrest/hamcrest-php",

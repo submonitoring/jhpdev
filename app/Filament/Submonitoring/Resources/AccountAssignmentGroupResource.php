@@ -57,6 +57,8 @@ class AccountAssignmentGroupResource extends Resource
 
     // protected static SubNavigationPosition $subNavigationPosition = SubNavigationPosition::Top;
 
+    protected static ?string $recordTitleAttribute = 'account_assignment_group_desc';
+
     public static function form(Form $form): Form
     {
         return $form

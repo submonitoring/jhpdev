@@ -3,6 +3,7 @@
 namespace App\Providers\Filament;
 
 use App\Filament\Auth\Login;
+use Awcodes\LightSwitch\LightSwitchPlugin;
 use Filament\Http\Middleware\Authenticate;
 use Filament\Http\Middleware\AuthenticateSession;
 use Filament\Http\Middleware\DisableBladeIconComponents;
@@ -135,7 +136,7 @@ class JhpPanelProvider extends PanelProvider
             // ->topNavigation()
             // ->breadcrumbs(false)
             ->maxContentWidth(MaxWidth::Full)
-            ->brandLogo(fn() => view('filament/brand-logo'))
+            ->brandLogo(fn() => view('filament/logo'))
             ->brandLogoHeight('auto')
             ->favicon(asset('favicon-32x32.png'))
             ->brandName('JHP System')
@@ -158,6 +159,7 @@ class JhpPanelProvider extends PanelProvider
                     ),
                 // FilamentSimpleThemePlugin::make()
                 DeliaPlugin::make(),
+                LightSwitchPlugin::make(),
             ])
             ->viteTheme('resources/css/filament/jhp/theme.css');
     }

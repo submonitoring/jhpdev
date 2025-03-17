@@ -290,6 +290,7 @@ class SubmonitoringPanelProvider extends PanelProvider
                 //     ->socialRegister(),
                 // FilamentUsersPlugin::make(),
                 // FilamentWalletPlugin::make(),
+                DeliaPlugin::make(),
             ])
             ->resources([
                 config('filament-logger.activity_resource')

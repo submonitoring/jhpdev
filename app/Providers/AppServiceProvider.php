@@ -18,6 +18,7 @@ use Filament\Tables\Actions\HeaderActionsPosition;
 use Filament\Tables\Enums\ActionsPosition;
 use Filament\Tables\Enums\FiltersLayout;
 use Filament\Tables\Table;
+use Illuminate\Support\Facades\Gate;
 use Spatie\Health\Facades\Health;
 use Spatie\Health\Checks\Checks\OptimizedAppCheck;
 use Spatie\Health\Checks\Checks\DebugModeCheck;
@@ -82,5 +83,9 @@ class AppServiceProvider extends ServiceProvider
 
         // config(['app.locale' => 'id']);
         // Carbon::setLocale('id');
+
+        // Gate::guessPolicyNamesUsing(function (string $modelClass) {
+        //     return str_replace('Models', 'Policies', $modelClass) . 'Policy';
+        // });
     }
 }

@@ -81,8 +81,8 @@ return [
         'navigation_group' => 'Settings',
         'navigation_sort' => 1,
         'limited_access' => false,
-        'should_register_navigation' => true,
-        //        'gate' => ''
+        'should_register_navigation' => false,
+        'gate' => 'resource-lock'
     ],
 
     /*
