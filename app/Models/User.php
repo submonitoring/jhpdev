@@ -244,15 +244,15 @@ class User extends Authenticatable implements FilamentUser
 
         static::creating(function ($model) {
             $user = auth()->user();
-            $model->created_by = $user->username;
-            $model->updated_by = $user->username;
-            $model->record_title = $model->username;
+            $model->created_by = $user?->username;
+            $model->updated_by = $user?->username;
+            $model->record_title = $model?->username;
         });
 
         static::updating(function ($model) {
             $user = auth()->user();
-            $model->updated_by = $user->username;
-            $model->record_title = $model->username;
+            $model->updated_by = $user?->username;
+            $model->record_title = $model?->username;
         });
 
         // static::created(function ($model) {
