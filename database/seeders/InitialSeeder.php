@@ -27,7 +27,7 @@ class InitialSeeder extends Seeder
             'unique' => Str::ulid(),
             'record_title' => 'Submonitoring',
             'name' => 'submonitoring',
-            'user_name' => 'submonitoring',
+            'username' => 'submonitoring',
             'panel_role_id' => 1,
             'email' => 'submonitoring@outlook.com',
             'password' => Hash::make('s3ng0n46'),
