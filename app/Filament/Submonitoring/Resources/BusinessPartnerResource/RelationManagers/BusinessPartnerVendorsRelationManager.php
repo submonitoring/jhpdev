@@ -21,7 +21,12 @@ class BusinessPartnerVendorsRelationManager extends RelationManager
 {
     protected static string $relationship = 'businessPartnerVendors';
 
-    use CanBeEmbeddedInModals;
+    public function hasCombinedRelationManagerTabsWithContent(): bool
+    {
+        return true;
+    }
+
+    // use CanBeEmbeddedInModals;
 
     public static function getNavigationLabel(): string
     {

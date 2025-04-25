@@ -4,6 +4,7 @@ namespace App\Models;
 
 use App\log;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Auth;
 
 class DocumentType extends Model
 {
@@ -40,6 +41,24 @@ class DocumentType extends Model
     public function itemCategories()
     {
         return $this->belongsToMany(ItemCategory::class);
+    }
+
+    public static function boot()
+    {
+        parent::boot();
+
+        static::creating(function ($model) {
+            $user = Auth::user();
+            $model->created_by = $user->username;
+            $model->updated_by = $user->username;
+            $model->record_title = $model->document_type_desc;
+        });
+
+        static::updating(function ($model) {
+            $user = Auth::user();
+            $model->updated_by = $user->username;
+            $model->record_title = $model->document_type_desc;
+        });
     }
 
     use log;

@@ -20,7 +20,7 @@ class StatusStatusGroupImporter extends Importer
             ImportColumn::make('status_id')
                 ->numeric()
                 ->rules(['integer']),
-            ImportColumn::make('is_active')
+            ImportColumn::make('isactive')
                 ->boolean()
                 ->rules(['boolean']),
             ImportColumn::make('created_by')

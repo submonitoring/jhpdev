@@ -9,6 +9,7 @@ use App\Filament\Submonitoring\Resources\BusinessPartnerResource as ResourcesBus
 use App\Models\BusinessPartner;
 use Filament\Forms;
 use Filament\Forms\Form;
+use Filament\Pages\SubNavigationPosition;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
@@ -38,7 +39,7 @@ class BusinessPartnerResource extends Resource
 
     // protected static ?string $navigationGroup = 'System';
 
-    // protected static SubNavigationPosition $subNavigationPosition = SubNavigationPosition::Top;
+    protected static SubNavigationPosition $subNavigationPosition = SubNavigationPosition::Top;
 
     // protected static bool $shouldRegisterNavigation = false;
 

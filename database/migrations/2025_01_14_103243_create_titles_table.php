@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::create('titles', function (Blueprint $table) {
             $table->id();
             $table->ulid('unique')->nullable();
+            $table->string('record_title')->nullable();
             $table->string('title')->nullable();
             $table->string('title_desc')->nullable();
             $table->boolean('is_active')->nullable();

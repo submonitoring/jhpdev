@@ -12,4 +12,9 @@ class EditStatusStatusGroup extends EditRecord
     protected static string $resource = StatusStatusGroupResource::class;
 
     use editpage;
+
+    public static function shouldRegisterSpotlight(): bool
+    {
+        return false;
+    }
 }

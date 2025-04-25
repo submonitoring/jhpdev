@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::create('transaction_types', function (Blueprint $table) {
             $table->id();
             $table->ulid('unique')->nullable();
+            $table->string('record_title')->nullable();
             $table->string('transaction_type')->nullable();
             $table->string('transaction_type_dsec')->nullable();
             $table->boolean('is_active')->nullable();

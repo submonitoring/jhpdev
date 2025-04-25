@@ -18,6 +18,9 @@ class GlAccountImporter extends Importer
                 ->rules(['max:255']),
             ImportColumn::make('gl_account_name')
                 ->rules(['max:255']),
+            ImportColumn::make('gl_account_group_id')
+                ->numeric()
+                ->rules(['integer']),
             ImportColumn::make('is_active')
                 ->boolean()
                 ->rules(['boolean']),

@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::create('sales_area_sales_office', function (Blueprint $table) {
             $table->id();
             $table->ulid('unique')->nullable();
+            $table->string('record_title')->nullable();
             $table->foreignId('sales_area_id')->nullable()
                 ->constrained()
                 ->cascadeOnUpdate()

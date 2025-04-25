@@ -4,6 +4,7 @@ namespace App\Models;
 
 use App\log;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Auth;
 
 class BpCategoryTitle extends Model
 {
@@ -28,4 +29,24 @@ class BpCategoryTitle extends Model
     {
         return $this->belongsTo(Title::class);
     }
+
+    public static function boot()
+    {
+        parent::boot();
+
+        static::creating(function ($model) {
+            $user = Auth::user();
+            $model->created_by = $user->username;
+            $model->updated_by = $user->username;
+            $model->record_title = $model->bpCategory->bp_category_desc . ' ' . $model->title->title_desc;
+        });
+
+        static::updating(function ($model) {
+            $user = Auth::user();
+            $model->updated_by = $user->username;
+            $model->record_title = $model->bpCategory->bp_category_desc . ' ' . $model->title->title_desc;
+        });
+    }
+
+    use log;
 }

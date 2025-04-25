@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::create('business_partner_customers', function (Blueprint $table) {
             $table->id();
             $table->ulid('unique')->nullable();
+            $table->string('record_title')->nullable();
             $table->string('sort')->nullable();
             $table->foreignId('business_partner_id')->nullable()
                 ->constrained()

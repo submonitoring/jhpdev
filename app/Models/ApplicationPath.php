@@ -4,6 +4,7 @@ namespace App\Models;
 
 use App\log;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Auth;
 
 class ApplicationPath extends Model
 {
@@ -85,6 +86,24 @@ class ApplicationPath extends Model
     public function users10()
     {
         return $this->hasMany(User::class, 'canreorder_id');
+    }
+
+    public static function boot()
+    {
+        parent::boot();
+
+        static::creating(function ($model) {
+            $user = Auth::user();
+            $model->created_by = $user->username;
+            $model->updated_by = $user->username;
+            $model->record_title = $model->module_caa_id;
+        });
+
+        static::updating(function ($model) {
+            $user = Auth::user();
+            $model->updated_by = $user->username;
+            $model->record_title = $model->module_caa_id;
+        });
     }
 
     use log;

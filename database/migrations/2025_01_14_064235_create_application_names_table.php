@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::create('application_names', function (Blueprint $table) {
             $table->id();
             $table->ulid('unique')->nullable();
+            $table->string('record_title')->nullable();
             $table->string('application_name')->nullable();
             $table->string('application_name_name')->nullable();
             $table->boolean('is_active')->nullable();

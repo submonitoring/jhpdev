@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::create('purchasing_groups', function (Blueprint $table) {
             $table->id();
             $table->ulid('unique')->nullable();
+            $table->string('record_title')->nullable();
             $table->string('purchasing_group')->nullable();
             $table->string('purchasing_group_name')->nullable();
             $table->boolean('is_active')->nullable();

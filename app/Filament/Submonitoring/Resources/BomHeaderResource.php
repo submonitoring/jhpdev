@@ -16,6 +16,7 @@ use Awcodes\TableRepeater\Header;
 use Filament\Forms;
 use Filament\Forms\Components\Grid;
 use Filament\Forms\Components\Repeater;
+use Filament\Forms\Components\RichEditor;
 use Filament\Forms\Components\Section;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Textarea;
@@ -64,6 +65,8 @@ class BomHeaderResource extends Resource
 
     // protected static SubNavigationPosition $subNavigationPosition = SubNavigationPosition::Top;
 
+    protected static ?string $recordTitleAttribute = 'record_title';
+
     public static function form(Form $form): Form
     {
         return $form
@@ -86,7 +89,7 @@ class BomHeaderResource extends Resource
                             //     ->required()
                             //     ->unique(BoMHeader::class, ignoreRecord: true),
 
-                            RichMentionEditor::make('bom_header_text')
+                            RichEditor::make('bom_header_text')
                                 ->columnSpanFull(),
 
                         ]),

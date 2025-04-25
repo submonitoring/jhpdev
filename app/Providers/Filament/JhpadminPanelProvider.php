@@ -69,7 +69,7 @@ class JhpadminPanelProvider extends PanelProvider
                 'danger' => Color::Rose,
                 'gray' => Color::Gray,
                 'info' => Color::Blue,
-                'primary' => Color::Red,
+                'primary' => '#ED0800',
                 'success' => Color::Emerald,
                 'warning' => Color::Orange,
             ])
@@ -251,7 +251,7 @@ class JhpadminPanelProvider extends PanelProvider
                 //     ->socialRegister(),
                 // FilamentUsersPlugin::make(),
                 // FilamentWalletPlugin::make(),
-                DeliaPlugin::make(),
+                // DeliaPlugin::make(),
             ])
             ->viteTheme('resources/css/filament/jhpadmin/theme.css');
     }

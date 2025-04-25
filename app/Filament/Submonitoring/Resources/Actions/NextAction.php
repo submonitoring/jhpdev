@@ -20,6 +20,6 @@ class NextAction extends Action
         $this->hiddenLabel()
             ->icon('heroicon-o-arrow-right')
             ->outlined()
-            ->tooltip("Next {$this->getRecordTitle()}");
+            ->tooltip("Next of {$this->getRecordTitle()}");
     }
 }

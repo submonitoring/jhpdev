@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::create('fiscal_years', function (Blueprint $table) {
             $table->id();
             $table->ulid('unique')->nullable();
+            $table->string('record_title')->nullable();
             $table->string('fiscal_year')->nullable();
             $table->string('fiscal_year_name')->nullable();
             $table->boolean('is_active')->nullable();

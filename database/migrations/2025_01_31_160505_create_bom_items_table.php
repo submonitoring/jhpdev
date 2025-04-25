@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::create('bom_items', function (Blueprint $table) {
             $table->id();
             $table->ulid('unique')->nullable();
+            $table->string('record_title')->nullable();
             $table->string('sort')->nullable();
             $table->foreignId('bom_header_id')->nullable()
                 ->constrained()

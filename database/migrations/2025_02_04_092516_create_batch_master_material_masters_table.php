@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::create('batch_master_material_master', function (Blueprint $table) {
             $table->id();
             $table->ulid('unique')->nullable();
+            $table->string('record_title')->nullable();
             $table->foreignId('material_master_id')->nullable()
                 ->constrained()
                 ->cascadeOnUpdate()

@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::create('module_caas', function (Blueprint $table) {
             $table->id();
             $table->ulid('unique')->nullable();
+            $table->string('record_title')->nullable();
             $table->string('module_caa')->nullable();
             $table->string('module_caa_name')->nullable();
             $table->foreignId('module_baa_id')->nullable()

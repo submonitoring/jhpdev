@@ -4,12 +4,31 @@ namespace App\Models;
 
 use App\log;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Auth;
 
 class ModuleActivity extends Model
 {
     public function applicationPaths()
     {
         return $this->hasMany(ApplicationPath::class);
+    }
+
+    public static function boot()
+    {
+        parent::boot();
+
+        static::creating(function ($model) {
+            $user = Auth::user();
+            $model->created_by = $user->username;
+            $model->updated_by = $user->username;
+            $model->record_title = $model->module_activity_name;
+        });
+
+        static::updating(function ($model) {
+            $user = Auth::user();
+            $model->updated_by = $user->username;
+            $model->record_title = $model->module_activity_name;
+        });
     }
 
     use log;

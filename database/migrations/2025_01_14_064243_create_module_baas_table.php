@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::create('module_baas', function (Blueprint $table) {
             $table->id();
             $table->ulid('unique')->nullable();
+            $table->string('record_title')->nullable();
             $table->string('module_baa')->nullable();
             $table->string('module_baa_name')->nullable();
             $table->foreignId('module_aaa_id')->nullable()

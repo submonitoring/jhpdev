@@ -64,6 +64,8 @@ class BpCategoryTitleResource extends Resource
 
     // protected static SubNavigationPosition $subNavigationPosition = SubNavigationPosition::Top;
 
+    protected static ?string $recordTitleAttribute = 'record_title';
+
     public static function form(Form $form): Form
     {
         return $form
@@ -160,9 +162,9 @@ class BpCategoryTitleResource extends Resource
             ->headerActions([
                 // Tables\Actions\CreateAction::make(),
 
-                // ImportAction::make()
-                //     ->label('Import')
-                //     ->importer(BpCategoryTitleImporter::class)
+                ImportAction::make()
+                    ->label('Import')
+                    ->importer(BpCategoryTitleImporter::class)
             ])
             ->actions([
                 // ActionGroup::make([

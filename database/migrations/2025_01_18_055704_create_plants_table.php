@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::create('plants', function (Blueprint $table) {
             $table->id();
             $table->ulid('unique')->nullable();
+            $table->string('record_title')->nullable();
             $table->string('plant')->nullable();
             $table->string('plant_name')->nullable();
             $table->foreignId('company_code_id')->nullable()

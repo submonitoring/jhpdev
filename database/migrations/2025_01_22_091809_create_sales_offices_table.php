@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::create('sales_offices', function (Blueprint $table) {
             $table->id();
             $table->ulid('unique')->nullable();
+            $table->string('record_title')->nullable();
             $table->string('sales_office')->nullable();
             $table->string('sales_office_name')->nullable();
             $table->boolean('is_active')->nullable();

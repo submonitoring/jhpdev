@@ -57,6 +57,8 @@ class TaxClassificationResource extends Resource
 
     // protected static SubNavigationPosition $subNavigationPosition = SubNavigationPosition::Top;
 
+    protected static ?string $recordTitleAttribute = 'record_title';
+
     public static function form(Form $form): Form
     {
         return $form

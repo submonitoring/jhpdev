@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::create('storage_conditions', function (Blueprint $table) {
             $table->id();
             $table->ulid('unique')->nullable();
+            $table->string('record_title')->nullable();
             $table->string('storage_condition')->nullable();
             $table->string('storage_condition_desc')->nullable();
             $table->boolean('is_active')->nullable();

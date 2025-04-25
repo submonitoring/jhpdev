@@ -5,6 +5,8 @@ namespace App\Filament\Submonitoring\Resources;
 use App\Filament\Imports\MaterialMasterImporter;
 use App\Filament\Submonitoring\Clusters\MaterialMaster as ClustersMaterialMaster;
 use App\Filament\Submonitoring\Resources\MaterialMasterResource\Pages;
+use App\Filament\Submonitoring\Resources\MaterialMasterResource\Pages\EditMaterialMaster;
+use App\Filament\Submonitoring\Resources\MaterialMasterResource\Pages\ViewMaterialMaster;
 use App\Filament\Submonitoring\Resources\MaterialMasterResource\RelationManagers;
 use App\Filament\Submonitoring\Resources\MaterialMasterResource\RelationManagers\AllMaterialMasterSalesRelationManager;
 use App\Filament\Submonitoring\Resources\MaterialMasterResource\RelationManagers\BomHeadersRelationManager;
@@ -32,7 +34,11 @@ use Filament\Forms\Components\ToggleButtons;
 use Filament\Forms\Form;
 use Filament\Forms\Get;
 use Filament\Forms\Set;
+use Filament\Infolists\Components\Section as ComponentsSection;
+use Filament\Infolists\Components\TextEntry;
+use Filament\Infolists\Infolist;
 use Filament\Pages\SubNavigationPosition;
+use Filament\Resources\Pages\Page;
 use Filament\Resources\Resource;
 use Filament\Support\Enums\ActionSize;
 use Filament\Tables;
@@ -83,7 +89,9 @@ class MaterialMasterResource extends Resource
 
     // protected static ?string $navigationGroup = 'System';
 
-    // protected static SubNavigationPosition $subNavigationPosition = SubNavigationPosition::Top;
+    protected static SubNavigationPosition $subNavigationPosition = SubNavigationPosition::Top;
+
+    protected static ?string $recordTitleAttribute = 'record_title';
 
     public static function form(Form $form): Form
     {
@@ -97,6 +105,7 @@ class MaterialMasterResource extends Resource
         return [
 
             Section::make('Material Master')
+                ->icon('heroicon-o-cube')
                 ->schema([
 
                     Grid::make(4)
@@ -106,6 +115,7 @@ class MaterialMasterResource extends Resource
                                 ->label('Material Type')
                                 ->required()
                                 ->live()
+                                ->native(false)
                                 ->options(MaterialType::whereIsActive(1)->pluck('material_type_desc', 'id'))
                                 ->disabledOn('edit')
                                 ->afterStateUpdated(function (Set $set, $state) {
@@ -128,11 +138,12 @@ class MaterialMasterResource extends Resource
                             Select::make('industry_sector_id')
                                 ->label('Industry Sector')
                                 ->default(1)
+                                ->native(false)
                                 ->options(IndustrySector::whereIsActive(1)->pluck('industry_sector_desc', 'id')),
 
                         ]),
 
-                ]),
+                ])->compact(),
 
             Section::make('Material Number')
                 ->hidden(fn(Get $get) => $get('material_type_id') === null)
@@ -157,7 +168,7 @@ class MaterialMasterResource extends Resource
                         ->label('Material Description')
                         ->required(),
 
-                ]),
+                ])->compact(),
 
             Section::make('General Data')
                 ->hidden(fn(Get $get) => $get('material_type_id') === null)
@@ -169,19 +180,27 @@ class MaterialMasterResource extends Resource
                             Select::make('material_group_id')
                                 ->label('Material Group')
                                 ->required()
+                                ->native(false)
                                 ->options(MaterialGroup::whereIsActive(1)->pluck('material_group_desc', 'id')),
 
                         ]),
+                ])->compact(),
+
+            Section::make('Sales Data')
+                ->hidden(fn(Get $get) => $get('material_type_id') === null)
+                ->schema([
+
 
                     Grid::make(4)
                         ->schema([
 
                             Select::make('division_id')
                                 ->label('Division')
+                                ->native(false)
                                 ->options(Division::whereIsActive(1)->pluck('division_name', 'id')),
 
                         ]),
-                ]),
+                ])->compact(),
 
             Section::make('Batch Status')
                 ->hidden(fn(Get $get) => $get('material_type_id') === null)
@@ -197,7 +216,7 @@ class MaterialMasterResource extends Resource
 
                         ]),
 
-                ]),
+                ])->compact(),
 
             Section::make('BoM Status')
                 ->hidden(fn(Get $get) => $get('material_type_id') === null)
@@ -223,7 +242,7 @@ class MaterialMasterResource extends Resource
 
                         ]),
 
-                ]),
+                ])->compact(),
 
             Section::make('Price')
                 ->hidden(fn(Get $get) => $get('material_type_id') === null)
@@ -239,7 +258,7 @@ class MaterialMasterResource extends Resource
                         ]),
 
 
-                ]),
+                ])->compact(),
 
             Section::make('Dimensions')
                 ->hidden(fn(Get $get) => $get('material_type_id') === null)
@@ -251,6 +270,7 @@ class MaterialMasterResource extends Resource
                             Select::make('base_uom_id')
                                 ->label('Base UoM')
                                 ->required()
+                                ->native(false)
                                 ->options(Uom::whereIsActive(1)->pluck('uom', 'id')),
 
                         ]),
@@ -260,6 +280,7 @@ class MaterialMasterResource extends Resource
 
                             Select::make('weight_unit_id')
                                 ->label('Weight Unit')
+                                ->native(false)
                                 ->options(Uom::whereIsActive(1)->pluck('uom', 'id')),
 
                         ]),
@@ -278,7 +299,7 @@ class MaterialMasterResource extends Resource
                         ]),
 
 
-                ]),
+                ])->compact(),
 
             Section::make('Status')
                 ->hidden(fn(Get $get) => $get('material_type_id') === null)
@@ -540,7 +561,8 @@ class MaterialMasterResource extends Resource
                     ]),
             ])
             ->headerActions([
-                Tables\Actions\CreateAction::make(),
+                Tables\Actions\CreateAction::make()
+                    ->icon('heroicon-o-plus'),
 
                 ImportAction::make()
                     ->label('Import')
@@ -585,38 +607,38 @@ class MaterialMasterResource extends Resource
                                 $updatecurrentnumber->save();
                             }
                         })
-                        ->successRedirectUrl(fn(Model $replica): string => route('filament.submonitoring.material-master-data.resources.MaterialMasters.edit', $replica)),
+                        ->successRedirectUrl(fn(Model $replica): string => route('filament.submonitoring.material-master.resources.material-masters.edit', $replica)),
 
 
                 ]),
 
-                RelationManagerAction::make('matplant')
-                    ->label('Plant')
-                    ->icon('heroicon-m-arrow-right-end-on-rectangle')
-                    ->button()
-                    ->outlined()
-                    ->modalWidth('full')
-                    ->modalSubmitActionLabel('Save')
-                    ->relationManager(MaterialMasterPlantsRelationManager::make()),
+                // RelationManagerAction::make('matplant')
+                //     ->label('Plant')
+                //     ->icon('heroicon-m-arrow-right-end-on-rectangle')
+                //     ->button()
+                //     ->outlined()
+                //     ->modalWidth('full')
+                //     ->modalSubmitActionLabel('Save')
+                //     ->relationManager(MaterialMasterPlantsRelationManager::make()),
 
-                RelationManagerAction::make('matsales')
-                    ->label('Sales')
-                    ->icon('heroicon-m-arrow-right-end-on-rectangle')
-                    ->button()
-                    ->outlined()
-                    ->modalWidth('full')
-                    ->modalSubmitActionLabel('Save')
-                    ->relationManager(AllMaterialMasterSalesRelationManager::make()),
+                // RelationManagerAction::make('matsales')
+                //     ->label('Sales')
+                //     ->icon('heroicon-m-arrow-right-end-on-rectangle')
+                //     ->button()
+                //     ->outlined()
+                //     ->modalWidth('full')
+                //     ->modalSubmitActionLabel('Save')
+                //     ->relationManager(AllMaterialMasterSalesRelationManager::make()),
 
-                RelationManagerAction::make('bomheader')
-                    ->label('BoM')
-                    ->icon('heroicon-m-queue-list')
-                    ->button()
-                    ->outlined()
-                    ->modalWidth('full')
-                    ->modalSubmitActionLabel('Save')
-                    ->hidden(fn($record) => $record->is_bom_header == null)
-                    ->relationManager(BomHeadersRelationManager::make()),
+                // RelationManagerAction::make('bomheader')
+                //     ->label('BoM')
+                //     ->icon('heroicon-m-queue-list')
+                //     ->button()
+                //     ->outlined()
+                //     ->modalWidth('full')
+                //     ->modalSubmitActionLabel('Save')
+                //     ->hidden(fn($record) => $record->is_bom_header == null)
+                //     ->relationManager(BomHeadersRelationManager::make()),
 
             ])
             ->bulkActions([
@@ -645,5 +667,27 @@ class MaterialMasterResource extends Resource
             'view' => Pages\ViewMaterialMaster::route('/{record}'),
             'edit' => Pages\EditMaterialMaster::route('/{record}/edit'),
         ];
+    }
+
+    public static function infolist(Infolist $infolist): Infolist
+    {
+        return $infolist
+            ->schema([
+                ComponentsSection::make(__('General'))
+                    ->icon('heroicon-o-document-text')
+                    ->schema([
+                        TextEntry::make('material_number'),
+                        TextEntry::make('material_desc')
+                            ->columnSpanFull(),
+                    ])
+            ]);
+    }
+
+    public static function getRecordSubNavigation(Page $page): array
+    {
+        return $page->generateNavigationItems([
+            ViewMaterialMaster::class,
+            EditMaterialMaster::class,
+        ]);
     }
 }

@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::create('status_groups', function (Blueprint $table) {
             $table->id();
             $table->ulid('unique')->nullable();
+            $table->string('record_title')->nullable();
             $table->string('status_group')->nullable();
             $table->string('status_group_name')->nullable();
             $table->boolean('is_active')->nullable();

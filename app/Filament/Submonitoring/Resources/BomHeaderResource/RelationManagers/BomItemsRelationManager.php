@@ -31,7 +31,7 @@ class BomItemsRelationManager extends RelationManager
 {
     protected static string $relationship = 'bomItems';
 
-    use CanBeEmbeddedInModals;
+    // use CanBeEmbeddedInModals;
 
     public static function getNavigationLabel(): string
     {

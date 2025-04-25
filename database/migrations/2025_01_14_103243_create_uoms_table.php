@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::create('uoms', function (Blueprint $table) {
             $table->id();
             $table->ulid('unique')->nullable();
+            $table->string('record_title')->nullable();
             $table->string('uom')->nullable();
             $table->string('uom_name')->nullable();
             $table->string('iso_uom')->nullable();

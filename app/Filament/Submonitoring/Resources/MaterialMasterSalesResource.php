@@ -82,7 +82,9 @@ class MaterialMasterSalesResource extends Resource
 
     // protected static ?string $navigationGroup = 'System';
 
-    // protected static SubNavigationPosition $subNavigationPosition = SubNavigationPosition::Top;
+    protected static SubNavigationPosition $subNavigationPosition = SubNavigationPosition::Top;
+
+    protected static ?string $recordTitleAttribute = 'record_title';
 
     public static function form(Form $form): Form
     {

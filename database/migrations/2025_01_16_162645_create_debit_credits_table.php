@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::create('debit_credits', function (Blueprint $table) {
             $table->id();
             $table->ulid('unique')->nullable();
+            $table->string('record_title')->nullable();
             $table->string('debit_credit')->nullable();
             $table->string('debit_credit_desc')->nullable();
             $table->boolean('is_active')->nullable();

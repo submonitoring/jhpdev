@@ -22,7 +22,7 @@ class MaterialMastersRelationManager extends RelationManager
 {
     protected static string $relationship = 'materialMasters';
 
-    use CanBeEmbeddedInModals;
+    // use CanBeEmbeddedInModals;
 
     public static function getNavigationLabel(): string
     {

@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::create('plant_storage_location', function (Blueprint $table) {
             $table->id();
             $table->ulid('unique')->nullable();
+            $table->string('record_title')->nullable();
             $table->foreignId('plant_id')->nullable()
                 ->constrained()
                 ->cascadeOnUpdate()

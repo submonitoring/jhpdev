@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::create('status_status_group', function (Blueprint $table) {
             $table->id();
             $table->ulid('unique')->nullable();
+            $table->string('record_title')->nullable();
             $table->foreignId('status_group_id')->nullable()
                 ->constrained()
                 ->cascadeOnUpdate()

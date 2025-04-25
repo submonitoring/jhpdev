@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::create('batch_sources', function (Blueprint $table) {
             $table->id();
             $table->ulid('unique')->nullable();
+            $table->string('record_title')->nullable();
             $table->foreignId('number_range_id')->nullable()
                 ->constrained()
                 ->cascadeOnUpdate()

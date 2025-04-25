@@ -67,7 +67,7 @@ class JhpPanelProvider extends PanelProvider
                 'danger' => Color::Rose,
                 'gray' => Color::Gray,
                 'info' => Color::Blue,
-                'primary' => Color::Red,
+                'primary' => '#ED0800',
                 'success' => Color::Emerald,
                 'warning' => Color::Orange,
             ])
@@ -158,7 +158,7 @@ class JhpPanelProvider extends PanelProvider
                         // action: CustomTwoFactorPage::class // optionally, use a custom 2FA page
                     ),
                 // FilamentSimpleThemePlugin::make()
-                DeliaPlugin::make(),
+                // DeliaPlugin::make(),
                 LightSwitchPlugin::make(),
             ])
             ->viteTheme('resources/css/filament/jhp/theme.css');

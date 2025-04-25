@@ -4,6 +4,7 @@ namespace App\Models;
 
 use App\log;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Auth;
 
 class MaterialMaster extends Model
 {
@@ -65,6 +66,24 @@ class MaterialMaster extends Model
     public function batchMasters()
     {
         return $this->belongsToMany(BatchMaster::class);
+    }
+
+    public static function boot()
+    {
+        parent::boot();
+
+        static::creating(function ($model) {
+            $user = Auth::user();
+            $model->created_by = $user->username;
+            $model->updated_by = $user->username;
+            $model->record_title = $model->material_number;
+        });
+
+        static::updating(function ($model) {
+            $user = Auth::user();
+            $model->updated_by = $user->username;
+            $model->record_title = $model->material_number;
+        });
     }
 
     use log;

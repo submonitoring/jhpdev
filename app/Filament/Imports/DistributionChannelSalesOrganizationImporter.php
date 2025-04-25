@@ -15,11 +15,9 @@ class DistributionChannelSalesOrganizationImporter extends Importer
     {
         return [
             ImportColumn::make('distribution_channel_id')
-                ->numeric()
-                ->rules(['integer']),
+                ->rules(['max:255']),
             ImportColumn::make('sales_organization_id')
-                ->numeric()
-                ->rules(['integer']),
+                ->rules(['max:255']),
             ImportColumn::make('isactive')
                 ->boolean()
                 ->rules(['boolean']),

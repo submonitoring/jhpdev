@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::create('document_types', function (Blueprint $table) {
             $table->id();
             $table->ulid('unique')->nullable();
+            $table->string('record_title')->nullable();
             $table->string('document_type')->nullable();
             $table->string('document_type_desc')->nullable();
             $table->foreignId('document_type_id')->nullable()

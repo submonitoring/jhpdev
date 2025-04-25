@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::create('posting_keys', function (Blueprint $table) {
             $table->id();
             $table->ulid('unique')->nullable();
+            $table->string('record_title')->nullable();
             $table->string('posting_key')->nullable();
             $table->string('posting_key_name')->nullable();
             $table->boolean('is_active')->nullable();

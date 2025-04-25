@@ -26,7 +26,7 @@ class BomHeadersRelationManager extends RelationManager
 {
     protected static string $relationship = 'bomHeaders';
 
-    use CanBeEmbeddedInModals;
+    // use CanBeEmbeddedInModals;
 
     public static function getNavigationLabel(): string
     {

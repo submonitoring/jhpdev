@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::create('purchasing_organizations', function (Blueprint $table) {
             $table->id();
             $table->ulid('unique')->nullable();
+            $table->string('record_title')->nullable();
             $table->string('purchasing_organization')->nullable();
             $table->string('purchasing_organization_name')->nullable();
             $table->foreignId('company_code_id')->nullable()

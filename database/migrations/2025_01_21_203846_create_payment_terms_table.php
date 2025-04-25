@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::create('payment_terms', function (Blueprint $table) {
             $table->id();
             $table->ulid('unique')->nullable();
+            $table->string('record_title')->nullable();
             $table->string('payment_term')->nullable();
             $table->string('payment_term_name')->nullable();
             $table->boolean('is_active')->nullable();

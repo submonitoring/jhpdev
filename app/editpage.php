@@ -2,11 +2,13 @@
 
 namespace App;
 
+use App\Filament\Resources\Pages\Concerns\CanPaginateViewRecord;
 use App\Filament\Submonitoring\Resources\Actions\NextAction;
 use App\Filament\Submonitoring\Resources\Actions\PreviousAction;
 use Filament\Actions\Action;
 use Filament\Actions\DeleteAction;
 use Filament\Actions\ViewAction;
+use Howdu\FilamentRecordSwitcher\Filament\Concerns\HasRecordSwitcher;
 use Kenepa\ResourceLock\Resources\Pages\Concerns\UsesResourceLock;
 
 trait editpage
@@ -29,4 +31,6 @@ trait editpage
     }
 
     use UsesResourceLock;
+    use HasRecordSwitcher;
+    use CanPaginateViewRecord;
 }

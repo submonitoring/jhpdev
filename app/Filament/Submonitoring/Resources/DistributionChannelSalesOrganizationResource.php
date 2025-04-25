@@ -3,6 +3,7 @@
 namespace App\Filament\Submonitoring\Resources;
 
 use App\Filament\Exports\DistributionChannelSalesOrganizationExporter;
+use App\Filament\Imports\DistributionChannelSalesOrganizationImporter;
 use App\Filament\Submonitoring\Clusters\SdOrgStruct;
 use App\Filament\Submonitoring\Resources\DistributionChannelSalesOrganizationResource\Pages;
 use App\Filament\Submonitoring\Resources\DistributionChannelSalesOrganizationResource\RelationManagers;
@@ -63,6 +64,8 @@ class DistributionChannelSalesOrganizationResource extends Resource
     // protected static ?string $navigationGroup = 'System';
 
     // protected static SubNavigationPosition $subNavigationPosition = SubNavigationPosition::Top;
+
+    protected static ?string $recordTitleAttribute = 'record_title';
 
     public static function form(Form $form): Form
     {
@@ -160,9 +163,9 @@ class DistributionChannelSalesOrganizationResource extends Resource
             ->headerActions([
                 // Tables\Actions\CreateAction::make(),
 
-                // ImportAction::make()
-                //     ->label('Import')
-                //     ->importer(DistChannelSalesOrgImporter::class)
+                ImportAction::make()
+                    ->label('Import')
+                    ->importer(DistributionChannelSalesOrganizationImporter::class)
             ])
             ->actions([
                 // ActionGroup::make([

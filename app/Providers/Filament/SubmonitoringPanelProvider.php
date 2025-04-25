@@ -108,7 +108,7 @@ class SubmonitoringPanelProvider extends PanelProvider
                 'danger' => Color::Rose,
                 'gray' => Color::Gray,
                 'info' => Color::Blue,
-                'primary' => Color::Red,
+                'primary' => '#ED0800',
                 'success' => Color::Emerald,
                 'warning' => Color::Orange,
             ])
@@ -290,7 +290,7 @@ class SubmonitoringPanelProvider extends PanelProvider
                 //     ->socialRegister(),
                 // FilamentUsersPlugin::make(),
                 // FilamentWalletPlugin::make(),
-                DeliaPlugin::make(),
+                // DeliaPlugin::make(),
             ])
             ->resources([
                 config('filament-logger.activity_resource')

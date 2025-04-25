@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::create('division_sales_organization', function (Blueprint $table) {
             $table->id();
             $table->ulid('unique')->nullable();
+            $table->string('record_title')->nullable();
             $table->foreignId('division_id')->nullable()
                 ->constrained()
                 ->cascadeOnUpdate()

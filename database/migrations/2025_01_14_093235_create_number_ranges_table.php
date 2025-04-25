@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::create('number_ranges', function (Blueprint $table) {
             $table->id();
             $table->ulid('unique')->nullable();
+            $table->string('record_title')->nullable();
             $table->foreignId('nr_object_id')->nullable()
                 ->constrained()
                 ->cascadeOnUpdate()

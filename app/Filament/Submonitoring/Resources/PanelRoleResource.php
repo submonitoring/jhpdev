@@ -7,6 +7,7 @@ use App\Filament\Imports\PanelRoleImporter;
 use App\Filament\Submonitoring\Resources\PanelRoleResource\Pages;
 use App\Filament\Submonitoring\Resources\PanelRoleResource\RelationManagers;
 use App\Models\PanelRole;
+use Carbon\Carbon;
 use Filament\Forms;
 use Filament\Forms\Components\Grid;
 use Filament\Forms\Components\Section;
@@ -29,15 +30,19 @@ use Filament\Tables\Filters\QueryBuilder\Constraints\TextConstraint;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
+use pxlrbt\FilamentExcel\Actions\Tables\ExportAction;
+use pxlrbt\FilamentExcel\Actions\Tables\ExportBulkAction as TablesExportBulkAction;
+use pxlrbt\FilamentExcel\Exports\ExcelExport;
+use RalphJSmit\Filament\Components\Forms\Sidebar;
 
 class PanelRoleResource extends Resource
 {
     protected static ?string $model = PanelRole::class;
 
-    public static function canViewAny(): bool
-    {
-        return auth()->user()->id == 1;
-    }
+    // public static function canViewAny(): bool
+    // {
+    //     return auth()->user()->id == 1;
+    // }
 
     protected static ?string $modelLabel = 'Panel Role';
 
@@ -55,6 +60,8 @@ class PanelRoleResource extends Resource
 
     // protected static SubNavigationPosition $subNavigationPosition = SubNavigationPosition::Top;
 
+    protected static ?string $recordTitleAttribute = 'record_title';
+
     public static function form(Form $form): Form
     {
         return $form
@@ -66,37 +73,42 @@ class PanelRoleResource extends Resource
     {
         return [
 
-            Section::make('Panel Role')
-                ->schema([
+            Sidebar::make([
+                // Components for the main section here
+                Section::make('Panel Role')
+                    ->schema([
 
-                    Grid::make(4)
-                        ->schema([
+                        Grid::make(4)
+                            ->schema([
 
-                            TextInput::make('panel_role')
-                                ->label('Panel Role')
-                                ->required()
-                                ->unique(PanelRole::class, ignoreRecord: true),
+                                TextInput::make('panel_role')
+                                    ->label('Panel Role')
+                                    ->required()
+                                    ->unique(PanelRole::class, ignoreRecord: true),
 
-                        ]),
+                            ]),
 
-                ])
-                ->compact(),
+                    ])
+                    ->compact(),
+            ], [
+                // Components for the sidebar section here
 
-            Section::make('Status')
-                ->schema([
+                Section::make('Status')
+                    ->schema([
 
-                    Grid::make(2)
-                        ->schema([
+                        Grid::make(2)
+                            ->schema([
 
-                            ToggleButtons::make('is_active')
-                                ->label('Active?')
-                                ->boolean()
-                                ->grouped()
-                                ->default(true),
+                                ToggleButtons::make('is_active')
+                                    ->label('Active?')
+                                    ->boolean()
+                                    ->grouped()
+                                    ->default(true),
 
-                        ]),
-                ])->collapsible()
-                ->compact(),
+                            ]),
+                    ])->collapsible()
+                    ->compact(),
+            ]),
 
         ];
     }
@@ -218,9 +230,29 @@ class PanelRoleResource extends Resource
                     Tables\Actions\DeleteBulkAction::make(),
                 ]),
 
-                ExportBulkAction::make()
-                    ->label('Export')
-                    ->exporter(PanelRoleExporter::class),
+                TablesExportBulkAction::make()->exports([
+                    ExcelExport::make('table')->fromTable()
+                        ->withFilename(function ($resource) {
+
+                            $now = Carbon::now();
+
+                            return $now->year . '.' . str_pad($now->month, 2, '0', STR_PAD_LEFT) . '.' . str_pad($now->day, 2, '0', STR_PAD_LEFT) . ' ' . str_pad($now->hour, 2, '0', STR_PAD_LEFT) . '.' . str_pad($now->minute, 2, '0', STR_PAD_LEFT) . ' ' . $resource::getmodelLabel() . ' Export from Table';
+                        }),
+                    ExcelExport::make('form')->fromForm()
+                        ->withFilename(function ($resource) {
+
+                            $now = Carbon::now();
+
+                            return $now->year . '.' . str_pad($now->month, 2, '0', STR_PAD_LEFT) . '.' . str_pad($now->day, 2, '0', STR_PAD_LEFT) . ' ' . str_pad($now->hour, 2, '0', STR_PAD_LEFT) . '.' . str_pad($now->minute, 2, '0', STR_PAD_LEFT) . ' ' . $resource::getmodelLabel() . ' Export from Form';
+                        }),
+                    ExcelExport::make('model')->fromModel()
+                        ->withFilename(function ($resource) {
+
+                            $now = Carbon::now();
+
+                            return $now->year . '.' . str_pad($now->month, 2, '0', STR_PAD_LEFT) . '.' . str_pad($now->day, 2, '0', STR_PAD_LEFT) . ' ' . str_pad($now->hour, 2, '0', STR_PAD_LEFT) . '.' . str_pad($now->minute, 2, '0', STR_PAD_LEFT) . ' ' . $resource::getmodelLabel() . ' Export from Model';
+                        }),
+                ])
 
             ]);
     }

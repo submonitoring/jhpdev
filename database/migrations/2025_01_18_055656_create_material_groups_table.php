@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::create('material_groups', function (Blueprint $table) {
             $table->id();
             $table->ulid('unique')->nullable();
+            $table->string('record_title')->nullable();
             $table->string('material_group')->nullable();
             $table->string('material_group_desc')->nullable();
             $table->boolean('is_active')->nullable();

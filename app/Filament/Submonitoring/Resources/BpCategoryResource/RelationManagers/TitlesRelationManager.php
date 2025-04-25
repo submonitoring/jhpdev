@@ -22,7 +22,7 @@ class TitlesRelationManager extends RelationManager
 {
     protected static string $relationship = 'titles';
 
-    use CanBeEmbeddedInModals;
+    // use CanBeEmbeddedInModals;
 
     public static function getNavigationLabel(): string
     {

@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::create('transaction_references', function (Blueprint $table) {
             $table->id();
             $table->ulid('unique')->nullable();
+            $table->string('record_title')->nullable();
             $table->string('transaction_reference')->nullable();
             $table->string('transaction_reference_desc')->nullable();
             $table->boolean('is_active')->nullable();

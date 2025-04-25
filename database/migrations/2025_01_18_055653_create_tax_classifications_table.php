@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::create('tax_classifications', function (Blueprint $table) {
             $table->id();
             $table->ulid('unique')->nullable();
+            $table->string('record_title')->nullable();
             $table->string('tax_classification')->nullable();
             $table->string('tax_classification_desc')->nullable();
             $table->boolean('is_active')->nullable();

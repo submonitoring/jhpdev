@@ -20,7 +20,7 @@ class BpCategoryTitleImporter extends Importer
             ImportColumn::make('title_id')
                 ->numeric()
                 ->rules(['integer']),
-            ImportColumn::make('is_active')
+            ImportColumn::make('isactive')
                 ->boolean()
                 ->rules(['boolean']),
             ImportColumn::make('created_by')

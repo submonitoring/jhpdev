@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::create('application_paths', function (Blueprint $table) {
             $table->id();
             $table->ulid('unique')->nullable();
+            $table->string('record_title')->nullable();
             $table->foreignId('application_name_id')->nullable()
                 ->constrained()
                 ->cascadeOnUpdate()

@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::create('distribution_channel_sales_organization', function (Blueprint $table) {
             $table->id();
             $table->ulid('unique')->nullable();
+            $table->string('record_title')->nullable();
             $table->string('distribution_channel_id')->nullable();
             $table->string('sales_organization_id')->nullable();
             $table->boolean('isactive')->nullable();

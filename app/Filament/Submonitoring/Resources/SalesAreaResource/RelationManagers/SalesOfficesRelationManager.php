@@ -22,7 +22,7 @@ class SalesOfficesRelationManager extends RelationManager
 {
     protected static string $relationship = 'salesOffices';
 
-    use CanBeEmbeddedInModals;
+    // use CanBeEmbeddedInModals;
 
     public static function getNavigationLabel(): string
     {

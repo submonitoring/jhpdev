@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::create('module_activities', function (Blueprint $table) {
             $table->id();
             $table->ulid('unique')->nullable();
+            $table->string('record_title')->nullable();
             $table->string('module_activity')->nullable();
             $table->string('module_activity_name')->nullable();
             $table->boolean('is_active')->nullable();

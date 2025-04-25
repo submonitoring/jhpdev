@@ -78,7 +78,9 @@ class MaterialMasterPlantResource extends Resource
 
     // protected static ?string $navigationGroup = 'System';
 
-    // protected static SubNavigationPosition $subNavigationPosition = SubNavigationPosition::Top;
+    protected static SubNavigationPosition $subNavigationPosition = SubNavigationPosition::Top;
+
+    protected static ?string $recordTitleAttribute = 'record_title';
 
     public static function form(Form $form): Form
     {
@@ -100,7 +102,11 @@ class MaterialMasterPlantResource extends Resource
                             Select::make('plant_id')
                                 ->label('Plant')
                                 ->required()
-                                ->options(Plant::whereIsActive(1)->pluck('plant_name', 'id')),
+                                ->options(Plant::whereIsActive(1)->pluck('plant_name', 'id'))
+                                ->live()
+                                ->afterStateUpdated(function (Get $get) {
+                                    dd($get('material_master_id'));
+                                }),
 
                         ]),
 

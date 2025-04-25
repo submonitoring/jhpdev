@@ -19,7 +19,7 @@ class BatchSourceImporter extends Importer
                 ->rules(['integer']),
             ImportColumn::make('batch_source')
                 ->rules(['max:255']),
-            ImportColumn::make('batch_sources_desc')
+            ImportColumn::make('batch_source_desc')
                 ->rules(['max:255']),
             ImportColumn::make('is_active')
                 ->boolean()

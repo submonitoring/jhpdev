@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::create('nr_objects', function (Blueprint $table) {
             $table->id();
             $table->ulid('unique')->nullable();
+            $table->string('record_title')->nullable();
             $table->string('nr_object')->nullable();
             $table->string('nr_object_name')->nullable();
             $table->boolean('is_active')->nullable();

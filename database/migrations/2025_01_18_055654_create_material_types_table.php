@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::create('material_types', function (Blueprint $table) {
             $table->id();
             $table->ulid('unique')->nullable();
+            $table->string('record_title')->nullable();
             $table->string('material_type')->nullable();
             $table->string('material_type_desc')->nullable();
             $table->foreignId('number_range_id')->nullable()

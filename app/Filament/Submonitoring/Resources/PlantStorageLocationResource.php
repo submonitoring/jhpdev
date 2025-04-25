@@ -3,6 +3,7 @@
 namespace App\Filament\Submonitoring\Resources;
 
 use App\Filament\Exports\PlantStorageLocationExporter;
+use App\Filament\Imports\PlantStorageLocationImporter;
 use App\Filament\Submonitoring\Clusters\MmOrgStruct;
 use App\Filament\Submonitoring\Resources\PlantStorageLocationResource\Pages;
 use App\Filament\Submonitoring\Resources\PlantStorageLocationResource\RelationManagers;
@@ -65,6 +66,8 @@ class PlantStorageLocationResource extends Resource
     // protected static ?string $navigationGroup = 'System';
 
     // protected static SubNavigationPosition $subNavigationPosition = SubNavigationPosition::Top;
+
+    protected static ?string $recordTitleAttribute = 'record_title';
 
     public static function form(Form $form): Form
     {
@@ -163,9 +166,9 @@ class PlantStorageLocationResource extends Resource
             ->headerActions([
                 // Tables\Actions\CreateAction::make(),
 
-                // ImportAction::make()
-                //     ->label('Import')
-                //     ->importer(PlantStorageLocationImporter::class)
+                ImportAction::make()
+                    ->label('Import')
+                    ->importer(PlantStorageLocationImporter::class)
             ])
             ->actions([
                 // ActionGroup::make([

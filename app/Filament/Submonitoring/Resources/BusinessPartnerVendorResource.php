@@ -6,6 +6,7 @@ use App\Filament\Exports\BusinessPartnerVendorExporter;
 use App\Filament\Submonitoring\Clusters\BusinessPartner;
 use App\Filament\Submonitoring\Resources\BusinessPartnerVendorResource\Pages;
 use App\Filament\Submonitoring\Resources\BusinessPartnerVendorResource\RelationManagers;
+use App\Models\BusinessPartner as ModelsBusinessPartner;
 use App\Models\BusinessPartnerVendor;
 use App\Models\CompanyCode;
 use App\Models\PurchasingOrganization;
@@ -16,14 +17,17 @@ use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\ToggleButtons;
 use Filament\Forms\Form;
+use Filament\Notifications\Notification;
 use Filament\Pages\SubNavigationPosition;
 use Filament\Resources\Resource;
 use Filament\Tables;
+use Filament\Tables\Actions\Action;
 use Filament\Tables\Actions\ActionGroup;
 use Filament\Tables\Actions\ExportBulkAction;
 use Filament\Tables\Actions\ImportAction;
 use Filament\Tables\Columns\CheckboxColumn;
 use Filament\Tables\Columns\ColumnGroup;
+use Filament\Tables\Columns\IconColumn;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Filters\QueryBuilder;
 use Filament\Tables\Filters\QueryBuilder\Constraints\BooleanConstraint;
@@ -56,7 +60,9 @@ class BusinessPartnerVendorResource extends Resource
 
     // protected static ?string $navigationGroup = 'System';
 
-    // protected static SubNavigationPosition $subNavigationPosition = SubNavigationPosition::Top;
+    protected static SubNavigationPosition $subNavigationPosition = SubNavigationPosition::Top;
+
+    protected static ?string $recordTitleAttribute = 'record_title';
 
     public static function form(Form $form): Form
     {
@@ -148,10 +154,10 @@ class BusinessPartnerVendorResource extends Resource
 
                 ColumnGroup::make('Status', [
 
-                    CheckboxColumn::make('is_active')
+                    IconColumn::make('is_active')
                         ->label('Status')
-                        ->sortable()
-                        ->alignCenter(),
+                        ->boolean()
+                        ->sortable(),
 
                 ]),
 
@@ -223,6 +229,41 @@ class BusinessPartnerVendorResource extends Resource
             ->actions([
                 ActionGroup::make([
                     Tables\Actions\ViewAction::make(),
+                    Action::make('nonaktif')
+                        ->label('Inactive')
+                        ->color('danger')
+                        ->icon('heroicon-o-x-circle')
+                        ->action(function ($record) {
+
+
+                            $data['is_active'] = 0;
+                            $record->update($data);
+
+                            return $record;
+
+                            Notification::make()
+                                ->title('Status Business Partner Company telah diubah menjadi Inactive')
+                                ->color('danger')
+                                ->send();
+                        }),
+                    Action::make('aktif')
+                        ->label('Activate')
+                        ->color('success')
+                        ->icon('heroicon-o-check-circle')
+                        ->action(function ($record) {
+
+                            ModelsBusinessPartner::where('id', $record->business_partner_id)->update(['is_active' => 1]);
+
+                            $data['is_active'] = 1;
+                            $record->update($data);
+
+                            return $record;
+
+                            Notification::make()
+                                ->title('Status Business Partner telah diubah menjadi Active')
+                                ->color('success')
+                                ->send();
+                        }),
                 ]),
 
 

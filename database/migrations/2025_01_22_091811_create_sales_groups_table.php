@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::create('sales_groups', function (Blueprint $table) {
             $table->id();
             $table->ulid('unique')->nullable();
+            $table->string('record_title')->nullable();
             $table->string('sales_group')->nullable();
             $table->string('sales_group_name')->nullable();
             $table->boolean('is_active')->nullable();

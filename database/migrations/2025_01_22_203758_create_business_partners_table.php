@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::create('business_partners', function (Blueprint $table) {
             $table->id();
             $table->ulid('unique')->nullable();
+            $table->string('record_title')->nullable();
             $table->foreignId('number_range_id')->nullable()
                 ->constrained()
                 ->cascadeOnUpdate()
@@ -41,6 +42,7 @@ return new class extends Migration
                 ->cascadeOnUpdate()
                 ->nullOnDelete();
             $table->string('vat_number')->nullable();
+            $table->string('nib')->nullable();
             $table->foreignId('title_id')->nullable()
                 ->constrained()
                 ->cascadeOnUpdate()

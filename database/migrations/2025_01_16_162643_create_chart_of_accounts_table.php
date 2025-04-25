@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::create('chart_of_accounts', function (Blueprint $table) {
             $table->id();
             $table->ulid('unique')->nullable();
+            $table->string('record_title')->nullable();
             $table->string('chart_of_account')->nullable();
             $table->string('chart_of_account_name')->nullable();
             $table->boolean('is_active')->nullable();

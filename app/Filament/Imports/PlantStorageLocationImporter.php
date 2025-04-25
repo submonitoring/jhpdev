@@ -14,7 +14,19 @@ class PlantStorageLocationImporter extends Importer
     public static function getColumns(): array
     {
         return [
-            //
+            ImportColumn::make('plant_id')
+                ->numeric()
+                ->rules(['integer']),
+            ImportColumn::make('storage_location_id')
+                ->numeric()
+                ->rules(['integer']),
+            ImportColumn::make('isactive')
+                ->boolean()
+                ->rules(['boolean']),
+            ImportColumn::make('created_by')
+                ->rules(['max:255']),
+            ImportColumn::make('updated_by')
+                ->rules(['max:255']),
         ];
     }
 

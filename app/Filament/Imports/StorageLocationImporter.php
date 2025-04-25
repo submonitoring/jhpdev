@@ -18,9 +18,6 @@ class StorageLocationImporter extends Importer
                 ->rules(['max:255']),
             ImportColumn::make('storage_location_name')
                 ->rules(['max:255']),
-            ImportColumn::make('plant_id')
-                ->numeric()
-                ->rules(['integer']),
             ImportColumn::make('is_active')
                 ->boolean()
                 ->rules(['boolean']),

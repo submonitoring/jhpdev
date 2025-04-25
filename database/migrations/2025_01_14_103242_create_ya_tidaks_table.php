@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::create('ya_tidaks', function (Blueprint $table) {
             $table->id();
             $table->ulid('unique')->nullable();
+            $table->string('record_title')->nullable();
             $table->string('ya_tidak')->nullable();
             $table->boolean('is_active')->nullable();
             $table->string('created_by')->nullable();

@@ -3,6 +3,7 @@
 namespace App\Filament\Submonitoring\Resources\BpCategoryTitleResource\Pages;
 
 use App\Filament\Submonitoring\Resources\BpCategoryTitleResource;
+use App\viewpage;
 use Filament\Actions;
 use Filament\Resources\Pages\ViewRecord;
 

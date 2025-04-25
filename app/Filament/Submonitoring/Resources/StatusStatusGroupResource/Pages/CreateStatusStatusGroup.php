@@ -12,4 +12,9 @@ class CreateStatusStatusGroup extends CreateRecord
     protected static string $resource = StatusStatusGroupResource::class;
 
     use createpage;
+
+    public static function shouldRegisterSpotlight(): bool
+    {
+        return false;
+    }
 }

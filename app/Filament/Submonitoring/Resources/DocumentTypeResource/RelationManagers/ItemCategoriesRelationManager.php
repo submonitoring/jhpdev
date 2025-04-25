@@ -22,7 +22,7 @@ class ItemCategoriesRelationManager extends RelationManager
 {
     protected static string $relationship = 'itemCategories';
 
-    use CanBeEmbeddedInModals;
+    // use CanBeEmbeddedInModals;
 
     public static function getNavigationLabel(): string
     {

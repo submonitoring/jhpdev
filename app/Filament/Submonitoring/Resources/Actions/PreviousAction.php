@@ -18,6 +18,6 @@ class PreviousAction extends Action
         $this->hiddenLabel()
             ->icon('heroicon-o-arrow-left')
             ->outlined()
-            ->tooltip("Previous {$this->getRecordTitle()}");
+            ->tooltip("Previous of {$this->getRecordTitle()}");
     }
 }

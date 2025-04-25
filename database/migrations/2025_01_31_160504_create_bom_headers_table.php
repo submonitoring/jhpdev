@@ -14,6 +14,12 @@ return new class extends Migration
         Schema::create('bom_headers', function (Blueprint $table) {
             $table->id();
             $table->ulid('unique')->nullable();
+            $table->string('record_title')->nullable();
+            $table->foreignId('number_range_id')->nullable()
+                ->constrained()
+                ->cascadeOnUpdate()
+                ->nullOnDelete();
+            $table->string('bom_number')->nullable();
             $table->foreignId('material_master_id')->nullable()
                 ->constrained()
                 ->cascadeOnUpdate()

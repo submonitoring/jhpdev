@@ -4,6 +4,7 @@ namespace App\Models;
 
 use App\log;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Auth;
 
 class MaterialMasterSales extends Model
 {
@@ -45,6 +46,24 @@ class MaterialMasterSales extends Model
     public function materialGroup()
     {
         return $this->belongsTo(MaterialGroup::class);
+    }
+
+    public static function boot()
+    {
+        parent::boot();
+
+        static::creating(function ($model) {
+            $user = Auth::user();
+            $model->created_by = $user->username;
+            $model->updated_by = $user->username;
+            $model->record_title = $model->materialMaster->material_number;
+        });
+
+        static::updating(function ($model) {
+            $user = Auth::user();
+            $model->updated_by = $user->username;
+            $model->record_title = $model->materialMaster->material_number;
+        });
     }
 
     use log;

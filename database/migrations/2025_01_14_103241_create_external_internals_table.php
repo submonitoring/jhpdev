@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::create('external_internals', function (Blueprint $table) {
             $table->id();
             $table->ulid('unique')->nullable();
+            $table->string('record_title')->nullable();
             $table->string('external_internal')->nullable();
             $table->boolean('is_active')->nullable();
             $table->string('created_by')->nullable();

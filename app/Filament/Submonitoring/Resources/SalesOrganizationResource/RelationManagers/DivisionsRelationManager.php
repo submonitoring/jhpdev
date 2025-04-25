@@ -22,7 +22,7 @@ class DivisionsRelationManager extends RelationManager
 {
     protected static string $relationship = 'divisions';
 
-    use CanBeEmbeddedInModals;
+    // use CanBeEmbeddedInModals;
 
     public static function getNavigationLabel(): string
     {

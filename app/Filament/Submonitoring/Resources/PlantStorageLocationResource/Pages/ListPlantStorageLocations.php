@@ -9,11 +9,4 @@ use Filament\Resources\Pages\ListRecords;
 class ListPlantStorageLocations extends ListRecords
 {
     protected static string $resource = PlantStorageLocationResource::class;
-
-    protected function getHeaderActions(): array
-    {
-        return [
-            Actions\CreateAction::make(),
-        ];
-    }
 }

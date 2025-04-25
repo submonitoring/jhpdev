@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::create('bp_category_title', function (Blueprint $table) {
             $table->id();
             $table->ulid('unique')->nullable();
+            $table->string('record_title')->nullable();
             $table->foreignId('bp_category_id')->nullable()
                 ->constrained()
                 ->cascadeOnUpdate()

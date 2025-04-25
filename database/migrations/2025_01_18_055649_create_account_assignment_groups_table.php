@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::create('account_assignment_groups', function (Blueprint $table) {
             $table->id();
             $table->ulid('unique')->nullable();
+            $table->string('record_title')->nullable();
             $table->string('account_assignment_group')->nullable();
             $table->string('account_assignment_group_desc')->nullable();
             $table->boolean('is_active')->nullable();

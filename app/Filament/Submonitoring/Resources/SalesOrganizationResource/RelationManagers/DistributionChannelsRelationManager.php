@@ -22,7 +22,7 @@ class DistributionChannelsRelationManager extends RelationManager
 {
     protected static string $relationship = 'distributionChannels';
 
-    use CanBeEmbeddedInModals;
+    // use CanBeEmbeddedInModals;
 
     public static function getNavigationLabel(): string
     {

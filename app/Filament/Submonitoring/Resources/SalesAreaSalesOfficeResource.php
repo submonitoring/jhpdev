@@ -3,6 +3,7 @@
 namespace App\Filament\Submonitoring\Resources;
 
 use App\Filament\Exports\SalesAreaSalesOfficeExporter;
+use App\Filament\Imports\SalesAreaSalesOfficeImporter;
 use App\Filament\Submonitoring\Clusters\SdOrgStruct;
 use App\Filament\Submonitoring\Resources\SalesAreaSalesOfficeResource\Pages;
 use App\Filament\Submonitoring\Resources\SalesAreaSalesOfficeResource\RelationManagers;
@@ -66,6 +67,8 @@ class SalesAreaSalesOfficeResource extends Resource
     // protected static ?string $navigationGroup = 'System';
 
     // protected static SubNavigationPosition $subNavigationPosition = SubNavigationPosition::Top;
+
+    protected static ?string $recordTitleAttribute = 'record_title';
 
     public static function form(Form $form): Form
     {
@@ -214,9 +217,9 @@ class SalesAreaSalesOfficeResource extends Resource
             ->headerActions([
                 // Tables\Actions\CreateAction::make(),
 
-                // ImportAction::make()
-                //     ->label('Import')
-                //     ->importer(SalesAreaSalesOfficeImporter::class)
+                ImportAction::make()
+                    ->label('Import')
+                    ->importer(SalesAreaSalesOfficeImporter::class)
             ])
             ->actions([
                 // ActionGroup::make([

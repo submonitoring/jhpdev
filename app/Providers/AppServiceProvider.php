@@ -14,11 +14,15 @@ use Carbon\Carbon;
 use Filament\Pages\SubNavigationPosition;
 use Filament\Tables\Actions\Action;
 use Filament\Tables\Actions\ActionGroup;
+use Filament\Tables\Actions\BulkActionGroup;
+use Filament\Tables\Actions\DeleteBulkAction;
 use Filament\Tables\Actions\HeaderActionsPosition;
 use Filament\Tables\Enums\ActionsPosition;
 use Filament\Tables\Enums\FiltersLayout;
 use Filament\Tables\Table;
 use Illuminate\Support\Facades\Gate;
+use pxlrbt\FilamentExcel\Actions\Tables\ExportBulkAction as TablesExportBulkAction;
+use pxlrbt\FilamentExcel\Exports\ExcelExport;
 use Spatie\Health\Facades\Health;
 use Spatie\Health\Checks\Checks\OptimizedAppCheck;
 use Spatie\Health\Checks\Checks\DebugModeCheck;
@@ -72,7 +76,36 @@ class AppServiceProvider extends ServiceProvider
                 ->emptyStateHeading('Belum ada data')
                 ->emptyStateDescription('.')
                 ->deferLoading()
-                ->extremePaginationLinks();
+                ->extremePaginationLinks()
+                ->bulkActions([
+                    BulkActionGroup::make([
+                        DeleteBulkAction::make(),
+                    ]),
+
+                    TablesExportBulkAction::make()->exports([
+                        ExcelExport::make('table')->fromTable()
+                            ->withFilename(function ($resource) {
+
+                                $now = Carbon::now();
+
+                                return $now->year . '.' . str_pad($now->month, 2, '0', STR_PAD_LEFT) . '.' . str_pad($now->day, 2, '0', STR_PAD_LEFT) . ' ' . str_pad($now->hour, 2, '0', STR_PAD_LEFT) . '.' . str_pad($now->minute, 2, '0', STR_PAD_LEFT) . ' ' . $resource::getmodelLabel() . ' Export from Table';
+                            }),
+                        ExcelExport::make('form')->fromForm()
+                            ->withFilename(function ($resource) {
+
+                                $now = Carbon::now();
+
+                                return $now->year . '.' . str_pad($now->month, 2, '0', STR_PAD_LEFT) . '.' . str_pad($now->day, 2, '0', STR_PAD_LEFT) . ' ' . str_pad($now->hour, 2, '0', STR_PAD_LEFT) . '.' . str_pad($now->minute, 2, '0', STR_PAD_LEFT) . ' ' . $resource::getmodelLabel() . ' Export from Form';
+                            }),
+                        ExcelExport::make('model')->fromModel()
+                            ->withFilename(function ($resource) {
+
+                                $now = Carbon::now();
+
+                                return $now->year . '.' . str_pad($now->month, 2, '0', STR_PAD_LEFT) . '.' . str_pad($now->day, 2, '0', STR_PAD_LEFT) . ' ' . str_pad($now->hour, 2, '0', STR_PAD_LEFT) . '.' . str_pad($now->minute, 2, '0', STR_PAD_LEFT) . ' ' . $resource::getmodelLabel() . ' Export from Model';
+                            }),
+                    ])
+                ]);
         });
 
         Health::checks([

@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::create('procurement_types', function (Blueprint $table) {
             $table->id();
             $table->ulid('unique')->nullable();
+            $table->string('record_title')->nullable();
             $table->string('procurement_type')->nullable();
             $table->string('procurement_type_desc')->nullable();
             $table->boolean('is_active')->nullable();

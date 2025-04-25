@@ -10,7 +10,7 @@ trait listpage
     {
         return [
             // Actions\CreateAction::make(),
-            BookmarkHeaderAction::make(),
+            // BookmarkHeaderAction::make(),
         ];
     }
 }

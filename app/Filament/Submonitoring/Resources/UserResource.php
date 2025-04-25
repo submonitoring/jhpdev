@@ -47,10 +47,10 @@ class UserResource extends Resource
 {
     protected static ?string $model = User::class;
 
-    public static function canViewAny(): bool
-    {
-        return auth()->user()->id == 1;
-    }
+    // public static function canViewAny(): bool
+    // {
+    //     return auth()->user()->id == 1;
+    // }
 
     protected static ?string $modelLabel = 'User';
 
@@ -68,7 +68,7 @@ class UserResource extends Resource
 
     // protected static SubNavigationPosition $subNavigationPosition = SubNavigationPosition::Top;
 
-    protected static ?string $recordTitleAttribute = 'username';
+    protected static ?string $recordTitleAttribute = 'record_title';
 
     // protected static ?string $recordRouteKeyName = 'unique';
 

@@ -29,7 +29,12 @@ class BusinessPartnerCustomersRelationManager extends RelationManager
 {
     protected static string $relationship = 'businessPartnerCustomers';
 
-    use CanBeEmbeddedInModals;
+    public function hasCombinedRelationManagerTabsWithContent(): bool
+    {
+        return true;
+    }
+
+    // use CanBeEmbeddedInModals;
 
     public static function getNavigationLabel(): string
     {
@@ -54,6 +59,7 @@ class BusinessPartnerCustomersRelationManager extends RelationManager
                     ActionGroup::make([
                         Tables\Actions\ViewAction::make(),
                         Tables\Actions\EditAction::make(),
+                        Tables\Actions\DeleteAction::make()
                     ])->dropdown(false),
                 ]),
             ])

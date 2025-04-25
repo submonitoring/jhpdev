@@ -11,7 +11,7 @@
 
     <p>You are not authorized</p>
 <br>
-    <button class="btn" onclick="javascript:history.back()">Back</button>
+    <button class="btn btn-neutral" onclick="javascript:history.back()">← Back</button>
 
 
 </div>

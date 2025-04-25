@@ -22,7 +22,7 @@ class StorageLocationsRelationManager extends RelationManager
 {
     protected static string $relationship = 'storageLocations';
 
-    use CanBeEmbeddedInModals;
+    // use CanBeEmbeddedInModals;
 
     public static function getNavigationLabel(): string
     {

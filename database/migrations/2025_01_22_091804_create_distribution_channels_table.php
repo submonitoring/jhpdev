@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::create('distribution_channels', function (Blueprint $table) {
             $table->id();
             $table->ulid('unique')->nullable();
+            $table->string('record_title')->nullable();
             $table->string('distribution_channel')->nullable();
             $table->string('distribution_channel_name')->nullable();
             $table->boolean('is_active')->nullable();

@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::create('gl_accounts', function (Blueprint $table) {
             $table->id();
             $table->ulid('unique')->nullable();
+            $table->string('record_title')->nullable();
             $table->string('gl_account')->nullable();
             $table->string('gl_account_name')->nullable();
             $table->foreignId('gl_account_group_id')->nullable()

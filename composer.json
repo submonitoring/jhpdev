@@ -20,7 +20,7 @@
         "codewithdennis/filament-simple-alert": "^3.0",
         "devonab/filament-easy-footer": "^1.1",
         "filament/filament": "^3.3",
-        "guava/filament-modal-relation-managers": "^1.2",
+        "guava/filament-modal-relation-managers": "^1.4",
         "howdu/filament-record-switcher": "^1.0",
         "jeffgreco13/filament-breezy": "^2.6",
         "kenepa/banner": "^0.1.0",

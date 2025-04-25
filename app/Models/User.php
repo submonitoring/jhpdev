@@ -15,6 +15,7 @@ use Laravel\Jetstream\HasTeams;
 use Laravel\Sanctum\HasApiTokens;
 use Filament\Panel;
 use Filament\Models\Contracts\FilamentUser;
+use Filament\Notifications\Notification;
 use Illuminate\Database\Eloquent\Concerns\HasUlids;
 use Illuminate\Database\Eloquent\Model;
 use Jeffgreco13\FilamentBreezy\Traits\TwoFactorAuthenticatable as TraitsTwoFactorAuthenticatable;
@@ -235,5 +236,33 @@ class User extends Authenticatable implements FilamentUser
     public function getRouteKeyName()
     {
         return 'unique';
+    }
+
+    public static function boot()
+    {
+        parent::boot();
+
+        static::creating(function ($model) {
+            $user = auth()->user();
+            $model->created_by = $user->username;
+            $model->updated_by = $user->username;
+            $model->record_title = $model->username;
+        });
+
+        static::updating(function ($model) {
+            $user = auth()->user();
+            $model->updated_by = $user->username;
+            $model->record_title = $model->username;
+        });
+
+        // static::created(function ($model) {
+
+        //     $recipient = auth()->user();
+        //     $recipienta = User::find(1);
+
+        //     Notification::make()
+        //         ->title($model->username . ' User created by ' . $model->username)
+        //         ->sendToDatabase([$recipient, $recipienta]);
+        // });
     }
 }

@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::create('company_codes', function (Blueprint $table) {
             $table->id();
             $table->ulid('unique')->nullable();
+            $table->string('record_title')->nullable();
             $table->string('company_code')->nullable();
             $table->string('company_code_name')->nullable();
             $table->string('vat_number')->nullable();
