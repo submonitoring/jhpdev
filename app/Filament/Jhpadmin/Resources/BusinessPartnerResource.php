@@ -48,6 +48,8 @@ class BusinessPartnerResource extends Resource
     //     return false;
     // }
 
+    protected static ?string $recordTitleAttribute = 'record_title';
+
     public static function form(Form $form): Form
     {
         return ResourcesBusinessPartnerResource::form($form);
