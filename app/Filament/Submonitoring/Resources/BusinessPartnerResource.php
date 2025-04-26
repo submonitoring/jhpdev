@@ -132,7 +132,8 @@ class BusinessPartnerResource extends Resource
                         ->inline()
                         ->multiple()
                         // ->required()
-                        ->live(),
+                        ->live()
+                        ->hintIcon('heroicon-m-question-mark-circle', tooltip: 'Pilih Customer jika Business Partner merupakan pembeli.  Pilih Vendor jika Business Partner merupakan supplier.'),
 
                 ])->compact(),
 
@@ -210,10 +211,20 @@ class BusinessPartnerResource extends Resource
 
                                                 TextInput::make('name_1')
                                                     ->required()
-                                                    ->label('Nama')
+                                                    ->label('Name')
                                                     ->disabled(fn(Get $get) =>
                                                     $get('bp_category_id') == null)
                                                     ->extraInputAttributes(['style' => 'font-size: 1.5rem;height: 3rem;']),
+
+                                            ]),
+
+                                        Grid::make()
+                                            ->schema([
+
+                                                TextInput::make('search_term')
+                                                    ->label('Search Term')
+                                                    ->disabled(fn(Get $get) =>
+                                                    $get('bp_category_id') == null),
 
                                             ])
 
@@ -346,7 +357,7 @@ class BusinessPartnerResource extends Resource
                                                         ->where('provinsi_id', $get('provinsi_id'))
                                                         ->pluck('kabupaten', 'id'))
                                                     ->searchable()
-                                                    ->required()
+                                                    // ->required()
                                                     ->live()
                                                     ->native(false)
                                                     ->disabled(fn(Get $get) =>
@@ -361,7 +372,7 @@ class BusinessPartnerResource extends Resource
                                                         ->where('kabupaten_id', $get('kabupaten_id'))
                                                         ->pluck('kecamatan', 'id'))
                                                     ->searchable()
-                                                    ->required()
+                                                    // ->required()
                                                     ->live()
                                                     ->native(false)
                                                     ->disabled(fn(Get $get) =>
@@ -376,7 +387,7 @@ class BusinessPartnerResource extends Resource
                                                         ->where('kecamatan_id', $get('kecamatan_id'))
                                                         ->pluck('kelurahan', 'id'))
                                                     ->searchable()
-                                                    ->required()
+                                                    // ->required()
                                                     ->live()
                                                     ->native(false)
                                                     ->disabled(fn(Get $get) =>
@@ -397,7 +408,7 @@ class BusinessPartnerResource extends Resource
 
                                                 Textarea::make('alamat')
                                                     ->label('Alamat')
-                                                    ->required()
+                                                    // ->required()
                                                     ->columnSpanFull()
                                                     ->disabled(fn(Get $get) =>
                                                     $get('kelurahan_id') == null)
@@ -407,7 +418,7 @@ class BusinessPartnerResource extends Resource
                                                 TextInput::make('rt')
                                                     ->label('RT')
                                                     ->numeric()
-                                                    ->required()
+                                                    // ->required()
                                                     ->disabled(fn(Get $get) =>
                                                     $get('kelurahan_id') == null)
                                                     ->hidden(fn(Get $get) =>
@@ -416,7 +427,7 @@ class BusinessPartnerResource extends Resource
                                                 TextInput::make('rw')
                                                     ->label('RW')
                                                     ->numeric()
-                                                    ->required()
+                                                    // ->required()
                                                     ->disabled(fn(Get $get) =>
                                                     $get('kelurahan_id') == null)
                                                     ->hidden(fn(Get $get) =>
@@ -425,7 +436,7 @@ class BusinessPartnerResource extends Resource
                                                 TextInput::make('kodepos')
                                                     ->label('Kodepos')
                                                     ->disabled()
-                                                    ->required()
+                                                    // ->required()
                                                     ->dehydrated()
                                                     ->hidden(fn(Get $get) =>
                                                     $get('country_id') != 105),
@@ -550,10 +561,26 @@ class BusinessPartnerResource extends Resource
                                                 ->label('NIB')
                                                 ->numeric()
                                                 ->length(13)
-                                                ->maxLength(13),
-                                            // ->required(),
+                                                ->maxLength(13)
+                                                ->hintIcon('heroicon-m-question-mark-circle', tooltip: 'NIB = Nomor Induk Berusaha'),
                                         ]),
-                                ])
+                                ]),
+
+                            Section::make('Status')
+                                ->schema([
+
+                                    Grid::make(4)
+                                        ->schema([
+
+                                            ToggleButtons::make('is_active')
+                                                ->label('Active?')
+                                                ->boolean()
+                                                ->grouped()
+                                                ->default(true),
+
+                                        ]),
+                                ])->collapsible()
+                                ->compact(),
 
 
                         ]),
@@ -561,30 +588,37 @@ class BusinessPartnerResource extends Resource
                     Tab::make(__('Company Data'))
                         // ->icon('heroicon-o-list-bullet')
                         ->schema([
-                            TableRepeater::make('businessPartnerCompanies')
-                                ->relationship()
-                                // ->streamlined()
-                                ->headers([
-                                    Header::make('Company Code')->width('150px'),
-                                ])
-                                ->schema([
-                                    Select::make('company_code_id')
-                                        ->label('Company Code')
-                                        ->inlineLabel()
-                                        ->options(CompanyCode::where('is_active', 1)->pluck('company_code_name', 'id'))
-                                        ->required()
-                                        ->disabled()
-                                        ->dehydrated()
-                                        ->default(1)
-                                        ->native(false),
 
-                                    hidden::make('is_active')
+                            Repeater::make('businessPartnerCompanies')
+                                ->label('Company Code Data')
+                                ->relationship()
+                                ->schema([
+
+                                    Fieldset::make('Company Code Data')
+                                        ->schema([
+
+                                            Grid::make(2)
+                                                ->schema([
+
+                                                    Select::make('company_code_id')
+                                                        ->label('Company Code')
+                                                        ->inlineLabel()
+                                                        ->options(CompanyCode::where('is_active', 1)->pluck('company_code_name', 'id'))
+                                                        ->required()
+                                                        ->disabled()
+                                                        ->dehydrated()
+                                                        ->default(1)
+                                                        ->native(false),
+
+                                                ]),
+
+                                        ]),
+
+                                    Hidden::make('is_active')
                                         ->default(1),
                                 ])
-
                                 ->maxItems(1)
-                                ->columnSpan('full')
-                                ->orderColumn('sort'),
+                                ->orderColumn('sort')
                         ]),
 
                     Tab::make(__('Customer Data'))
@@ -592,48 +626,62 @@ class BusinessPartnerResource extends Resource
                         ->visible(fn(Get $get) =>
                         in_array('1', $get('bp_role_id')))
                         ->schema([
-                            TableRepeater::make('businessPartnerCustomers')
+                            Repeater::make('businessPartnerCustomers')
+                                ->label('Customer Data')
                                 ->relationship()
-                                // ->streamlined()
-                                ->headers([
-                                    Header::make('Sales Org')->width('150px'),
-                                    Header::make('Dist Chann')->width('150px'),
-                                    Header::make('Division')->width('150px'),
-                                ])
                                 ->schema([
-                                    Select::make('sales_organization_id')
-                                        ->label('Sales Organization')
-                                        ->inlineLabel()
-                                        ->options(SalesOrganization::where('is_active', 1)->pluck('sales_organization_name', 'id'))
-                                        ->required()
-                                        ->disabled()
-                                        ->dehydrated()
-                                        ->default(1)
-                                        ->native(false),
 
-                                    Select::make('distribution_channel_id')
-                                        ->label('Distribution Channel')
-                                        ->inlineLabel()
-                                        ->options(DistributionChannel::where('is_active', 1)->pluck('distribution_channel_name', 'id'))
-                                        ->required()
-                                        ->disableOptionsWhenSelectedInSiblingRepeaterItems()
-                                        ->native(false),
+                                    Fieldset::make('Sales Area Data')
+                                        ->schema([
 
-                                    Select::make('division_id')
-                                        ->label('Division')
-                                        ->inlineLabel()
-                                        ->options(Division::where('is_active', 1)->pluck('division_name', 'id'))
-                                        ->required()
-                                        ->disabled()
-                                        ->dehydrated()
-                                        ->default(4)
-                                        ->native(false),
+                                            Grid::make(2)
+                                                ->schema([
 
-                                    hidden::make('is_active')
+                                                    Select::make('sales_organization_id')
+                                                        ->label('Sales Organization')
+                                                        ->inlineLabel()
+                                                        ->options(SalesOrganization::where('is_active', 1)->pluck('sales_organization_name', 'id'))
+                                                        ->required()
+                                                        ->disabled()
+                                                        ->dehydrated()
+                                                        ->default(1)
+                                                        ->native(false),
+
+                                                ]),
+
+                                            Grid::make(2)
+                                                ->schema([
+
+                                                    Select::make('distribution_channel_id')
+                                                        ->label('Distribution Channel')
+                                                        ->inlineLabel()
+                                                        ->options(DistributionChannel::where('is_active', 1)->pluck('distribution_channel_name', 'id'))
+                                                        ->required()
+                                                        ->native(false),
+
+                                                ]),
+
+                                            Grid::make(2)
+                                                ->schema([
+
+                                                    Select::make('division_id')
+                                                        ->label('Division')
+                                                        ->inlineLabel()
+                                                        ->options(Division::where('is_active', 1)->pluck('division_name', 'id'))
+                                                        ->required()
+                                                        ->disabled()
+                                                        ->dehydrated()
+                                                        ->default(4)
+                                                        ->native(false),
+
+                                                ]),
+
+                                        ]),
+
+                                    Hidden::make('is_active')
                                         ->default(1),
                                 ])
-                                ->columnSpan('full')
-                                ->orderColumn('sort'),
+                                ->orderColumn('sort')
                         ]),
 
                     Tab::make(__('Vendor Data'))
@@ -642,51 +690,40 @@ class BusinessPartnerResource extends Resource
                         in_array('2', $get('bp_role_id')))
                         ->schema([
 
-                            TableRepeater::make('businessPartnerVendors')
+                            Repeater::make('businessPartnerVendors')
+                                ->label('Vendor Data')
                                 ->relationship()
-                                // ->streamlined()
-                                ->headers([
-                                    Header::make('Purch Org.')->width('150px'),
-                                ])
                                 ->schema([
-                                    Select::make('purchasing_organization_id')
-                                        ->label('Purchasing Organization')
-                                        ->inlineLabel()
-                                        ->options(PurchasingOrganization::where('is_active', 1)->pluck('purchasing_organization_name', 'id'))
-                                        ->required()
-                                        ->default(1)
-                                        ->disabled()
-                                        ->dehydrated()
-                                        ->native(false),
 
-                                    hidden::make('is_active')
+                                    Fieldset::make('Purchasing Data')
+                                        ->schema([
+
+                                            Grid::make(2)
+                                                ->schema([
+
+                                                    Select::make('purchasing_organization_id')
+                                                        ->label('Purchasing Organization')
+                                                        ->inlineLabel()
+                                                        ->options(PurchasingOrganization::where('is_active', 1)->pluck('purchasing_organization_name', 'id'))
+                                                        ->required()
+                                                        ->disabled()
+                                                        ->dehydrated()
+                                                        ->default(1)
+                                                        ->native(false),
+
+                                                ]),
+
+                                        ]),
+
+                                    Hidden::make('is_active')
                                         ->default(1),
                                 ])
                                 ->maxItems(1)
-                                ->columnSpan('full')
-                                ->orderColumn('sort'),
+                                ->orderColumn('sort')
 
                         ]),
 
                 ]),
-
-            Section::make('Status')
-                ->hidden(fn(Get $get) =>
-                $get('bp_role_id') == null)
-                ->schema([
-
-                    Grid::make(4)
-                        ->schema([
-
-                            ToggleButtons::make('is_active')
-                                ->label('Active?')
-                                ->boolean()
-                                ->grouped()
-                                ->default(true),
-
-                        ]),
-                ])->collapsible()
-                ->compact(),
 
         ];
     }

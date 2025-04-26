@@ -14,6 +14,10 @@ class BusinessPartnerImporter extends Importer
     public static function getColumns(): array
     {
         return [
+            ImportColumn::make('unique')
+                ->rules(['max:26']),
+            ImportColumn::make('record_title')
+                ->rules(['max:255']),
             ImportColumn::make('number_range_id')
                 ->numeric()
                 ->rules(['integer']),
@@ -22,7 +26,17 @@ class BusinessPartnerImporter extends Importer
             ImportColumn::make('bp_category_id')
                 ->numeric()
                 ->rules(['integer']),
-            ImportColumn::make('bp_role_id')
+            ImportColumn::make('bp_role_id'),
+            ImportColumn::make('account_assignment_group_id')
+                ->numeric()
+                ->rules(['integer']),
+            ImportColumn::make('tax_classification_id')
+                ->numeric()
+                ->rules(['integer']),
+            ImportColumn::make('currency_id')
+                ->numeric()
+                ->rules(['integer']),
+            ImportColumn::make('payment_term_id')
                 ->numeric()
                 ->rules(['integer']),
             ImportColumn::make('vat_number')
@@ -55,6 +69,8 @@ class BusinessPartnerImporter extends Importer
             ImportColumn::make('fax_number_1_ext')
                 ->rules(['max:255']),
             ImportColumn::make('fax_number_2')
+                ->rules(['max:255']),
+            ImportColumn::make('fax_number_2_ext')
                 ->rules(['max:255']),
             ImportColumn::make('handphone_number_1')
                 ->rules(['max:255']),
@@ -110,6 +126,8 @@ class BusinessPartnerImporter extends Importer
             ImportColumn::make('created_by')
                 ->rules(['max:255']),
             ImportColumn::make('updated_by')
+                ->rules(['max:255']),
+            ImportColumn::make('nib')
                 ->rules(['max:255']),
         ];
     }

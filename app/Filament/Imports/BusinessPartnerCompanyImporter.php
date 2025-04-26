@@ -14,6 +14,10 @@ class BusinessPartnerCompanyImporter extends Importer
     public static function getColumns(): array
     {
         return [
+            ImportColumn::make('unique')
+                ->rules(['max:26']),
+            ImportColumn::make('record_title')
+                ->rules(['max:255']),
             ImportColumn::make('sort')
                 ->rules(['max:255']),
             ImportColumn::make('business_partner_id')
@@ -22,16 +26,28 @@ class BusinessPartnerCompanyImporter extends Importer
             ImportColumn::make('company_code_id')
                 ->numeric()
                 ->rules(['integer']),
-            ImportColumn::make('account_assignment_group_id')
+            ImportColumn::make('cust_account_assignment_group_id')
                 ->numeric()
                 ->rules(['integer']),
-            ImportColumn::make('tax_classification_id')
+            ImportColumn::make('cust_tax_classification_id')
                 ->numeric()
                 ->rules(['integer']),
-            ImportColumn::make('currency_id')
+            ImportColumn::make('cust_currency_id')
                 ->numeric()
                 ->rules(['integer']),
-            ImportColumn::make('payment_term_id')
+            ImportColumn::make('cust_payment_term_id')
+                ->numeric()
+                ->rules(['integer']),
+            ImportColumn::make('vend_account_assignment_group_id')
+                ->numeric()
+                ->rules(['integer']),
+            ImportColumn::make('vend_tax_classification_id')
+                ->numeric()
+                ->rules(['integer']),
+            ImportColumn::make('vend_currency_id')
+                ->numeric()
+                ->rules(['integer']),
+            ImportColumn::make('vend_payment_term_id')
                 ->numeric()
                 ->rules(['integer']),
             ImportColumn::make('is_active')

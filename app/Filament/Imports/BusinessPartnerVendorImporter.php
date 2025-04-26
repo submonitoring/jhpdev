@@ -14,6 +14,10 @@ class BusinessPartnerVendorImporter extends Importer
     public static function getColumns(): array
     {
         return [
+            ImportColumn::make('unique')
+                ->rules(['max:26']),
+            ImportColumn::make('record_title')
+                ->rules(['max:255']),
             ImportColumn::make('sort')
                 ->rules(['max:255']),
             ImportColumn::make('business_partner_id')
