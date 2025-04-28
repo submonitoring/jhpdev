@@ -38,9 +38,11 @@ use Filament\Tables\Filters\QueryBuilder\Constraints\SelectConstraint;
 use Filament\Tables\Filters\QueryBuilder\Constraints\TextConstraint;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\HtmlString;
 use STS\FilamentImpersonate\Tables\Actions\Impersonate;
 
 class UserResource extends Resource
@@ -225,6 +227,49 @@ class UserResource extends Resource
                             return ($state);
                         })
                         ->copyMessage('Tersalin')
+                        ->sortable(),
+
+                    TextColumn::make('copyable')
+                        ->label('User Pass')
+                        ->default(function (Model $record) {
+
+                            return (new HtmlString('<div>Bismillah, </br>
+                            </br>
+                                dev.jhpherbal.com
+                            </br>
+                            </br>
+                            ' . $record->name . '
+                            </br>
+                                __________</br>
+                                Username:</br></br>
+                                ' . $record->username . '</br></br>
+                                __________</br></br>
+                                Password:</br></br>
+                                ' . $record->jhpunique . '</div>'));
+                        })
+                        ->copyable()
+                        ->copyableState(function (Model $record) {
+
+                            return (new HtmlString(
+                                'Bismillah,
+
+                                siakad.tsn.ponpes.id
+
+                                ' . $record->name . '
+
+                                __________
+
+                                Username:
+
+                                ' . $record->username . '
+
+                                __________
+
+                                Password:
+
+                                ' . $record->jhpunique . ''
+                            ));
+                        })
                         ->sortable(),
 
                     TextColumn::make('email')
