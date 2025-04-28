@@ -30,6 +30,7 @@ use Filament\Tables\Actions\ImportAction;
 use Filament\Tables\Columns\CheckboxColumn;
 use Filament\Tables\Columns\ColumnGroup;
 use Filament\Tables\Columns\TextColumn;
+use Filament\Tables\Columns\TextInputColumn;
 use Filament\Tables\Columns\ToggleColumn;
 use Filament\Tables\Filters\QueryBuilder;
 use Filament\Tables\Filters\QueryBuilder\Constraints\BooleanConstraint;
@@ -242,7 +243,7 @@ class NumberRangeResource extends Resource
                         ->copyMessage('Tersalin')
                         ->sortable(),
 
-                    TextColumn::make('current_number')
+                    TextInputColumn::make('current_number')
                         ->label('Current Number')
                         ->searchable(isIndividual: true, isGlobal: false)
                         ->copyable()

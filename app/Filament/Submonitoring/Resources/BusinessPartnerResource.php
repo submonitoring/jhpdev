@@ -212,9 +212,13 @@ class BusinessPartnerResource extends Resource
                                                 TextInput::make('name_1')
                                                     ->required()
                                                     ->label('Name')
+                                                    ->live(onBlur: true)
                                                     ->disabled(fn(Get $get) =>
                                                     $get('bp_category_id') == null)
-                                                    ->extraInputAttributes(['style' => 'font-size: 1.5rem;height: 3rem;']),
+                                                    ->extraInputAttributes(['style' => 'font-size: 1.5rem;height: 3rem;'])
+                                                    ->afterStateUpdated(function (?string $state, Set $set) {
+                                                        $set('name_1', Str::ucwords(strtolower($state)));
+                                                    }),
 
                                             ]),
 

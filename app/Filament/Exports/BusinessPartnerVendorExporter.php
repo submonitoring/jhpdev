@@ -16,6 +16,8 @@ class BusinessPartnerVendorExporter extends Exporter
         return [
             ExportColumn::make('id')
                 ->label('ID'),
+            ExportColumn::make('unique'),
+            ExportColumn::make('record_title'),
             ExportColumn::make('sort'),
             ExportColumn::make('business_partner_id'),
             ExportColumn::make('purchasing_organization_id'),
