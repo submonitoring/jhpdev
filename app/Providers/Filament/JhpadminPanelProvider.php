@@ -159,7 +159,7 @@ class JhpadminPanelProvider extends PanelProvider
                         // action: CustomTwoFactorPage::class // optionally, use a custom 2FA page
                     ),
                 // FilamentSimpleThemePlugin::make(),
-                QuickCreatePlugin::make(),
+                // QuickCreatePlugin::make(),
                 // StickyHeaderPlugin::make(),
                 // ->floating(),
                 // VersionsPlugin::make(),
