@@ -253,7 +253,7 @@ class UserResource extends Resource
                             return (new HtmlString(
                                 'Bismillah,
 
-                                siakad.tsn.ponpes.id
+                                dev.jhpherbal.com
 
                                 ' . $record->name . '
 
