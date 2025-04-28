@@ -246,11 +246,6 @@ class NumberRangeResource extends Resource
                     TextInputColumn::make('current_number')
                         ->label('Current Number')
                         ->searchable(isIndividual: true, isGlobal: false)
-                        ->copyable()
-                        ->copyableState(function ($state) {
-                            return ($state);
-                        })
-                        ->copyMessage('Tersalin')
                         ->sortable(),
 
                 ]),
