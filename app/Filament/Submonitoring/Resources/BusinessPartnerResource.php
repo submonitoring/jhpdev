@@ -156,20 +156,22 @@ class BusinessPartnerResource extends Resource
                             Grid::make(4)
                                 ->schema([
 
-                                    Fieldset::make('BP Number')
+                                    Section::make('BP Number')
                                         ->schema([
 
                                             TextInput::make('bp_number')
                                                 // ->label('BP Number')
                                                 ->hiddenLabel()
                                                 ->disabled(),
-                                        ])->hiddenOn('create'),
+                                        ])
+                                        ->compact()
+                                        ->hiddenOn('create'),
 
                                 ]),
 
 
                             Split::make([
-                                Fieldset::make('Nama')
+                                Section::make('Nama')
                                     ->schema([
 
                                         Grid::make(4)
@@ -232,12 +234,12 @@ class BusinessPartnerResource extends Resource
 
                                             ])
 
-                                    ])
+                                    ])->compact()
 
                             ]),
 
                             Split::make([
-                                Fieldset::make('Communication')
+                                Section::make('Communication')
                                     ->schema([
 
                                         Grid::make(4)
@@ -311,12 +313,13 @@ class BusinessPartnerResource extends Resource
                                             ]),
 
                                     ])
+                                    ->compact()
                                     ->columnspan(4),
 
                             ]),
 
                             Split::make([
-                                Fieldset::make('Address')
+                                Section::make('Address')
                                     ->schema([
 
                                         Grid::make(4)
@@ -538,11 +541,12 @@ class BusinessPartnerResource extends Resource
 
 
                                     ])
+                                    ->compact()
                                     ->columnspan(4),
 
                             ]),
 
-                            Fieldset::make('Tax Data')
+                            Section::make('Tax Data')
                                 ->schema([
                                     Grid::make(4)
                                         ->schema([
@@ -554,9 +558,10 @@ class BusinessPartnerResource extends Resource
                                                 ->maxLength(16),
                                             // ->required(),
                                         ]),
-                                ]),
+                                ])
+                                ->compact(),
 
-                            Fieldset::make('Sales')
+                            Section::make('Sales')
                                 ->schema([
                                     Grid::make(4)
                                         ->schema([
@@ -568,7 +573,8 @@ class BusinessPartnerResource extends Resource
                                                 ->maxLength(13)
                                                 ->hintIcon('heroicon-m-question-mark-circle', tooltip: 'NIB = Nomor Induk Berusaha'),
                                         ]),
-                                ]),
+                                ])
+                                ->compact(),
 
                             Section::make('Status')
                                 ->schema([
@@ -598,7 +604,7 @@ class BusinessPartnerResource extends Resource
                                 ->relationship()
                                 ->schema([
 
-                                    Fieldset::make('Company Code Data')
+                                    Section::make('Company Code Data')
                                         ->schema([
 
                                             Grid::make(2)
@@ -616,7 +622,7 @@ class BusinessPartnerResource extends Resource
 
                                                 ]),
 
-                                        ]),
+                                        ])->compact(),
 
                                     Hidden::make('is_active')
                                         ->default(1),
@@ -635,7 +641,7 @@ class BusinessPartnerResource extends Resource
                                 ->relationship()
                                 ->schema([
 
-                                    Fieldset::make('Sales Area Data')
+                                    Section::make('Sales Area Data')
                                         ->schema([
 
                                             Grid::make(2)
@@ -661,7 +667,8 @@ class BusinessPartnerResource extends Resource
                                                         ->inlineLabel()
                                                         ->options(DistributionChannel::where('is_active', 1)->pluck('distribution_channel_name', 'id'))
                                                         ->required()
-                                                        ->native(false),
+                                                        ->native(false)
+                                                        ->distinct(),
 
                                                 ]),
 
@@ -680,7 +687,7 @@ class BusinessPartnerResource extends Resource
 
                                                 ]),
 
-                                        ]),
+                                        ])->compact(),
 
                                     Hidden::make('is_active')
                                         ->default(1),
@@ -699,7 +706,7 @@ class BusinessPartnerResource extends Resource
                                 ->relationship()
                                 ->schema([
 
-                                    Fieldset::make('Purchasing Data')
+                                    Section::make('Purchasing Data')
                                         ->schema([
 
                                             Grid::make(2)
@@ -717,7 +724,7 @@ class BusinessPartnerResource extends Resource
 
                                                 ]),
 
-                                        ]),
+                                        ])->compact(),
 
                                     Hidden::make('is_active')
                                         ->default(1),
@@ -727,7 +734,7 @@ class BusinessPartnerResource extends Resource
 
                         ]),
 
-                ]),
+                ])->contained(false),
 
         ];
     }
