@@ -289,7 +289,7 @@ class BusinessPartnerCustomerResource extends Resource
                             return $record;
 
                             Notification::make()
-                                ->title('Status Business Partner Company telah diubah menjadi Inactive')
+                                ->title('Status Business Partner Customer telah diubah menjadi Inactive')
                                 ->color('danger')
                                 ->send();
                         }),
@@ -316,8 +316,7 @@ class BusinessPartnerCustomerResource extends Resource
 
             ])
             ->bulkActions([
-                Tables\Actions\BulkActionGroup::make([
-                ]),
+                Tables\Actions\BulkActionGroup::make([]),
 
                 ExportBulkAction::make()
                     ->label('Export')
