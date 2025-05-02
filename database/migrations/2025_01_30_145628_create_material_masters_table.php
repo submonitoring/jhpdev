@@ -57,6 +57,7 @@ return new class extends Migration
             $table->boolean('is_bom_header')->nullable();
             $table->boolean('is_bom_item')->nullable();
             $table->boolean('is_external')->nullable();
+            $table->boolean('massall')->nullable();
             $table->boolean('is_active')->nullable();
             $table->string('created_by')->nullable();
             $table->string('updated_by')->nullable();

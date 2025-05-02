@@ -6,6 +6,7 @@ use App\Filament\Imports\MaterialMasterPlantImporter;
 use App\Filament\Submonitoring\Clusters\MaterialMaster;
 use App\Filament\Submonitoring\Resources\MaterialMasterPlantResource\Pages;
 use App\Filament\Submonitoring\Resources\MaterialMasterPlantResource\RelationManagers;
+use App\Models\MaterialMaster as ModelsMaterialMaster;
 use App\Models\MaterialMasterPlant;
 use App\Models\Plant;
 use App\Models\ProcurementType;
@@ -27,6 +28,7 @@ use Filament\Forms\Components\ToggleButtons;
 use Filament\Forms\Form;
 use Filament\Forms\Get;
 use Filament\Forms\Set;
+use Filament\Notifications\Notification;
 use Filament\Pages\SubNavigationPosition;
 use Filament\Resources\Resource;
 use Filament\Support\Enums\ActionSize;
@@ -402,27 +404,116 @@ class MaterialMasterPlantResource extends Resource
                     ]),
             ])
             ->headerActions([
-                Tables\Actions\CreateAction::make(),
+                // Tables\Actions\CreateAction::make(),
 
-                ImportAction::make()
-                    ->label('Import')
-                    ->importer(MaterialMasterPlantImporter::class),
+                // ImportAction::make()
+                //     ->label('Import')
+                //     ->importer(MaterialMasterPlantImporter::class),
             ])
             ->actions([
                 ActionGroup::make([
                     ActionGroup::make([
                         Tables\Actions\ViewAction::make(),
-                        Tables\Actions\EditAction::make(),
-                        Tables\Actions\DeleteAction::make(),
+                        // Tables\Actions\EditAction::make(),
+                        // Tables\Actions\DeleteAction::make(),
+
+                        Action::make('nonaktif')
+                            ->label('Inactive')
+                            ->color('danger')
+                            ->icon('heroicon-o-x-circle')
+                            ->requiresConfirmation()
+                            ->action(function ($record) {
+
+                                $data['is_active'] = 0;
+                                $record->update($data);
+
+                                return $record;
+
+                                Notification::make()
+                                    ->title('Status Material Master telah diubah menjadi Inactive')
+                                    ->color('danger')
+                                    ->send();
+                            }),
+
+                        Action::make('aktif')
+                            ->label('Activate')
+                            ->color('success')
+                            ->icon('heroicon-o-check-circle')
+                            ->requiresConfirmation()
+                            ->action(function ($record) {
+
+                                ModelsMaterialMaster::where('id', $record->material_master_id)->update(['is_active' => 1]);
+
+                                $data['is_active'] = 1;
+                                $record->update($data);
+
+                                return $record;
+
+                                Notification::make()
+                                    ->title('Status Material Master telah diubah menjadi Active')
+                                    ->color('success')
+                                    ->send();
+                            }),
+
                     ])->dropdown(false),
 
                 ]),
 
             ])
             ->bulkActions([
-                Tables\Actions\BulkActionGroup::make([
-                    Tables\Actions\DeleteBulkAction::make(),
-                ]),
+                // Tables\Actions\BulkActionGroup::make([
+                //     Tables\Actions\DeleteBulkAction::make(),
+                // ]),
+
+                Tables\Actions\BulkAction::make('massinactivate')
+                    ->label(__('Mass Inactive'))
+                    ->color('danger')
+                    ->requiresConfirmation()
+                    ->modalIcon('heroicon-o-x-circle')
+                    ->modalIconColor('danger')
+                    ->modalHeading('Mass Inactive?')
+                    ->action(
+                        function (Collection $records, array $data) {
+
+                            $records->each(
+                                function ($record) {
+
+                                    $data['is_active'] = 0;
+                                    $record->update($data);
+                                    return $record;
+                                }
+                            );
+                        }
+                    ),
+
+                Tables\Actions\BulkAction::make('massactivate')
+                    ->label(__('Mass Activate'))
+                    ->color('success')
+                    ->requiresConfirmation()
+                    ->modalIcon('heroicon-o-check-circle')
+                    ->modalIconColor('success')
+                    ->modalHeading('Mass Activate?')
+                    ->action(
+                        function (Collection $records, array $data) {
+
+                            $records->each(
+                                function ($record) {
+
+                                    ModelsMaterialMaster::where('id', $record->material_master_id)->update(['is_active' => 1]);
+
+                                    $data['is_active'] = 1;
+                                    $record->update($data);
+
+                                    return $record;
+
+                                    Notification::make()
+                                        ->title('Status Material Master telah diubah menjadi Active')
+                                        ->color('success')
+                                        ->send();
+                                }
+                            );
+                        }
+                    ),
 
                 ExportBulkAction::make()
                     ->label('Export')

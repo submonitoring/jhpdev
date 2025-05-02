@@ -874,6 +874,7 @@ class BusinessPartnerResource extends Resource
                             ->label('Inactive')
                             ->color('danger')
                             ->icon('heroicon-o-x-circle')
+                            ->requiresConfirmation()
                             ->action(function ($record) {
 
                                 $cekbpcomp = BusinessPartnerCompany::where('business_partner_id', $record->id)->pluck('id')->toArray();
@@ -902,20 +903,57 @@ class BusinessPartnerResource extends Resource
                             ->label('Activate')
                             ->color('success')
                             ->icon('heroicon-o-check-circle')
-                            ->action(function ($record) {
+                            ->requiresConfirmation()
+                            ->form([
 
-                                $data['is_active'] = 1;
-                                $record->update($data);
+                                Checkbox::make('massall')
+                                    ->label('Also activate all related Business Partners?'),
 
-                                return $record;
+                            ])
+                            ->action(function ($record, $data) {
 
-                                Notification::make()
-                                    ->title('Status Business Partner telah diubah menjadi Active')
-                                    ->color('danger')
-                                    ->send();
+                                if ($data['massall'] ==  true) {
+
+
+                                    $cekbpcomp = BusinessPartnerCompany::where('business_partner_id', $record->id)->pluck('id')->toArray();
+                                    $cekbpcust = BusinessPartnerCustomer::where('business_partner_id', $record->id)->pluck('id')->toArray();
+                                    $cekbpvend = BusinessPartnerVendor::where('business_partner_id', $record->id)->pluck('id')->toArray();
+
+                                    BusinessPartnerCompany::whereIn('id', $cekbpcomp)->update(['is_active' => 1]);
+
+                                    BusinessPartnerCustomer::whereIn('id', $cekbpcust)->update(['is_active' => 1]);
+
+                                    BusinessPartnerVendor::whereIn('id', $cekbpvend)->update(['is_active' => 1]);
+
+                                    $data['is_active'] = 1;
+                                    $record->update($data);
+                                    return $record;
+
+                                    Notification::make()
+                                        ->title('Status Business Partner telah diubah menjadi Active')
+                                        ->color('danger')
+                                        ->send();
+                                } elseif ($data['massall'] ==  false) {
+
+                                    $data['is_active'] = 1;
+                                    $record->update($data);
+                                    return $record;
+
+                                    Notification::make()
+                                        ->title('Status Business Partner telah diubah menjadi Active')
+                                        ->color('danger')
+                                        ->send();
+                                }
                             }),
                     ])->dropdown(false),
                 ]),
+
+                // Tables\Actions\Action::make('pdf')
+                //     ->label('PDF')
+                //     ->color('icon')
+                //     ->icon('heroicon-o-document-arrow-down')
+                //     ->url(fn(BusinessPartner $record) => route('pdf', $record))
+                //     ->openUrlInNewTab(),
 
                 // RelationManagerAction::make('createbpcomp')
                 //     ->label('Company')
@@ -958,7 +996,6 @@ class BusinessPartnerResource extends Resource
                     ->modalIcon('heroicon-o-x-circle')
                     ->modalIconColor('danger')
                     ->modalHeading('Mass Inactive?')
-                    ->modalSubmitActionLabel('Simpan')
                     ->action(
                         function (Collection $records, array $data) {
 
@@ -992,11 +1029,10 @@ class BusinessPartnerResource extends Resource
                     ->modalIcon('heroicon-o-check-circle')
                     ->modalIconColor('success')
                     ->modalHeading('Mass Activate?')
-                    ->modalSubmitActionLabel('Simpan')
                     ->form([
 
                         Checkbox::make('massall')
-                            ->label('Also change all Business Partners?'),
+                            ->label('Also change all related Business Partners?'),
 
                     ])
                     ->action(

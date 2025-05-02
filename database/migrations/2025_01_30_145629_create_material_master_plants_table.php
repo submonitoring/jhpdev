@@ -13,6 +13,7 @@ return new class extends Migration
     {
         Schema::create('material_master_plants', function (Blueprint $table) {
             $table->id();
+            $table->string('sort')->nullable();
             $table->ulid('unique')->nullable();
             $table->string('record_title')->nullable();
             $table->foreignId('material_master_id')->nullable()

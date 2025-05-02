@@ -14,6 +14,7 @@ use App\Models\DistributionChannel;
 use App\Models\Division;
 use App\Models\SalesOrganization;
 use Filament\Forms;
+use Filament\Forms\Components\Checkbox;
 use Filament\Forms\Components\Grid;
 use Filament\Forms\Components\Section;
 use Filament\Forms\Components\Select;
@@ -39,6 +40,7 @@ use Filament\Tables\Filters\QueryBuilder\Constraints\TextConstraint;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
+use Illuminate\Support\Collection;
 
 class BusinessPartnerCustomerResource extends Resource
 {
@@ -280,6 +282,7 @@ class BusinessPartnerCustomerResource extends Resource
                         ->label('Inactive')
                         ->color('danger')
                         ->icon('heroicon-o-x-circle')
+                        ->requiresConfirmation()
                         ->action(function ($record) {
 
 
@@ -297,6 +300,7 @@ class BusinessPartnerCustomerResource extends Resource
                         ->label('Activate')
                         ->color('success')
                         ->icon('heroicon-o-check-circle')
+                        ->requiresConfirmation()
                         ->action(function ($record) {
 
                             ModelsBusinessPartner::where('id', $record->business_partner_id)->update(['is_active' => 1]);
@@ -316,7 +320,57 @@ class BusinessPartnerCustomerResource extends Resource
 
             ])
             ->bulkActions([
-                Tables\Actions\BulkActionGroup::make([]),
+                // Tables\Actions\BulkActionGroup::make([]),
+
+                Tables\Actions\BulkAction::make('massinactivate')
+                    ->label(__('Mass Inactive'))
+                    ->color('danger')
+                    ->requiresConfirmation()
+                    ->modalIcon('heroicon-o-x-circle')
+                    ->modalIconColor('danger')
+                    ->modalHeading('Mass Inactive?')
+                    ->action(
+                        function (Collection $records, array $data) {
+
+                            $records->each(
+                                function ($record) {
+
+                                    $data['is_active'] = 0;
+                                    $record->update($data);
+                                    return $record;
+                                }
+                            );
+                        }
+                    ),
+
+                Tables\Actions\BulkAction::make('massactivate')
+                    ->label(__('Mass Activate'))
+                    ->color('success')
+                    ->requiresConfirmation()
+                    ->modalIcon('heroicon-o-check-circle')
+                    ->modalIconColor('success')
+                    ->modalHeading('Mass Activate?')
+                    ->action(
+                        function (Collection $records, array $data) {
+
+                            $records->each(
+                                function ($record) {
+
+                                    ModelsBusinessPartner::where('id', $record->business_partner_id)->update(['is_active' => 1]);
+
+                                    $data['is_active'] = 1;
+                                    $record->update($data);
+
+                                    return $record;
+
+                                    Notification::make()
+                                        ->title('Status Business Partner telah diubah menjadi Active')
+                                        ->color('success')
+                                        ->send();
+                                }
+                            );
+                        }
+                    ),
 
                 ExportBulkAction::make()
                     ->label('Export')

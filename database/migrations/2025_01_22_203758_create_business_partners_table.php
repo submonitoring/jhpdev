@@ -101,6 +101,7 @@ return new class extends Migration
             $table->string('building_number')->nullable();
             $table->string('floor')->nullable();
             $table->string('room')->nullable();
+            $table->boolean('massall')->nullable();
             $table->boolean('is_active')->nullable();
             $table->string('created_by')->nullable();
             $table->string('updated_by')->nullable();
