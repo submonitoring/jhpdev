@@ -31,6 +31,7 @@ use App\Models\NumberRange;
 use App\Models\PaymentTerm;
 use App\Models\Provinsi;
 use App\Models\PurchasingOrganization;
+use App\Models\SalesArea;
 use App\Models\SalesOrganization;
 use App\Models\TaxClassification;
 use App\Models\Title;
@@ -133,7 +134,27 @@ class BusinessPartnerResource extends Resource
                         ->multiple()
                         // ->required()
                         ->live()
-                        ->hintIcon('heroicon-m-question-mark-circle', tooltip: 'Pilih Customer jika Business Partner merupakan pembeli.  Pilih Vendor jika Business Partner merupakan supplier.'),
+                        ->hintIcon('heroicon-m-question-mark-circle', tooltip: 'Pilih Customer jika Business Partner merupakan pembeli.  Pilih Vendor jika Business Partner merupakan supplier.')
+                        ->afterStateUpdated(function (Set $set, Get $get, ?array $state) {
+                            if (filled($state)) {
+                                $bpcustrep = $get('businessPartnerCustomers') ?? [];
+
+                                $salesarea = SalesArea::where('is_active', 1)->get();
+
+                                array_push(
+                                    $bpcustrep,
+                                    ...$salesarea->map(function ($sales) {
+                                        return [
+                                            'sales_organization_id' => $sales->sales_organization_id,
+                                            'distribution_channel_id' => $sales->distribution_channel_id,
+                                            'division_id' => $sales->division_id,
+                                        ];
+                                    })->toArray()
+                                );
+
+                                $set('businessPartnerCustomers', $bpcustrep);
+                            }
+                        }),
 
                 ])->compact(),
 
@@ -220,6 +241,23 @@ class BusinessPartnerResource extends Resource
                                                     ->extraInputAttributes(['style' => 'font-size: 1.5rem;height: 3rem;'])
                                                     ->afterStateUpdated(function (?string $state, Set $set) {
                                                         $set('name_1', Str::ucwords(strtolower($state)));
+                                                    }),
+
+                                            ]),
+
+                                        Grid::make()
+                                            ->schema([
+
+                                                TextInput::make('name_4')
+                                                    ->required()
+                                                    ->label('Contact Person')
+                                                    ->live(onBlur: true)
+                                                    ->hidden(fn(Get $get) =>
+                                                    $get('bp_category_id') == 1 || $get('bp_category_id') == null)
+                                                    ->disabled(fn(Get $get) =>
+                                                    $get('bp_category_id') == null)
+                                                    ->afterStateUpdated(function (?string $state, Set $set) {
+                                                        $set('name_4', Str::ucwords(strtolower($state)));
                                                     }),
 
                                             ]),
