@@ -133,28 +133,28 @@ class BusinessPartnerResource extends Resource
                         ->inline()
                         ->multiple()
                         // ->required()
-                        ->live()
                         ->hintIcon('heroicon-m-question-mark-circle', tooltip: 'Pilih Customer jika Business Partner merupakan pembeli.  Pilih Vendor jika Business Partner merupakan supplier.')
-                        ->afterStateUpdated(function (Set $set, Get $get, ?array $state) {
-                            if (filled($state)) {
-                                $bpcustrep = $get('businessPartnerCustomers') ?? [];
+                        ->live(),
+                    // ->afterStateUpdated(function (Set $set, Get $get, ?array $state) {
+                    //     if (filled($state)) {
+                    //         $bpcustrep = $get('businessPartnerCustomers') ?? [];
 
-                                $salesarea = SalesArea::where('is_active', 1)->get();
+                    //         $salesarea = SalesArea::where('is_active', 1)->get();
 
-                                array_push(
-                                    $bpcustrep,
-                                    ...$salesarea->map(function ($sales) {
-                                        return [
-                                            'sales_organization_id' => $sales->sales_organization_id,
-                                            'distribution_channel_id' => $sales->distribution_channel_id,
-                                            'division_id' => $sales->division_id,
-                                        ];
-                                    })->toArray()
-                                );
+                    //         array_push(
+                    //             $bpcustrep,
+                    //             ...$salesarea->map(function ($sales) {
+                    //                 return [
+                    //                     'sales_organization_id' => $sales->sales_organization_id,
+                    //                     'distribution_channel_id' => $sales->distribution_channel_id,
+                    //                     'division_id' => $sales->division_id,
+                    //                 ];
+                    //             })->toArray()
+                    //         );
 
-                                $set('businessPartnerCustomers', $bpcustrep);
-                            }
-                        }),
+                    //         $set('businessPartnerCustomers', $bpcustrep);
+                    //     }
+                    // }),
 
                 ])->compact(),
 
