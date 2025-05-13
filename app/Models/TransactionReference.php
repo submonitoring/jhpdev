@@ -8,6 +8,11 @@ use Illuminate\Support\Facades\Auth;
 
 class TransactionReference extends Model
 {
+    public function materialDocuments()
+    {
+        return $this->hasMany(MaterialDocument::class);
+    }
+
     public static function boot()
     {
         parent::boot();

@@ -18,6 +18,11 @@ class DocumentType extends Model
         return $this->belongsTo(ModuleCaa::class);
     }
 
+    public function moduleAaa()
+    {
+        return $this->belongsTo(ModuleAaa::class);
+    }
+
     public function documentType()
     {
         return $this->belongsTo(DocumentType::class);
@@ -41,6 +46,16 @@ class DocumentType extends Model
     public function itemCategories()
     {
         return $this->belongsToMany(ItemCategory::class);
+    }
+
+    public function materialDocuments()
+    {
+        return $this->hasMany(MaterialDocument::class);
+    }
+
+    public function accountDeterminations()
+    {
+        return $this->hasMany(AccountDetermination::class);
     }
 
     public static function boot()

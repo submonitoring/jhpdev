@@ -22,6 +22,11 @@ class MaterialType extends Model
         return $this->hasMany(MaterialMaster::class);
     }
 
+    public function accountDeterminations()
+    {
+        return $this->hasMany(AccountDetermination::class);
+    }
+
     public static function boot()
     {
         parent::boot();

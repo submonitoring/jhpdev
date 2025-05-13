@@ -63,6 +63,11 @@ class MaterialMaster extends Model
         return $this->hasMany(BomItem::class);
     }
 
+    public function materialDocumentItems()
+    {
+        return $this->hasMany(MaterialDocumentItem::class);
+    }
+
     public function batchMasters()
     {
         return $this->belongsToMany(BatchMaster::class);

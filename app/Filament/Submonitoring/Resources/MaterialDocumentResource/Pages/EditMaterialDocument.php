@@ -1,0 +1,40 @@
+<?php
+
+namespace App\Filament\Submonitoring\Resources\MaterialDocumentResource\Pages;
+
+use App\Filament\Resources\Pages\Concerns\CanPaginateViewRecord;
+use App\Filament\Submonitoring\Resources\Actions\NextAction;
+use App\Filament\Submonitoring\Resources\Actions\PreviousAction;
+use App\Filament\Submonitoring\Resources\MaterialDocumentResource;
+use Filament\Actions;
+use Filament\Actions\Action;
+use Filament\Actions\ViewAction;
+use Filament\Resources\Pages\EditRecord;
+use Howdu\FilamentRecordSwitcher\Filament\Concerns\HasRecordSwitcher;
+use Kenepa\ResourceLock\Resources\Pages\Concerns\UsesResourceLock;
+
+class EditMaterialDocument extends EditRecord
+{
+    protected static string $resource = MaterialDocumentResource::class;
+
+    protected function getHeaderActions(): array
+    {
+        return [
+            PreviousAction::make(),
+            NextAction::make(),
+            ViewAction::make(),
+            // DeleteAction::make(),
+            Action::make('Back to List')
+                ->url($this->getResource()::getUrl('index')),
+        ];
+    }
+
+    protected function getRedirectUrl(): string
+    {
+        return $this->getResource()::getUrl('index');
+    }
+
+    use UsesResourceLock;
+    use HasRecordSwitcher;
+    use CanPaginateViewRecord;
+}

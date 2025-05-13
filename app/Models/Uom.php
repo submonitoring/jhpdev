@@ -28,6 +28,11 @@ class Uom extends Model
         return $this->hasMany(BomItem::class);
     }
 
+    public function materialDocumentItems()
+    {
+        return $this->hasMany(MaterialDocumentItem::class);
+    }
+
     public static function boot()
     {
         parent::boot();

@@ -25,6 +25,10 @@ return new class extends Migration
                 ->constrained()
                 ->cascadeOnUpdate()
                 ->nullOnDelete();
+            $table->foreignId('module_aaa_id')->nullable()
+                ->constrained()
+                ->cascadeOnUpdate()
+                ->nullOnDelete();
             $table->foreignId('module_caa_id')->nullable()
                 ->constrained()
                 ->cascadeOnUpdate()

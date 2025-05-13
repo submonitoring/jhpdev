@@ -23,6 +23,21 @@ class ModuleAaa extends Model
         return $this->hasMany(ModuleBaa::class);
     }
 
+    public function documentTypes()
+    {
+        return $this->hasMany(DocumentType::class);
+    }
+
+    public function accountDeterminations()
+    {
+        return $this->hasMany(AccountDetermination::class);
+    }
+
+    public function journalEntries()
+    {
+        return $this->hasMany(JournalEntry::class);
+    }
+
     public static function boot()
     {
         parent::boot();

@@ -16,7 +16,11 @@ return new class extends Migration
             $table->ulid('unique')->nullable();
             $table->string('record_title')->nullable();
             $table->string('transaction_type')->nullable();
-            $table->string('transaction_type_dsec')->nullable();
+            $table->string('transaction_type_desc')->nullable();
+            $table->foreignId('document_type_id')->nullable()
+                ->constrained()
+                ->cascadeOnUpdate()
+                ->nullOnDelete();
             $table->boolean('is_active')->nullable();
             $table->string('created_by')->nullable();
             $table->string('updated_by')->nullable();

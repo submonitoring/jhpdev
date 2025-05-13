@@ -230,6 +230,16 @@ class MaterialMasterSalesResource extends Resource
                     ->copyMessage('Tersalin')
                     ->sortable(),
 
+                TextColumn::make('materialMaster.material_desc')
+                    ->label('Material Desc')
+                    ->searchable(isIndividual: true, isGlobal: false)
+                    ->copyable()
+                    ->copyableState(function ($state) {
+                        return ($state);
+                    })
+                    ->copyMessage('Tersalin')
+                    ->sortable(),
+
                 ColumnGroup::make('Sales Area', [
 
                     TextColumn::make('salesOrganization.sales_organization_name')

@@ -23,6 +23,11 @@ class Plant extends Model
         return $this->hasMany(MaterialMasterSales::class);
     }
 
+    public function materialDocumentItems()
+    {
+        return $this->hasMany(MaterialDocumentItem::class);
+    }
+
     public function storageLocations()
     {
         return $this->belongsToMany(StorageLocation::class);

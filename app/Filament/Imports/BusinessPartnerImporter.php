@@ -123,6 +123,9 @@ class BusinessPartnerImporter extends Importer
             ImportColumn::make('is_active')
                 ->boolean()
                 ->rules(['boolean']),
+            ImportColumn::make('massall')
+                ->boolean()
+                ->rules(['boolean']),
             ImportColumn::make('created_by')
                 ->rules(['max:255']),
             ImportColumn::make('updated_by')

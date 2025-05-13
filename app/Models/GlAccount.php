@@ -13,6 +13,16 @@ class GlAccount extends Model
         return $this->belongsTo(GlAccountGroup::class);
     }
 
+    public function accountDeterminationItems()
+    {
+        return $this->hasMany(AccountDeterminationItem::class);
+    }
+
+    public function journalEntries()
+    {
+        return $this->hasMany(JournalEntry::class);
+    }
+
     public static function boot()
     {
         parent::boot();

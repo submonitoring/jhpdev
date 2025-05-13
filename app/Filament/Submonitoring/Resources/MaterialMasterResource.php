@@ -265,21 +265,21 @@ class MaterialMasterResource extends Resource
                                 ])
                                 ->compact(),
 
-                            Section::make('Price')
-                                ->schema([
+                            // Section::make('Price')
+                            //     ->schema([
 
-                                    Grid::make(4)
-                                        ->schema([
+                            //         Grid::make(4)
+                            //             ->schema([
 
-                                            TextInput::make('price')
-                                                ->label('Harga Barang')
-                                                ->numeric(),
+                            //                 TextInput::make('price')
+                            //                     ->label('Harga Barang')
+                            //                     ->numeric(),
 
-                                        ]),
+                            //             ]),
 
 
-                                ])
-                                ->compact(),
+                            //     ])
+                            //     ->compact(),
 
                             Section::make('Dimensions')
                                 ->schema([
@@ -387,9 +387,9 @@ class MaterialMasterResource extends Resource
                                                         ->label('Safety Stock')
                                                         ->numeric(),
 
-                                                    TextInput::make('minimal_safety_stock')
-                                                        ->label('Minimal Safety Stock')
-                                                        ->numeric(),
+                                                    // TextInput::make('minimal_safety_stock')
+                                                    //     ->label('Minimal Safety Stock')
+                                                    //     ->numeric(),
 
                                                 ]),
 
@@ -528,60 +528,60 @@ class MaterialMasterResource extends Resource
 
                                         ])->compact(),
 
-                                    Section::make('Accounting Data')
-                                        ->schema([
+                                    // Section::make('Accounting Data')
+                                    //     ->schema([
 
-                                            Grid::make(2)
-                                                ->schema([
+                                    //         Grid::make(2)
+                                    //             ->schema([
 
-                                                    Select::make('account_assignment_group_id')
-                                                        ->label('Account Assignment Group')
-                                                        ->inlineLabel()
-                                                        ->options(AccountAssignmentGroup::where('is_active', 1)->pluck('account_assignment_group_desc', 'id'))
-                                                        // ->required()
-                                                        ->native(false),
+                                    //                 Select::make('account_assignment_group_id')
+                                    //                     ->label('Account Assignment Group')
+                                    //                     ->inlineLabel()
+                                    //                     ->options(AccountAssignmentGroup::where('is_active', 1)->pluck('account_assignment_group_desc', 'id'))
+                                    //                     // ->required()
+                                    //                     ->native(false),
 
-                                                ]),
+                                    //             ]),
 
-                                            Grid::make(2)
-                                                ->schema([
+                                    //         Grid::make(2)
+                                    //             ->schema([
 
-                                                    Select::make('tax_classification_id')
-                                                        ->label('Tax Classification')
-                                                        ->inlineLabel()
-                                                        ->options(TaxClassification::where('is_active', 1)->pluck('tax_classification_desc', 'id'))
-                                                        // ->required()
-                                                        ->native(false),
+                                    //                 Select::make('tax_classification_id')
+                                    //                     ->label('Tax Classification')
+                                    //                     ->inlineLabel()
+                                    //                     ->options(TaxClassification::where('is_active', 1)->pluck('tax_classification_desc', 'id'))
+                                    //                     // ->required()
+                                    //                     ->native(false),
 
-                                                ]),
-                                        ])->compact(),
+                                    //             ]),
+                                    //     ])->compact(),
 
-                                    Section::make('Plant')
-                                        ->schema([
+                                    // Section::make('Plant')
+                                    //     ->schema([
 
-                                            Grid::make(4)
-                                                ->schema([
+                                    //         Grid::make(4)
+                                    //             ->schema([
 
-                                                    Select::make('plant_id')
-                                                        ->label('Delivering Plant')
-                                                        ->required()
-                                                        ->native()
-                                                        ->options(Plant::whereIsActive(1)->pluck('plant_name', 'id')),
+                                    //                 Select::make('plant_id')
+                                    //                     ->label('Delivering Plant')
+                                    //                     ->required()
+                                    //                     ->native()
+                                    //                     ->options(Plant::whereIsActive(1)->pluck('plant_name', 'id')),
 
-                                                ]),
+                                    //             ]),
 
-                                            Grid::make(4)
-                                                ->schema([
+                                    //         Grid::make(4)
+                                    //             ->schema([
 
-                                                    Select::make('material_group_id')
-                                                        ->label('Material Group')
-                                                        ->required()
-                                                        ->native()
-                                                        ->options(MaterialGroup::whereIsActive(1)->pluck('material_group_desc', 'id')),
+                                    //                 Select::make('material_group_id')
+                                    //                     ->label('Material Group')
+                                    //                     ->required()
+                                    //                     ->native()
+                                    //                     ->options(MaterialGroup::whereIsActive(1)->pluck('material_group_desc', 'id')),
 
-                                                ])
+                                    //             ])
 
-                                        ]),
+                                    //     ]),
 
                                     Hidden::make('is_active')
                                         ->default(1),

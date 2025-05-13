@@ -8,6 +8,7 @@ use App\Filament\Submonitoring\Resources\DocumentTypeResource\Pages;
 use App\Filament\Submonitoring\Resources\DocumentTypeResource\RelationManagers;
 use App\Filament\Submonitoring\Resources\DocumentTypeResource\RelationManagers\ItemCategoriesRelationManager;
 use App\Models\DocumentType;
+use App\Models\ModuleAaa;
 use App\Models\ModuleCaa;
 use App\Models\NumberRange;
 use App\Models\StatusGroup;
@@ -135,8 +136,18 @@ class DocumentTypeResource extends Resource
                 ])
                 ->compact(),
 
-            Section::make('Module Caa')
+            Section::make('Module')
                 ->schema([
+
+                    Grid::make(4)
+                        ->schema([
+
+                            Select::make('module_aaa_id')
+                                ->label('Module Aaa')
+                                ->native(false)
+                                ->options(ModuleAaa::whereIsActive(1)->pluck('module_aaa_name', 'id')),
+
+                        ]),
 
                     Grid::make(4)
                         ->schema([
@@ -252,6 +263,30 @@ class DocumentTypeResource extends Resource
 
                     TextColumn::make('numberRange.number_range_name')
                         ->label('Number Range Name')
+                        ->searchable(isIndividual: true, isGlobal: false)
+                        ->copyable()
+                        ->copyableState(function ($state) {
+                            return ($state);
+                        })
+                        ->copyMessage('Tersalin')
+                        ->sortable(),
+
+                ]),
+
+                ColumnGroup::make('Module Aaa', [
+
+                    TextColumn::make('moduleAaa.module_aaa')
+                        ->label('Module Aaa')
+                        ->searchable(isIndividual: true, isGlobal: false)
+                        ->copyable()
+                        ->copyableState(function ($state) {
+                            return ($state);
+                        })
+                        ->copyMessage('Tersalin')
+                        ->sortable(),
+
+                    TextColumn::make('moduleAaa.module_aaa_name')
+                        ->label('Module Aaa Name')
                         ->searchable(isIndividual: true, isGlobal: false)
                         ->copyable()
                         ->copyableState(function ($state) {

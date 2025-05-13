@@ -7,6 +7,7 @@ use App\Filament\Imports\TransactionTypeImporter;
 use App\Filament\Submonitoring\Clusters\MmBasicSettings;
 use App\Filament\Submonitoring\Resources\TransactionTypeResource\Pages;
 use App\Filament\Submonitoring\Resources\TransactionTypeResource\RelationManagers;
+use App\Models\DocumentType;
 use App\Models\TransactionType;
 use Filament\Forms;
 use Filament\Forms\Components\Grid;
@@ -101,6 +102,22 @@ class TransactionTypeResource extends Resource
                             TextInput::make('transaction_type_desc')
                                 ->label('Desc')
                                 ->required(),
+
+                        ]),
+
+                ])
+                ->compact(),
+
+            Section::make('Document Type')
+                ->schema([
+
+                    Grid::make(4)
+                        ->schema([
+
+                            Select::make('document_type_id')
+                                ->label('Document Type')
+                                ->native(false)
+                                ->options(DocumentType::whereIsActive(1)->pluck('document_type_desc', 'id')),
 
                         ]),
 

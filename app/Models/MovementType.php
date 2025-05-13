@@ -8,6 +8,16 @@ use Illuminate\Support\Facades\Auth;
 
 class MovementType extends Model
 {
+    public function materialDocumentItems()
+    {
+        return $this->hasMany(MaterialDocumentItem::class);
+    }
+
+    public function accountDeterminations()
+    {
+        return $this->hasMany(AccountDetermination::class);
+    }
+
     public static function boot()
     {
         parent::boot();

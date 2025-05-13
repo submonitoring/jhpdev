@@ -8,6 +8,16 @@ use Illuminate\Support\Facades\Auth;
 
 class TransactionType extends Model
 {
+    public function materialDocuments()
+    {
+        return $this->hasMany(MaterialDocument::class);
+    }
+
+    public function accountDeterminations()
+    {
+        return $this->hasMany(AccountDetermination::class);
+    }
+
     public static function boot()
     {
         parent::boot();
