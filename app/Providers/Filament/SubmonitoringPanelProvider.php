@@ -126,6 +126,11 @@ class SubmonitoringPanelProvider extends PanelProvider
                     ->collapsed(),
 
                 NavigationGroup::make()
+                    ->label('Reports')
+                    ->icon('heroicon-o-clipboard-document-list')
+                    ->collapsed(),
+
+                NavigationGroup::make()
                     ->label('Transactions')
                     ->icon('heroicon-o-document')
                     ->collapsed(),

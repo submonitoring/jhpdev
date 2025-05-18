@@ -15,7 +15,7 @@ class MaterialMasterPlantPolicy
      */
     public function viewAny(User $user): bool
     {
-        return $user->can('view_any_material::master::plant');
+        return $user->can('view_any_list::kebutuhan::produksi');
     }
 
     /**
@@ -23,7 +23,7 @@ class MaterialMasterPlantPolicy
      */
     public function view(User $user, MaterialMasterPlant $materialMasterPlant): bool
     {
-        return $user->can('view_material::master::plant');
+        return $user->can('view_list::kebutuhan::produksi');
     }
 
     /**
@@ -31,7 +31,7 @@ class MaterialMasterPlantPolicy
      */
     public function create(User $user): bool
     {
-        return $user->can('create_material::master::plant');
+        return $user->can('create_list::kebutuhan::produksi');
     }
 
     /**
@@ -39,7 +39,7 @@ class MaterialMasterPlantPolicy
      */
     public function update(User $user, MaterialMasterPlant $materialMasterPlant): bool
     {
-        return $user->can('update_material::master::plant');
+        return $user->can('update_list::kebutuhan::produksi');
     }
 
     /**
@@ -47,7 +47,7 @@ class MaterialMasterPlantPolicy
      */
     public function delete(User $user, MaterialMasterPlant $materialMasterPlant): bool
     {
-        return $user->can('delete_material::master::plant');
+        return $user->can('delete_list::kebutuhan::produksi');
     }
 
     /**
@@ -55,7 +55,7 @@ class MaterialMasterPlantPolicy
      */
     public function deleteAny(User $user): bool
     {
-        return $user->can('delete_any_material::master::plant');
+        return $user->can('delete_any_list::kebutuhan::produksi');
     }
 
     /**
@@ -63,7 +63,7 @@ class MaterialMasterPlantPolicy
      */
     public function forceDelete(User $user, MaterialMasterPlant $materialMasterPlant): bool
     {
-        return $user->can('force_delete_material::master::plant');
+        return $user->can('force_delete_list::kebutuhan::produksi');
     }
 
     /**
@@ -71,7 +71,7 @@ class MaterialMasterPlantPolicy
      */
     public function forceDeleteAny(User $user): bool
     {
-        return $user->can('force_delete_any_material::master::plant');
+        return $user->can('force_delete_any_list::kebutuhan::produksi');
     }
 
     /**
@@ -79,7 +79,7 @@ class MaterialMasterPlantPolicy
      */
     public function restore(User $user, MaterialMasterPlant $materialMasterPlant): bool
     {
-        return $user->can('restore_material::master::plant');
+        return $user->can('restore_list::kebutuhan::produksi');
     }
 
     /**
@@ -87,7 +87,7 @@ class MaterialMasterPlantPolicy
      */
     public function restoreAny(User $user): bool
     {
-        return $user->can('restore_any_material::master::plant');
+        return $user->can('restore_any_list::kebutuhan::produksi');
     }
 
     /**
@@ -95,7 +95,7 @@ class MaterialMasterPlantPolicy
      */
     public function replicate(User $user, MaterialMasterPlant $materialMasterPlant): bool
     {
-        return $user->can('replicate_material::master::plant');
+        return $user->can('replicate_list::kebutuhan::produksi');
     }
 
     /**
@@ -103,6 +103,6 @@ class MaterialMasterPlantPolicy
      */
     public function reorder(User $user): bool
     {
-        return $user->can('reorder_material::master::plant');
+        return $user->can('reorder_list::kebutuhan::produksi');
     }
 }

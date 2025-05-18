@@ -36,6 +36,7 @@ return new class extends Migration
                 ->cascadeOnUpdate()
                 ->nullOnDelete();
             $table->string('document_number')->nullable();
+            $table->string('external_po_number')->nullable();
             $table->text('text_header')->nullable();
 
             $table->ulid('unique')->nullable();

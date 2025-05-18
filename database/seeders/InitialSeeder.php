@@ -55,7 +55,7 @@ class InitialSeeder extends Seeder
             'record_title' => 'jhp0001',
             'name' => 'JHP0001',
             'username' => 'jhp0001',
-            'panel_role_id' => 2,
+            'panel_role_id' => 3,
             'email' => 'jhp0001@mail.com',
             'password' => Hash::make('31928332'),
         ]);
@@ -102,6 +102,17 @@ class InitialSeeder extends Seeder
             'panel_role_id' => 2,
             'email' => 'jhp0005@mail.com',
             'password' => Hash::make('74928493'),
+        ]);
+
+        DB::table('users')->insert([
+            'id' => 7,
+            'unique' => Str::ulid(),
+            'record_title' => 'jhp0006',
+            'name' => 'JHP0006',
+            'username' => 'jhp0006',
+            'panel_role_id' => 3,
+            'email' => 'jhp0006@mail.com',
+            'password' => Hash::make('43354346'),
         ]);
     }
 }

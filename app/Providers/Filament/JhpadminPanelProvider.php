@@ -87,7 +87,12 @@ class JhpadminPanelProvider extends PanelProvider
                     ->collapsed(),
 
                 NavigationGroup::make()
-                    ->label('Material Document')
+                    ->label('Reports')
+                    ->icon('heroicon-o-clipboard-document-list')
+                    ->collapsed(),
+
+                NavigationGroup::make()
+                    ->label('Transactions')
                     ->icon('heroicon-o-document')
                     ->collapsed(),
 

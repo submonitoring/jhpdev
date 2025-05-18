@@ -18,6 +18,16 @@ class GlAccountGroup extends Model
         return $this->belongsTo(ChartOfAccount::class);
     }
 
+    public function journalEntries()
+    {
+        return $this->hasMany(JournalEntry::class);
+    }
+
+    public function accountDeterminationItems()
+    {
+        return $this->hasMany(AccountDeterminationItem::class);
+    }
+
     public static function boot()
     {
         parent::boot();

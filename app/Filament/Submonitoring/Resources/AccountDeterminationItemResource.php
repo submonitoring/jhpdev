@@ -9,6 +9,7 @@ use App\Filament\Submonitoring\Resources\AccountDeterminationItemResource\Relati
 use App\Models\AccountDeterminationItem;
 use App\Models\DebitCredit;
 use App\Models\GlAccount;
+use App\Models\GlAccountGroup;
 use Filament\Forms;
 use Filament\Forms\Components\Checkbox;
 use Filament\Forms\Components\Grid;
@@ -17,6 +18,7 @@ use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\ToggleButtons;
 use Filament\Forms\Form;
+use Filament\Forms\Get;
 use Filament\Notifications\Notification;
 use Filament\Pages\SubNavigationPosition;
 use Filament\Resources\Resource;
@@ -89,11 +91,26 @@ class AccountDeterminationItemResource extends Resource
                                 ->options(DebitCredit::whereIsActive(1)->pluck('debit_credit', 'id'))
                                 ->required(),
 
+                            ToggleButtons::make('gl_account_group_id')
+                                ->label('GL Account Group')
+                                ->inline()
+                                ->inlineLabel()
+                                ->options(GlAccountGroup::whereIsActive(1)->pluck('gl_account_group_name', 'id'))
+                                ->required()
+                                ->live(),
+
+
+
                             ToggleButtons::make('gl_account_id')
                                 ->label('GL Account')
                                 ->inline()
                                 ->inlineLabel()
-                                ->options(GlAccount::whereIsActive(1)->pluck('gl_account_name', 'id'))
+                                ->options(function (Get $get) {
+
+                                    $glaccountgroup = $get('gl_account_group_id');
+
+                                    return (GlAccount::whereIsActive(1)->where('gl_account_group_id', $glaccountgroup)->pluck('gl_account_name', 'id'));
+                                })
                                 ->required(),
 
                         ]),

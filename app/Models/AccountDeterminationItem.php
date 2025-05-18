@@ -13,6 +13,11 @@ class AccountDeterminationItem extends Model
         return $this->belongsTo(AccountDetermination::class);
     }
 
+    public function glAccountGroup()
+    {
+        return $this->belongsTo(GlAccountGroup::class);
+    }
+
     public function glAccount()
     {
         return $this->belongsTo(GlAccount::class);

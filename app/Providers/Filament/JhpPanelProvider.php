@@ -75,6 +75,16 @@ class JhpPanelProvider extends PanelProvider
             ->navigationGroups([
 
                 NavigationGroup::make()
+                    ->label('Reports')
+                    ->icon('heroicon-o-clipboard-document-list')
+                    ->collapsed(),
+
+                NavigationGroup::make()
+                    ->label('Transactions')
+                    ->icon('heroicon-o-document')
+                    ->collapsed(),
+
+                NavigationGroup::make()
                     ->label('Sales Order')
                     ->icon('heroicon-o-shopping-bag')
                     ->collapsed(),

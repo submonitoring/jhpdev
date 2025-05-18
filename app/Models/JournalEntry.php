@@ -28,6 +28,21 @@ class JournalEntry extends Model
         return $this->belongsTo(GlAccount::class);
     }
 
+    public function glAccountGroup()
+    {
+        return $this->belongsTo(GlAccountGroup::class);
+    }
+
+    public function materialMaster()
+    {
+        return $this->belongsTo(MaterialMaster::class);
+    }
+
+    public function plant()
+    {
+        return $this->belongsTo(Plant::class);
+    }
+
     public static function boot()
     {
         parent::boot();

@@ -23,6 +23,10 @@ return new class extends Migration
                 ->constrained()
                 ->cascadeOnUpdate()
                 ->nullOnDelete();
+            $table->foreignId('gl_account_group_id')->nullable()
+                ->constrained()
+                ->cascadeOnUpdate()
+                ->nullOnDelete();
             $table->foreignId('gl_account_id')->nullable()
                 ->constrained()
                 ->cascadeOnUpdate()
