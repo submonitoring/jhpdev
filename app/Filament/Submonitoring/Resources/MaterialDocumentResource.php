@@ -281,7 +281,6 @@ class MaterialDocumentResource extends Resource
 
                                                                             $matuom = MaterialMaster::where('id', $state)->first();
 
-                                                                            $set('uom_id', $matuom->base_uom_id);
                                                                             $set('movement_type_id', $movement_type_id->movement_type_id);
 
                                                                             $journal_entries = $get('journalEntries') ?? [];
