@@ -16,8 +16,6 @@ class ListKebutuhanProduksiExporter extends Exporter
     public static function getColumns(): array
     {
         return [
-            ExportColumn::make('id')
-                ->label('ID'),
             ExportColumn::make('materialMaster.material_desc'),
             ExportColumn::make('plant.plant_name'),
             ExportColumn::make('safety_stock'),

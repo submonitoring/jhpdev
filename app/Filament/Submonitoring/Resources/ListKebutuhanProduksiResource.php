@@ -219,8 +219,8 @@ class ListKebutuhanProduksiResource extends Resource
                 //     Tables\Actions\DeleteBulkAction::make(),
                 // ]),
 
-                ActionsExportBulkAction::make()
-                    ->exporter(ListKebutuhanProduksiExporter::class),
+                // ActionsExportBulkAction::make()
+                //     ->exporter(ListKebutuhanProduksiExporter::class),
             ]);
     }
 
