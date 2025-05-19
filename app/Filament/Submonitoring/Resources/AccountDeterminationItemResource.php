@@ -162,6 +162,16 @@ class AccountDeterminationItemResource extends Resource
                         ->copyMessage('Tersalin')
                         ->sortable(),
 
+                    TextColumn::make('glAccountGroup.gl_account_group_name')
+                        ->label('GL Account Group')
+                        ->searchable(isIndividual: true, isGlobal: false)
+                        ->copyable()
+                        ->copyableState(function ($state) {
+                            return ($state);
+                        })
+                        ->copyMessage('Tersalin')
+                        ->sortable(),
+
                     TextColumn::make('glAccount.gl_account_name')
                         ->label('GL Account')
                         ->searchable(isIndividual: true, isGlobal: false)
