@@ -30,6 +30,7 @@ use Filament\Tables\Actions\ImportAction;
 use Filament\Tables\Columns\CheckboxColumn;
 use Filament\Tables\Columns\ColumnGroup;
 use Filament\Tables\Columns\IconColumn;
+use Filament\Tables\Columns\SelectColumn;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Filters\QueryBuilder;
 use Filament\Tables\Filters\QueryBuilder\Constraints\BooleanConstraint;
@@ -171,6 +172,9 @@ class AccountDeterminationItemResource extends Resource
                         })
                         ->copyMessage('Tersalin')
                         ->sortable(),
+
+                    SelectColumn::make('gl_account_group_id')
+                        ->options(GlAccountGroup::where('is_active', 1)->pluck('gl_account_group_name', 'id')),
 
                     TextColumn::make('glAccount.gl_account_name')
                         ->label('GL Account')
