@@ -69,4 +69,10 @@ class ListKebutuhanProduksiResource extends Resource
             'edit' => Pages\EditListKebutuhanProduksi::route('/{record}/edit'),
         ];
     }
+
+    public static function getEloquentQuery(): Builder
+    {
+
+        return parent::getEloquentQuery()->where('is_active', 1);
+    }
 }
