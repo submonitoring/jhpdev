@@ -231,6 +231,8 @@ class MaterialDocumentResource extends Resource
                                                                 ->label('UoM')
                                                                 ->options(Uom::where('is_active', 1)->pluck('uom', 'id'))
                                                                 ->required()
+                                                                ->disabled()
+                                                                ->dehydrated()
                                                                 ->native(false),
 
                                                             Grid::make(3)
@@ -305,6 +307,8 @@ class MaterialDocumentResource extends Resource
                                                                         ->label('Movement Type')
                                                                         ->options(MovementType::where('is_active', 1)->pluck('movement_type_desc', 'id'))
                                                                         ->required()
+                                                                        ->disabled()
+                                                                        ->dehydrated()
                                                                         ->native(false),
                                                                 ]),
 

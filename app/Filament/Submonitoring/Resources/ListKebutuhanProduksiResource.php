@@ -153,6 +153,13 @@ class ListKebutuhanProduksiResource extends Resource
 
                 ]),
 
+                ColumnGroup::make('UoM', [
+
+                    TextColumn::make('materialMaster.baseUom.uom')
+                        ->label('UoM'),
+
+                ]),
+
                 ColumnGroup::make('Material Master Data', [
 
                     TextColumn::make('materialMaster.material_number')
@@ -230,5 +237,11 @@ class ListKebutuhanProduksiResource extends Resource
             'view' => Pages\ViewListKebutuhanProduksi::route('/{record}'),
             'edit' => Pages\EditListKebutuhanProduksi::route('/{record}/edit'),
         ];
+    }
+
+    public static function getEloquentQuery(): Builder
+    {
+
+        return parent::getEloquentQuery()->where('is_active', 1);
     }
 }
