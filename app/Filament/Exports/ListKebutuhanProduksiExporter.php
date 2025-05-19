@@ -18,8 +18,8 @@ class ListKebutuhanProduksiExporter extends Exporter
         return [
             ExportColumn::make('id')
                 ->label('ID'),
-            ExportColumn::make('material_master_id'),
-            ExportColumn::make('plant_id'),
+            ExportColumn::make('materialMaster.material_desc'),
+            ExportColumn::make('plant.plant_name'),
             ExportColumn::make('safety_stock'),
             ExportColumn::make('available_stock')
                 ->state(function ($record) {
