@@ -126,6 +126,10 @@ class MaterialDocumentResource extends Resource
                                     $doctype = TransactionType::where('id', $state)->first();
 
                                     $set('document_type_id', $doctype?->document_type_id);
+                                    $set('transaction_reference_id', null);
+                                    $set('document_date', null);
+                                    $set('materialDocumentItems', null);
+                                    $set('journalEntries', null);
                                 }),
 
                             Select::make('transaction_reference_id')
@@ -177,7 +181,8 @@ class MaterialDocumentResource extends Resource
                             DatePicker::make('document_date')
                                 ->label('Document Date')
                                 ->native(false)
-                                ->required(),
+                                ->required()
+                                ->closeOnDateSelection(),
                         ]),
 
 
@@ -398,6 +403,7 @@ class MaterialDocumentResource extends Resource
                                         ]),
 
                                 ])
+                                ->defaultItems(0)
                                 ->orderColumn('sort'),
 
                         ]),
