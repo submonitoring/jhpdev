@@ -99,8 +99,6 @@ class AccountDeterminationItemResource extends Resource
                                 ->required()
                                 ->live(),
 
-
-
                             ToggleButtons::make('gl_account_id')
                                 ->label('GL Account')
                                 ->inline()
