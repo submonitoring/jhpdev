@@ -645,6 +645,16 @@ class MaterialMasterResource extends Resource
                         ->copyMessage('Tersalin')
                         ->sortable(),
 
+                    TextColumn::make('uom.uom')
+                        ->label('UoM')
+                        ->searchable(isIndividual: true, isGlobal: false)
+                        ->copyable()
+                        ->copyableState(function ($state) {
+                            return ($state);
+                        })
+                        ->copyMessage('Tersalin')
+                        ->sortable(),
+
                 ]),
 
                 ColumnGroup::make('Material Data', [

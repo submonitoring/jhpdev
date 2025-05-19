@@ -40,5 +40,7 @@ class CreateMaterialDocument extends CreateRecord
 
             return $data;
         }
+
+        //check if data already input on todays date
     }
 }
