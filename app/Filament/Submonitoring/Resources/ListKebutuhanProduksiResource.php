@@ -124,6 +124,7 @@ class ListKebutuhanProduksiResource extends Resource
                     TextColumn::make('safety_stock')
                         ->label('Safety Stock')
                         // ->searchable(isIndividual: true, isGlobal: false)
+                        ->numeric()
                         ->copyable()
                         ->copyableState(function ($state) {
                             return ($state);
@@ -149,7 +150,8 @@ class ListKebutuhanProduksiResource extends Resource
                                 ->where('gl_account_group_id', 1)?->sum('quantity');
 
                             return ($getjournalentriesdebit - $getjournalentriescredit);
-                        }),
+                        })
+                        ->numeric(),
 
                 ]),
 
