@@ -6,7 +6,9 @@ use App\createpage;
 use App\Filament\Submonitoring\Resources\MaterialDocumentResource;
 use App\Models\NumberRange;
 use Filament\Actions;
+use Filament\Actions\Action;
 use Filament\Resources\Pages\CreateRecord;
+use Illuminate\Database\Eloquent\Model;
 
 class CreateMaterialDocument extends CreateRecord
 {
@@ -16,6 +18,8 @@ class CreateMaterialDocument extends CreateRecord
 
     protected function mutateFormDataBeforeCreate(array $data): array
     {
+
+        // dd($this->data['journalEntries']);
 
         $currentnriid = $this->data['number_range_id'];
 
@@ -40,7 +44,16 @@ class CreateMaterialDocument extends CreateRecord
 
             return $data;
         }
+    }
 
-        //check if data already input on todays date
+    protected function getCreateFormAction(): Action
+    {
+        return Action::make('create')
+            ->label('Create')
+            ->action(fn(CreateMaterialDocument $livewire) => $livewire->create())
+            ->requiresConfirmation()
+            ->modalHeading('Confirm the Material Document')
+            ->modalDescription('Do you confirm that the data is correct?')
+            ->modalSubmitActionLabel('Create');
     }
 }
