@@ -12,6 +12,7 @@ use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Pages\SubNavigationPosition;
 use Filament\Resources\Resource;
+use Filament\Support\Enums\Alignment;
 use Filament\Tables;
 use Filament\Tables\Actions\ExportBulkAction as ActionsExportBulkAction;
 use Filament\Tables\Columns\ColumnGroup;
@@ -124,6 +125,7 @@ class ListKebutuhanProduksiResource extends Resource
                     TextColumn::make('safety_stock')
                         ->label('Safety Stock')
                         // ->searchable(isIndividual: true, isGlobal: false)
+                        ->alignment(Alignment::End)
                         ->numeric()
                         ->copyable()
                         ->copyableState(function ($state) {
@@ -138,6 +140,7 @@ class ListKebutuhanProduksiResource extends Resource
 
                     TextColumn::make('available_stock')
                         ->label('Available Stock')
+                        ->alignment(Alignment::End)
                         ->default(function ($record) {
                             $getjournalentriesdebit = JournalEntry::where('material_master_id', $record->material_master_id)
                                 ->where('plant_id', $record->plant_id)
