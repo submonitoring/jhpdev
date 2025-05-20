@@ -2,11 +2,13 @@
 
 namespace App\Filament\Submonitoring\Resources;
 
+use App\Filament\Submonitoring\Clusters\MaterialDocument;
 use App\Filament\Submonitoring\Resources\JournalEntryResource\Pages;
 use App\Filament\Submonitoring\Resources\JournalEntryResource\RelationManagers;
 use App\Models\JournalEntry;
 use Filament\Forms;
 use Filament\Forms\Form;
+use Filament\Pages\SubNavigationPosition;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
@@ -17,7 +19,28 @@ class JournalEntryResource extends Resource
 {
     protected static ?string $model = JournalEntry::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+    public static function canViewAny(): bool
+    {
+        return auth()->user()->id == 1;
+    }
+
+    protected static ?string $modelLabel = 'Journal Entries';
+
+    protected static ?string $pluralModelLabel = 'Journal Entries';
+
+    protected static ?string $navigationLabel = 'Journal Entries';
+
+    protected static ?int $navigationSort = 823000000;
+
+    // protected static ?string $navigationIcon = 'heroicon-o-Qisms';
+
+    protected static ?string $cluster = MaterialDocument::class;
+
+    // protected static ?string $navigationGroup = 'System';
+
+    protected static SubNavigationPosition $subNavigationPosition = SubNavigationPosition::Top;
+
+    protected static ?string $recordTitleAttribute = 'record_title';
 
     public static function form(Form $form): Form
     {
