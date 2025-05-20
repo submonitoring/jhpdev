@@ -78,8 +78,23 @@ class JournalEntryResource extends Resource
             ->columns([
                 Tables\Columns\TextColumn::make('sort')
                     ->searchable(),
+                Tables\Columns\TextColumn::make('materialDocumentItem.material_document_id')
+                    ->sortable(),
+
+                Tables\Columns\TextColumn::make('materialDocumentItem.materialDocument.document_number')
+                    ->searchable(isIndividual: true, isGlobal: false)
+                    ->sortable(),
                 Tables\Columns\TextColumn::make('material_document_item_id')
-                    ->numeric()
+                    ->sortable(),
+
+                Tables\Columns\TextColumn::make('material_master_id')
+                    ->searchable(isIndividual: true, isGlobal: false)
+                    ->sortable(),
+                Tables\Columns\TextColumn::make('materialMaster.material_number')
+                    ->searchable(isIndividual: true, isGlobal: false)
+                    ->sortable(),
+
+                Tables\Columns\TextColumn::make('materialMaster.material_desc')
                     ->sortable(),
                 Tables\Columns\TextColumn::make('module_aaa_id')
                     ->numeric()
