@@ -13,6 +13,7 @@ use App\Models\DocumentType;
 use App\Models\GlAccount;
 use App\Models\MaterialDocument;
 use App\Models\MaterialMaster;
+use App\Models\MaterialMasterPlant;
 use App\Models\MovementType;
 use App\Models\NumberRange;
 use App\Models\Plant;
@@ -230,7 +231,8 @@ class MaterialDocumentResource extends Resource
                                                             TextInput::make('quantity')
                                                                 ->label('Qty')
                                                                 ->numeric()
-                                                                ->required(),
+                                                                ->required()
+                                                                ->live(),
 
                                                             Select::make('uom_id')
                                                                 ->label('UoM')
@@ -245,7 +247,14 @@ class MaterialDocumentResource extends Resource
 
                                                                     Select::make('plant_id')
                                                                         ->label('Plant')
-                                                                        ->options(Plant::where('is_active', 1)->pluck('plant_name', 'id'))
+                                                                        ->options(function (Get $get) {
+
+                                                                            $material_master_id = $get('material_master_id');
+
+                                                                            $getmaterialmasterplant = MaterialMasterPlant::where('material_master_id', $material_master_id)->pluck('plant_id');
+
+                                                                            return (Plant::where('is_active', 1)->whereIn('id', $getmaterialmasterplant)->pluck('plant_name', 'id'));
+                                                                        })
                                                                         ->required()
                                                                         ->native(false)
                                                                         ->live()
@@ -458,6 +467,16 @@ class MaterialDocumentResource extends Resource
 
                     TextColumn::make('materialDocumentItems.materialMaster.material_desc')
                         ->label('Items')
+                        ->listWithLineBreaks()
+                        ->bulleted(),
+
+                    TextColumn::make('materialDocumentItems.quantity')
+                        ->label('Quantity')
+                        ->listWithLineBreaks()
+                        ->bulleted(),
+
+                    TextColumn::make('materialDocumentItems.plant.plant_name')
+                        ->label('Plant')
                         ->listWithLineBreaks()
                         ->bulleted(),
 
