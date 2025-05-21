@@ -225,7 +225,11 @@ class MaterialDocumentResource extends Resource
 
                                                                     $matuom = MaterialMaster::where('id', $state)->first();
 
-                                                                    $set('uom_id', $matuom->base_uom_id);
+                                                                    $set('uom_id', $matuom?->base_uom_id);
+                                                                    $set('quantity', null);
+                                                                    $set('plant_id', null);
+                                                                    $set('movement_type_id', null);
+                                                                    $set('journalEntries', null);
                                                                 }),
 
                                                             TextInput::make('quantity')
@@ -235,6 +239,7 @@ class MaterialDocumentResource extends Resource
                                                                 ->live()
                                                                 ->afterStateUpdated(function (Set $set) {
                                                                     $set('plant_id', null);
+                                                                    $set('movement_type_id', null);
                                                                     $set('journalEntries', null);
                                                                 }),
 
