@@ -210,6 +210,7 @@ class ListKebutuhanProduksiResource extends Resource
                 ]),
 
             ])
+            ->defaultSort('material_desc')
             ->filters([
                 //
             ])

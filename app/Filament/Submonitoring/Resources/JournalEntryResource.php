@@ -6,14 +6,19 @@ use App\Filament\Submonitoring\Clusters\MaterialDocument;
 use App\Filament\Submonitoring\Resources\JournalEntryResource\Pages;
 use App\Filament\Submonitoring\Resources\JournalEntryResource\RelationManagers;
 use App\Models\JournalEntry;
+use App\Models\MaterialMaster;
+use App\Models\Plant;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Pages\SubNavigationPosition;
 use Filament\Resources\Resource;
 use Filament\Tables;
+use Filament\Tables\Actions\Action;
+use Filament\Tables\Actions\ActionGroup;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
+use Illuminate\Support\Collection;
 
 class JournalEntryResource extends Resource
 {
@@ -134,13 +139,45 @@ class JournalEntryResource extends Resource
                 //
             ])
             ->actions([
-                Tables\Actions\ViewAction::make(),
-                Tables\Actions\EditAction::make(),
+                ActionGroup::make([
+                    ActionGroup::make([
+                        Tables\Actions\ViewAction::make(),
+                        Tables\Actions\EditAction::make(),
+                        Tables\Actions\DeleteAction::make(),
+
+                    ])->dropdown(false),
+
+                ]),
+
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
                     Tables\Actions\DeleteBulkAction::make(),
                 ]),
+
+                Tables\Actions\BulkAction::make('updatematerialdescplant')
+                    ->label(__('Update Material Desc dan Plant Name'))
+                    ->color('info')
+                    ->requiresConfirmation()
+                    ->modalIconColor('info')
+                    ->modalHeading('Mass Update Material Desc dan Plant Name?')
+                    ->action(
+                        function (Collection $records, array $data) {
+
+                            $records->each(
+                                function ($record) {
+
+                                    $getmaterialmaster = MaterialMaster::where('id', $record->material_master_id)->first();
+                                    $getplant = Plant::where('id', $record->plant_id)->first();
+
+                                    $data['material_desc'] = $getmaterialmaster->material_desc;
+                                    $data['plant_name'] = $getplant->plant_name;
+                                    $record->update($data);
+                                    return $record;
+                                }
+                            );
+                        }
+                    ),
             ]);
     }
 

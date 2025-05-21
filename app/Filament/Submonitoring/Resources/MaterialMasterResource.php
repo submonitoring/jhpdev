@@ -369,10 +369,18 @@ class MaterialMasterResource extends Resource
                                                         ->required()
                                                         ->native(false)
                                                         ->options(Plant::whereIsActive(1)->pluck('plant_name', 'id'))
-                                                        ->live(),
-                                                    // ->afterStateUpdated(function (Get $get) {
-                                                    //     dd($get('material_master_id'));
-                                                    // }),
+                                                        ->live()
+                                                        ->afterStateUpdated(function (Get $get, Set $set, $state) {
+
+                                                            $getmaterialdesc = $get('../../material_desc');
+                                                            $getplant = Plant::where('id', $state)->first();
+
+                                                            $set('material_desc', $getmaterialdesc);
+                                                            $set('plant_name', $getplant->plant_name);
+                                                        }),
+
+                                                    Hidden::make('material_desc'),
+                                                    Hidden::make('plant_name'),
 
                                                 ]),
 

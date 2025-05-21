@@ -525,6 +525,30 @@ class MaterialMasterPlantResource extends Resource
                         }
                     ),
 
+                Tables\Actions\BulkAction::make('updatematerialdescplant')
+                    ->label(__('Update Material Desc dan Plant Name'))
+                    ->color('info')
+                    ->requiresConfirmation()
+                    ->modalIconColor('info')
+                    ->modalHeading('Mass Update Material Desc dan Plant Name?')
+                    ->action(
+                        function (Collection $records, array $data) {
+
+                            $records->each(
+                                function ($record) {
+
+                                    $getmaterialmaster = ModelsMaterialMaster::where('id', $record->material_master_id)->first();
+                                    $getplant = Plant::where('id', $record->plant_id)->first();
+
+                                    $data['material_desc'] = $getmaterialmaster->material_desc;
+                                    $data['plant_name'] = $getplant->plant_name;
+                                    $record->update($data);
+                                    return $record;
+                                }
+                            );
+                        }
+                    ),
+
                 ExportBulkAction::make()
                     ->label('Export')
                     ->exporter(MaterialMasterPlantImporter::class)
