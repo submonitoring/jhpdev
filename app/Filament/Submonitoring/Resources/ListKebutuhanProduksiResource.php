@@ -81,8 +81,9 @@ class ListKebutuhanProduksiResource extends Resource
                                 ->where('gl_account_group_id', 1)?->sum('quantity');
 
                             $availablestock = $getjournalentriesdebit - $getjournalentriescredit;
-
-                            if ($record->safety_stock > $availablestock) {
+                            if ($availablestock ==  null) {
+                                return null;
+                            } elseif ($record->safety_stock > $availablestock) {
 
                                 return ('>');
                             } else {
@@ -91,7 +92,9 @@ class ListKebutuhanProduksiResource extends Resource
                         })
                         ->icon(function ($state) {
 
-                            if ($state == '>') {
+                            if ($state == null) {
+                                return null;
+                            } elseif ($state == '>') {
 
                                 return ('heroicon-o-exclamation-circle');
                             } elseif ($state == '<') {
@@ -100,7 +103,9 @@ class ListKebutuhanProduksiResource extends Resource
                         })
                         ->color(function ($state) {
 
-                            if ($state == '>') {
+                            if ($state == null) {
+                                return null;
+                            } elseif ($state == '>') {
 
                                 return ('danger');
                             } elseif ($state == '<') {
