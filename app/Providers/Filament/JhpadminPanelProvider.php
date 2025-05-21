@@ -4,6 +4,7 @@ namespace App\Providers\Filament;
 
 use App\Filament\Jhpadmin\Widgets\BusinessPartner;
 use App\Filament\Jhpadmin\Widgets\BusinessPartnerMenu;
+use Asmit\ResizedColumn\ResizedColumnPlugin;
 use Awcodes\FilamentQuickCreate\QuickCreatePlugin;
 use Awcodes\LightSwitch\LightSwitchPlugin;
 use Devonab\FilamentEasyFooter\EasyFooterPlugin;
@@ -257,6 +258,7 @@ class JhpadminPanelProvider extends PanelProvider
                 // FilamentUsersPlugin::make(),
                 // FilamentWalletPlugin::make(),
                 // DeliaPlugin::make(),
+                ResizedColumnPlugin::make(),
             ])
             ->viteTheme('resources/css/filament/jhpadmin/theme.css');
     }

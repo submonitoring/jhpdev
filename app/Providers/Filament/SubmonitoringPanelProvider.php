@@ -2,6 +2,7 @@
 
 namespace App\Providers\Filament;
 
+use Asmit\ResizedColumn\ResizedColumnPlugin;
 use Awcodes\FilamentQuickCreate\QuickCreatePlugin;
 use Awcodes\FilamentStickyHeader\StickyHeaderPlugin;
 use Awcodes\FilamentVersions\VersionsPlugin;
@@ -296,6 +297,7 @@ class SubmonitoringPanelProvider extends PanelProvider
                 // FilamentUsersPlugin::make(),
                 // FilamentWalletPlugin::make(),
                 // DeliaPlugin::make(),
+                ResizedColumnPlugin::make(),
             ])
             ->resources([
                 config('filament-logger.activity_resource')

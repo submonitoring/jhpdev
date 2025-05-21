@@ -8,6 +8,7 @@
     "require": {
         "php": "^8.2",
         "archilex/filament-toggle-icon-column": "^3.2",
+        "asmit/resized-column": "^1.0",
         "awcodes/filament-badgeable-column": "^2.3",
         "awcodes/filament-quick-create": "^3.6",
         "awcodes/filament-sticky-header": "^2.0",

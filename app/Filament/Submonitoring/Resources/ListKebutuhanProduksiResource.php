@@ -8,6 +8,7 @@ use App\Filament\Submonitoring\Resources\ListKebutuhanProduksiResource\RelationM
 use App\Models\JournalEntry;
 use App\Models\MaterialMaster;
 use App\Models\MaterialMasterPlant;
+use Asmit\ResizedColumn\HasResizableColumn;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Pages\SubNavigationPosition;
@@ -27,6 +28,7 @@ use pxlrbt\FilamentExcel\Exports\ExcelExport;
 
 class ListKebutuhanProduksiResource extends Resource
 {
+
     protected static ?string $model = MaterialMasterPlant::class;
 
     public static function canViewAny(): bool
@@ -81,7 +83,7 @@ class ListKebutuhanProduksiResource extends Resource
                                 ->where('gl_account_group_id', 1)?->sum('quantity');
 
                             $availablestock = $getjournalentriesdebit - $getjournalentriescredit;
-                            if ($availablestock ==  null) {
+                            if ($availablestock == null) {
                                 return null;
                             } elseif ($record->safety_stock > $availablestock) {
 

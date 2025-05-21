@@ -3,6 +3,7 @@
 namespace App\Providers\Filament;
 
 use App\Filament\Auth\Login;
+use Asmit\ResizedColumn\ResizedColumnPlugin;
 use Awcodes\LightSwitch\LightSwitchPlugin;
 use Filament\Http\Middleware\Authenticate;
 use Filament\Http\Middleware\AuthenticateSession;
@@ -170,6 +171,7 @@ class JhpPanelProvider extends PanelProvider
                 // FilamentSimpleThemePlugin::make()
                 // DeliaPlugin::make(),
                 LightSwitchPlugin::make(),
+                ResizedColumnPlugin::make(),
             ])
             ->viteTheme('resources/css/filament/jhp/theme.css');
     }
