@@ -232,7 +232,11 @@ class MaterialDocumentResource extends Resource
                                                                 ->label('Qty')
                                                                 ->numeric()
                                                                 ->required()
-                                                                ->live(),
+                                                                ->live()
+                                                                ->afterStateUpdated(function (Set $set) {
+                                                                    $set('plant_id', null);
+                                                                    $set('journalEntries', null);
+                                                                }),
 
                                                             Select::make('uom_id')
                                                                 ->label('UoM')
@@ -256,6 +260,8 @@ class MaterialDocumentResource extends Resource
                                                                             return (Plant::where('is_active', 1)->whereIn('id', $getmaterialmasterplant)->pluck('plant_name', 'id'));
                                                                         })
                                                                         ->required()
+                                                                        ->disabled(fn(Get $get) =>
+                                                                        is_null($get('quantity')))
                                                                         ->native(false)
                                                                         ->live()
                                                                         ->afterStateUpdated(function (Get $get, Set $set, $state) {
