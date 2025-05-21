@@ -170,6 +170,16 @@ class ListKebutuhanProduksiResource extends Resource
 
                 ]),
 
+                TextColumn::make('plant.plant_name')
+                    ->label('Plant')
+                    ->searchable(isIndividual: true, isGlobal: false)
+                    ->copyable()
+                    ->copyableState(function ($state) {
+                        return ($state);
+                    })
+                    ->copyMessage('Tersalin')
+                    ->sortable(),
+
                 ColumnGroup::make('Material Master Data', [
 
                     TextColumn::make('materialMaster.material_number')
@@ -194,16 +204,6 @@ class ListKebutuhanProduksiResource extends Resource
 
                     TextColumn::make('materialMaster.materialGroup.material_group_desc')
                         ->label('Material Group')
-                        ->searchable(isIndividual: true, isGlobal: false)
-                        ->copyable()
-                        ->copyableState(function ($state) {
-                            return ($state);
-                        })
-                        ->copyMessage('Tersalin')
-                        ->sortable(),
-
-                    TextColumn::make('plant.plant_name')
-                        ->label('Plant')
                         ->searchable(isIndividual: true, isGlobal: false)
                         ->copyable()
                         ->copyableState(function ($state) {
