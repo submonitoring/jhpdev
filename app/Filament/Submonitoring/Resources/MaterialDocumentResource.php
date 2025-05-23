@@ -186,6 +186,7 @@ class MaterialDocumentResource extends Resource
 
                             DatePicker::make('document_date')
                                 ->label('Document Date')
+                                ->locale('id')
                                 ->native(false)
                                 ->required()
                                 ->closeOnDateSelection(),
