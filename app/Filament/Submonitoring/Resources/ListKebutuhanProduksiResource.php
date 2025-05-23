@@ -27,6 +27,8 @@ use Illuminate\Database\Eloquent\SoftDeletingScope;
 use pxlrbt\FilamentExcel\Actions\Tables\ExportBulkAction;
 use pxlrbt\FilamentExcel\Columns\Column;
 use pxlrbt\FilamentExcel\Exports\ExcelExport;
+use TomatoPHP\FilamentDocs\Filament\Actions\DocumentAction;
+use TomatoPHP\FilamentDocs\Services\Contracts\DocsVar;
 
 class ListKebutuhanProduksiResource extends Resource
 {
@@ -154,10 +156,14 @@ class ListKebutuhanProduksiResource extends Resource
                                 $availablestock = $getjournalentriesdebit - $getjournalentriescredit;
                                 if ($availablestock == null) {
                                     return ' ';
+                                } elseif ($record->safety_stock == $availablestock) {
+
+                                    return ('=');
                                 } elseif ($record->safety_stock > $availablestock) {
 
                                     return ('<');
-                                } else {
+                                } elseif ($record->safety_stock < $availablestock) {
+
                                     return ('>');
                                 }
                             })
@@ -174,11 +180,15 @@ class ListKebutuhanProduksiResource extends Resource
 
                                 $availablestock = $getjournalentriesdebit - $getjournalentriescredit;
                                 if ($availablestock == null) {
-                                    return 'null';
+                                    return ' ';
+                                } elseif ($record->safety_stock == $availablestock) {
+
+                                    return ('warning');
                                 } elseif ($record->safety_stock > $availablestock) {
 
                                     return ('danger');
-                                } else {
+                                } elseif ($record->safety_stock < $availablestock) {
+
                                     return ('success');
                                 }
                             })
@@ -311,6 +321,14 @@ class ListKebutuhanProduksiResource extends Resource
             ->actions([
                 // Tables\Actions\ViewAction::make(),
                 // Tables\Actions\EditAction::make(),
+
+                // DocumentAction::make()
+                //     ->vars(fn($record) => [
+                //         DocsVar::make('$MATERIAL_DESC')
+                //             ->value($record->material_desc),
+                //         DocsVar::make('$PLANT_NAME')
+                //             ->value($record->plant_name),
+                //     ])
             ])
             ->bulkActions([
                 // Tables\Actions\BulkActionGroup::make([
