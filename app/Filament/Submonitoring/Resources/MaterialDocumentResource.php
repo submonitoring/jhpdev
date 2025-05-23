@@ -67,9 +67,13 @@ use Filament\Tables\Table;
 use Guava\FilamentModalRelationManagers\Actions\Table\RelationManagerAction;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\Relationship;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Str;
+use Stevebauman\Purify\Facades\Purify;
+
+use function Livewire\on;
 
 class MaterialDocumentResource extends Resource
 {
@@ -148,7 +152,7 @@ class MaterialDocumentResource extends Resource
             Section::make('Material Document')
                 // ->icon('heroicon-o-user-group')
                 ->disabled(fn(Get $get) =>
-                is_null($get('transaction_type_id')))
+                    is_null($get('transaction_type_id')))
                 ->schema([
 
                     Hidden::make('number_range_id')
@@ -191,7 +195,7 @@ class MaterialDocumentResource extends Resource
 
             Tabs::make()
                 ->disabled(fn(Get $get) =>
-                is_null($get('transaction_type_id')))
+                    is_null($get('transaction_type_id')))
                 ->schema([
 
                     Tab::make('Items')
@@ -215,10 +219,43 @@ class MaterialDocumentResource extends Resource
                                                     Grid::make(3)
                                                         ->schema([
 
+                                                            // Select::make('material_master_id')
+                                                            //     ->label('Material')
+                                                            //     ->options(MaterialMaster::where('is_active', 1)->pluck('material_desc', 'id'))
+                                                            //     ->required()
+                                                            //     ->native(false)
+                                                            //     ->live()
+                                                            //     ->afterStateUpdated(function (Get $get, Set $set, $state) {
+
+                                                            //         $matuom = MaterialMaster::where('id', $state)->first();
+
+                                                            //         $set('uom_id', $matuom?->base_uom_id);
+                                                            //         $set('quantity', null);
+                                                            //         $set('plant_id', null);
+                                                            //         $set('movement_type_id', null);
+                                                            //         $set('journalEntries', null);
+                                                            //     }),
+
                                                             Select::make('material_master_id')
                                                                 ->label('Material')
-                                                                ->options(MaterialMaster::where('is_active', 1)->pluck('material_desc', 'id'))
+                                                                ->allowHtml()
+                                                                // ->options(MaterialMaster::where('is_active', 1)->pluck('material_desc', 'id'))
+                                                                // ->preload()
+                                                                ->searchable() // Don't forget to make it searchable otherwise there is no choices.js magic!
+                                                                ->getSearchResultsUsing(function (string $search) {
+                                                                    $materials = MaterialMaster::where('material_desc', 'like', "%{$search}%")->limit(50)->get();
+
+                                                                    return $materials->mapWithKeys(function ($materialmaster) {
+                                                                        return [$materialmaster->getKey() => static::getCleanOptionString($materialmaster)];
+                                                                    })->toArray();
+                                                                })
+                                                                ->getOptionLabelUsing(function ($value): string {
+                                                                    $materialmaster = MaterialMaster::find($value);
+
+                                                                    return static::getCleanOptionString($materialmaster);
+                                                                })
                                                                 ->required()
+                                                                ->preload()
                                                                 ->native(false)
                                                                 ->live()
                                                                 ->afterStateUpdated(function (Get $get, Set $set, $state) {
@@ -266,7 +303,7 @@ class MaterialDocumentResource extends Resource
                                                                         })
                                                                         ->required()
                                                                         ->disabled(fn(Get $get) =>
-                                                                        is_null($get('quantity')))
+                                                                            is_null($get('quantity')))
                                                                         ->native(false)
                                                                         ->live()
                                                                         ->afterStateUpdated(function (Get $get, Set $set, $state) {
@@ -276,7 +313,7 @@ class MaterialDocumentResource extends Resource
                                                                             //debit_credit_id (multi lines)
                                                                             //gl_account_id (multi lines)
                                                                             //quantity on journalEntries from materialDocumentItems quantity
-
+                                                                
                                                                             $transaction_type_id = $get('../../transaction_type_id');
 
                                                                             $document_type_id = TransactionType::where('id', $transaction_type_id)?->first();
@@ -307,24 +344,27 @@ class MaterialDocumentResource extends Resource
 
                                                                             $accountdeterminations = AccountDeterminationItem::where('account_determination_id', $accountdeterminationdata->id)->where('is_active', 1)->get();
 
-                                                                            // dd($accountdeterminationdata);
 
-                                                                            array_push(
+                                                                            $journal_entries_value = $accountdeterminations->map(function ($accountdetermination) use ($quantity, $module_aaa_id, $state, $material_master_id) {
+                                                                                return [
+                                                                                    'debit_credit_id' => $accountdetermination->debit_credit_id,
+                                                                                    'gl_account_group_id' => $accountdetermination->gl_account_group_id,
+                                                                                    'gl_account_id' => $accountdetermination->gl_account_id,
+                                                                                    'quantity' => $quantity,
+                                                                                    'module_aaa_id' => $module_aaa_id->module_aaa_id,
+                                                                                    'material_master_id' => $material_master_id,
+                                                                                    'plant_id' => $state,
+                                                                                ];
+                                                                            })->toArray();
+
+                                                                            // dd($accountdeterminationdata);
+                                                                
+                                                                            array_replace(
                                                                                 $journal_entries,
-                                                                                ...$accountdeterminations->map(function ($accountdetermination) use ($quantity, $module_aaa_id, $state, $material_master_id) {
-                                                                                    return [
-                                                                                        'debit_credit_id' => $accountdetermination->debit_credit_id,
-                                                                                        'gl_account_group_id' => $accountdetermination->gl_account_group_id,
-                                                                                        'gl_account_id' => $accountdetermination->gl_account_id,
-                                                                                        'quantity' => $quantity,
-                                                                                        'module_aaa_id' => $module_aaa_id->module_aaa_id,
-                                                                                        'material_master_id' => $material_master_id,
-                                                                                        'plant_id' => $state,
-                                                                                    ];
-                                                                                })->toArray()
+                                                                                ...$journal_entries_value
                                                                             );
 
-                                                                            $set('journalEntries', $journal_entries);
+                                                                            return $set('journalEntries', $journal_entries_value);
                                                                         }),
 
                                                                     Select::make('movement_type_id')
@@ -353,6 +393,8 @@ class MaterialDocumentResource extends Resource
                                                             Header::make('Account'),
                                                             Header::make('Quantity')
                                                                 ->align(Alignment::Center),
+                                                            Header::make('Plant')
+                                                                ->align(Alignment::Center),
                                                         ])
                                                         ->schema([
                                                             Select::make('debit_credit_id')
@@ -378,9 +420,17 @@ class MaterialDocumentResource extends Resource
                                                                 ->dehydrated()
                                                                 ->required(),
 
+                                                            Select::make('plant_id')
+                                                                ->label('Plant')
+                                                                ->options(Plant::where('is_active', 1)->pluck('plant_name', 'id'))
+                                                                ->required()
+                                                                ->disabled()
+                                                                ->dehydrated()
+                                                                ->native(false),
+
                                                             Hidden::make('module_aaa_id'),
                                                             Hidden::make('material_master_id'),
-                                                            Hidden::make('plant_id'),
+                                                            // Hidden::make('plant_id'),
                                                             Hidden::make('gl_account_group_id'),
                                                         ])
                                                         ->columnSpan('full')
@@ -808,5 +858,15 @@ class MaterialDocumentResource extends Resource
             'view' => Pages\ViewMaterialDocument::route('/{record}'),
             'edit' => Pages\EditMaterialDocument::route('/{record}/edit'),
         ];
+    }
+
+    public static function getCleanOptionString(Model $model): string
+    {
+        return Purify::clean(
+            view('filament.components.select-material-result')
+                ->with('material_desc', $model?->material_desc)
+                ->with('base_uom', $model?->baseUom->uom)
+                ->render()
+        );
     }
 }
