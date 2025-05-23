@@ -125,6 +125,7 @@ class MaterialDocumentResource extends Resource
                                 ->options(TransactionType::whereIsActive(1)->pluck('transaction_type_desc', 'id'))
                                 ->native(false)
                                 ->required()
+                                ->disabledOn('edit')
                                 ->live()
                                 ->afterStateUpdated(function ($state, Set $set) {
 
