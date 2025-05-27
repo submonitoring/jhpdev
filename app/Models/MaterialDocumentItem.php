@@ -28,6 +28,11 @@ class MaterialDocumentItem extends Model
         return $this->belongsTo(Plant::class);
     }
 
+    public function toPlant()
+    {
+        return $this->belongsTo(Plant::class, 'to_plant_id');
+    }
+
     public function materialDocument()
     {
         return $this->belongsTo(MaterialDocument::class);

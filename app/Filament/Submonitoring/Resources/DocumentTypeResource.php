@@ -178,6 +178,36 @@ class DocumentTypeResource extends Resource
                 ])
                 ->compact(),
 
+            Section::make('Is Zero Quantity Check on Material Document?')
+                ->schema([
+
+                    Grid::make(2)
+                        ->schema([
+
+                            ToggleButtons::make('is_matdoc_zero_qty_check')
+                                ->label('Zero Quantity Check on Matdoc?')
+                                ->boolean()
+                                ->grouped(),
+
+                        ]),
+                ])
+                ->compact(),
+
+            Section::make('Is Stock Transfer?')
+                ->schema([
+
+                    Grid::make(2)
+                        ->schema([
+
+                            ToggleButtons::make('is_stock_transfer')
+                                ->label('Is Stock Transfer?')
+                                ->boolean()
+                                ->grouped(),
+
+                        ]),
+                ])
+                ->compact(),
+
             Section::make('Status')
                 ->schema([
 

@@ -18,6 +18,16 @@ class TransactionType extends Model
         return $this->hasMany(AccountDetermination::class);
     }
 
+    public function materialDocumentCopyControls()
+    {
+        return $this->hasMany(MaterialDocumentCopyControl::class);
+    }
+
+    public function refernceMaterialDocumentCopyControls()
+    {
+        return $this->hasMany(MaterialDocumentCopyControl::class, 'reference_transaction_type_idd');
+    }
+
     public static function boot()
     {
         parent::boot();

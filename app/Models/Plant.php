@@ -28,6 +28,11 @@ class Plant extends Model
         return $this->hasMany(MaterialDocumentItem::class);
     }
 
+    public function toMaterialDocumentItems()
+    {
+        return $this->hasMany(MaterialDocumentItem::class);
+    }
+
     public function journalEntries()
     {
         return $this->hasMany(JournalEntry::class);

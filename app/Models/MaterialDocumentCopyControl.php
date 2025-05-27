@@ -6,16 +6,21 @@ use App\log;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Auth;
 
-class TransactionReference extends Model
+class MaterialDocumentCopyControl extends Model
 {
-    public function materialDocuments()
+    public function transactionType()
     {
-        return $this->hasMany(MaterialDocument::class);
+        return $this->belongsTo(TransactionType::class);
     }
 
-    public function materialDocumentCopyControls()
+    public function transactionReference()
     {
-        return $this->hasMany(MaterialDocumentCopyControl::class);
+        return $this->belongsTo(TransactionReference::class);
+    }
+
+    public function referenceTransactionType()
+    {
+        return $this->belongsTo(TransactionType::class, 'reference_transaction_type_id');
     }
 
     public static function boot()
@@ -26,13 +31,13 @@ class TransactionReference extends Model
             $user = Auth::user();
             $model->created_by = $user->username;
             $model->updated_by = $user->username;
-            $model->record_title = $model->transaction_reference_desc;
+            $model->record_title = $model->document_number;
         });
 
         static::updating(function ($model) {
             $user = Auth::user();
             $model->updated_by = $user->username;
-            $model->record_title = $model->transaction_reference_desc;
+            $model->record_title = $model->document_number;
         });
     }
 

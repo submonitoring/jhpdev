@@ -8,10 +8,13 @@ use App\Filament\Submonitoring\Resources\MaterialDocumentResource\Pages;
 use App\Filament\Submonitoring\Resources\MaterialDocumentResource\RelationManagers;
 use App\Models\AccountDetermination;
 use App\Models\AccountDeterminationItem;
+use App\Models\BusinessPartner;
 use App\Models\DebitCredit;
 use App\Models\DocumentType;
 use App\Models\GlAccount;
+use App\Models\JournalEntry;
 use App\Models\MaterialDocument;
+use App\Models\MaterialDocumentCopyControl;
 use App\Models\MaterialMaster;
 use App\Models\MaterialMasterPlant;
 use App\Models\MovementType;
@@ -29,7 +32,10 @@ use Filament\Forms\Components\Fieldset;
 use Filament\Forms\Components\Grid;
 use Filament\Forms\Components\Group;
 use Filament\Forms\Components\Hidden;
+use Filament\Forms\Components\MarkdownEditor;
+use Filament\Forms\Components\Placeholder;
 use Filament\Forms\Components\Repeater;
+use Filament\Forms\Components\RichEditor;
 use Filament\Forms\Components\Section;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Split;
@@ -70,6 +76,7 @@ use Illuminate\Database\Eloquent\Factories\Relationship;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 use Illuminate\Support\Collection;
+use Illuminate\Support\HtmlString;
 use Illuminate\Support\Str;
 use Stevebauman\Purify\Facades\Purify;
 
@@ -140,60 +147,128 @@ class MaterialDocumentResource extends Resource
 
                             Select::make('transaction_reference_id')
                                 ->label('Transaction Reference')
-                                ->options(TransactionReference::whereIsActive(1)->pluck('transaction_reference_desc', 'id'))
+                                ->options(function (Get $get) {
+
+                                    $getcopycontrol = MaterialDocumentCopyControl::whereIsActive(1)
+                                        ->where('transaction_type_id', $get('transaction_type_id'))
+                                        ->pluck('transaction_reference_id');
+
+                                    return TransactionReference::whereIsActive(1)->whereIn('id', $getcopycontrol)->pluck('transaction_reference_desc', 'id');
+
+                                })
+                                ->disabled(fn(Get $get) =>
+                                    is_null($get('transaction_type_id')))
                                 ->native(false)
+                                ->required()
+                                ->live(),
+
+                            Select::make('reference_document_number')
+                                ->label('Reference Document Number')
+                                ->options(function (Get $get) {
+
+                                    $getcopycontrol = MaterialDocumentCopyControl::whereIsActive(1)
+                                        ->where('transaction_type_id', $get('transaction_type_id'))
+                                        ->where('transaction_reference_id', $get('transaction_reference_id'))
+                                        ->first();
+
+                                    return MaterialDocument::where('transaction_type_id', $getcopycontrol?->reference_transaction_type_id)->pluck('document_number', 'document_number');
+                                })
+                                ->native(false)
+                                ->hidden(function (Get $get) {
+
+                                    $getcopycontrol = MaterialDocumentCopyControl::whereIsActive(1)
+                                        ->where('transaction_type_id', $get('transaction_type_id'))
+                                        ->where('transaction_reference_id', $get('transaction_reference_id'))
+                                        ->first();
+
+                                    // dd($getcopycontrol);
+                        
+                                    if (is_null($getcopycontrol?->reference_transaction_type_id)) {
+
+                                        return true;
+                                    } else {
+                                        return false;
+                                    }
+                                })
                                 ->live(),
 
                             Hidden::make('document_type_id'),
+                            Hidden::make('number_range_id')->label('NR Interval')->default(function () {
+                                $nriid = NumberRange::where('number_range_interval', 'MATDOC')->first();
+                                return ($nriid->id);
+                            }),
 
                         ]),
 
                 ])->compact(),
 
-            Section::make('Material Document')
-                // ->icon('heroicon-o-user-group')
+            Tabs::make()
                 ->disabled(fn(Get $get) =>
                     is_null($get('transaction_type_id')))
                 ->schema([
 
-                    Hidden::make('number_range_id')
-                        ->label('NR Interval')
-                        ->default(function () {
-
-                            $nriid = NumberRange::where('number_range_interval', 'MATDOC')->first();
-
-                            return ($nriid->id);
-                        }),
-
-                    Grid::make(4)
+                    Tab::make('General')
+                        // ->icon('heroicon-o-numbered-list')
                         ->schema([
 
-                            Section::make('Document Number')
+                            Grid::make(4)
                                 ->schema([
 
                                     TextInput::make('document_number')
-                                        // ->label('BP Number')
-                                        ->hiddenLabel()
-                                        ->disabled(),
-                                ])
-                                ->compact()
-                                ->hiddenOn('create'),
+                                        ->label('Document Number')
+                                        ->disabled()
+                                        ->hiddenOn('create'),
+                                ]),
+
+                            Grid::make(4)
+                                ->schema([
+
+                                    DatePicker::make('document_date')
+                                        ->label('Document Date')
+                                        ->locale('id')
+                                        ->native(false)
+                                        ->required()
+                                        ->closeOnDateSelection(),
+                                ]),
+
+                            Grid::make(4)
+                                ->schema([
+
+                                    TextInput::make('external_po_number')
+                                        ->label('External Document Number'),
+                                ]),
 
                         ]),
 
-                    Grid::make(4)
+                    Tab::make('BP')
+                        // ->icon('heroicon-o-numbered-list')
                         ->schema([
 
-                            DatePicker::make('document_date')
-                                ->label('Document Date')
-                                ->locale('id')
-                                ->native(false)
-                                ->required()
-                                ->closeOnDateSelection(),
+                            Grid::make(4)
+                                ->schema([
+
+                                    Select::make('business_partner_id')
+                                        ->label('Business Partner')
+                                        ->options(BusinessPartner::whereIsActive(1)->pluck('name_1', 'id'))
+                                        ->native(false),
+                                ]),
+
                         ]),
 
+                    Tab::make('Header Text')
+                        // ->icon('heroicon-o-numbered-list')
+                        ->schema([
 
-                ])->compact(),
+                            RichEditor::make('text_header')
+                                // ->label('Business Partner')
+                                ->hiddenLabel(),
+
+                        ]),
+
+                ]),
+
+
+
 
             Tabs::make()
                 ->disabled(fn(Get $get) =>
@@ -221,23 +296,6 @@ class MaterialDocumentResource extends Resource
                                                     Grid::make(3)
                                                         ->schema([
 
-                                                            // Select::make('material_master_id')
-                                                            //     ->label('Material')
-                                                            //     ->options(MaterialMaster::where('is_active', 1)->pluck('material_desc', 'id'))
-                                                            //     ->required()
-                                                            //     ->native(false)
-                                                            //     ->live()
-                                                            //     ->afterStateUpdated(function (Get $get, Set $set, $state) {
-
-                                                            //         $matuom = MaterialMaster::where('id', $state)->first();
-
-                                                            //         $set('uom_id', $matuom?->base_uom_id);
-                                                            //         $set('quantity', null);
-                                                            //         $set('plant_id', null);
-                                                            //         $set('movement_type_id', null);
-                                                            //         $set('journalEntries', null);
-                                                            //     }),
-
                                                             Select::make('material_master_id')
                                                                 ->label('Material')
                                                                 ->allowHtml()
@@ -262,123 +320,447 @@ class MaterialDocumentResource extends Resource
                                                                 ->live()
                                                                 ->afterStateUpdated(function (Get $get, Set $set, $state) {
 
-                                                                    $matuom = MaterialMaster::where('id', $state)->first();
-
-                                                                    $set('uom_id', $matuom?->base_uom_id);
                                                                     $set('quantity', null);
                                                                     $set('plant_id', null);
                                                                     $set('movement_type_id', null);
                                                                     $set('journalEntries', null);
+
+
                                                                 }),
 
-                                                            TextInput::make('quantity')
-                                                                ->label('Qty')
-                                                                ->numeric()
+                                                            Select::make('plant_id')
+                                                                ->label('Plant')
+                                                                ->options(function (Get $get) {
+
+                                                                    $material_master_id = $get('material_master_id');
+
+                                                                    $getmaterialmasterplant = MaterialMasterPlant::where('material_master_id', $material_master_id)->pluck('plant_id');
+
+                                                                    return (Plant::where('is_active', 1)->whereIn('id', $getmaterialmasterplant)->pluck('plant_name', 'id'));
+                                                                })
                                                                 ->required()
+                                                                ->disabled(fn(Get $get) =>
+                                                                    is_null($get('material_master_id')))
+                                                                ->native(false)
                                                                 ->live()
-                                                                ->afterStateUpdated(function (Set $set) {
-                                                                    $set('plant_id', null);
+                                                                ->afterStateUpdated(function (Get $get, Set $set, $state) {
+
+                                                                    $set('quantity', null);
                                                                     $set('movement_type_id', null);
                                                                     $set('journalEntries', null);
                                                                 }),
 
-                                                            Select::make('uom_id')
-                                                                ->label('UoM')
-                                                                ->options(Uom::where('is_active', 1)->pluck('uom', 'id'))
-                                                                ->required()
-                                                                ->disabled()
-                                                                ->dehydrated()
-                                                                ->native(false),
-
                                                             Grid::make(3)
                                                                 ->schema([
 
-                                                                    Select::make('plant_id')
-                                                                        ->label('Plant')
-                                                                        ->options(function (Get $get) {
-
-                                                                            $material_master_id = $get('material_master_id');
-
-                                                                            $getmaterialmasterplant = MaterialMasterPlant::where('material_master_id', $material_master_id)->pluck('plant_id');
-
-                                                                            return (Plant::where('is_active', 1)->whereIn('id', $getmaterialmasterplant)->pluck('plant_name', 'id'));
-                                                                        })
+                                                                    TextInput::make('quantity')
+                                                                        ->label('Qty')
+                                                                        ->numeric()
                                                                         ->required()
-                                                                        ->disabled(fn(Get $get) =>
-                                                                            is_null($get('quantity')))
-                                                                        ->native(false)
                                                                         ->live()
-                                                                        ->afterStateUpdated(function (Get $get, Set $set, $state) {
+                                                                        ->disabled(fn(Get $get) =>
+                                                                            is_null($get('plant_id')))
+                                                                        ->suffix(function (Get $get) {
 
-                                                                            //need to populate:
-                                                                            //movement_type_id
-                                                                            //debit_credit_id (multi lines)
-                                                                            //gl_account_id (multi lines)
-                                                                            //quantity on journalEntries from materialDocumentItems quantity
-                                                                
+                                                                            $getmaterial_master_id = MaterialMaster::where('id', $get('material_master_id'))->first();
+
+                                                                            return $getmaterial_master_id?->baseUom?->uom;
+
+                                                                        })
+                                                                        ->maxValue(function (Get $get) {
+
                                                                             $transaction_type_id = $get('../../transaction_type_id');
 
                                                                             $document_type_id = TransactionType::where('id', $transaction_type_id)?->first();
 
                                                                             $module_aaa_id = DocumentType::where('id', $document_type_id->document_type_id)?->first();
 
-                                                                            $material_type_id = MaterialMaster::where('id', $get('material_master_id'))?->first();
+                                                                            if ($module_aaa_id->is_matdoc_zero_qty_check == 1) {
 
-                                                                            $accountdeterminationdata = AccountDetermination::where('module_aaa_id', $module_aaa_id->module_aaa_id)
-                                                                                ->where('document_type_id', $document_type_id->document_type_id)
-                                                                                ->where('transaction_type_id', $transaction_type_id)
-                                                                                ->where('material_type_id', $material_type_id->material_type_id)->first();
+                                                                                $getmaterial_master_id = $get('material_master_id');
+                                                                                $getplant_id = $get('plant_id');
 
-                                                                            $movement_type_id = AccountDetermination::where('module_aaa_id', $module_aaa_id->module_aaa_id)
-                                                                                ->where('document_type_id', $document_type_id->document_type_id)
-                                                                                ->where('transaction_type_id', $transaction_type_id)
-                                                                                ->where('material_type_id', $material_type_id->material_type_id)->first();
+                                                                                $getjournalentriesdebit = JournalEntry::where('material_master_id', $getmaterial_master_id)
+                                                                                    ->where('plant_id', $getplant_id)
+                                                                                    ->where('debit_credit_id', 1)
+                                                                                    ->where('gl_account_group_id', 1)?->sum('quantity');
 
-                                                                            $material_master_id = $get('material_master_id');
+                                                                                $getjournalentriescredit = JournalEntry::where('material_master_id', $getmaterial_master_id)
+                                                                                    ->where('plant_id', $getplant_id)
+                                                                                    ->where('debit_credit_id', 2)
+                                                                                    ->where('gl_account_group_id', 1)?->sum('quantity');
 
-                                                                            $quantity = $get('quantity');
+                                                                                $availablestock = $getjournalentriesdebit - $getjournalentriescredit;
 
-                                                                            $matuom = MaterialMaster::where('id', $state)->first();
+                                                                                return $availablestock;
+                                                                            } elseif ($module_aaa_id->is_matdoc_zero_qty_check == 0) {
+                                                                                return;
+                                                                            }
+                                                                        })
+                                                                        ->helperText(function (Get $get) {
+                                                                            $getmaterial_master_id = $get('material_master_id');
+                                                                            $getplant_id = $get('plant_id');
 
-                                                                            $set('movement_type_id', $movement_type_id->movement_type_id);
+                                                                            $getjournalentriesdebit = JournalEntry::where('material_master_id', $getmaterial_master_id)
+                                                                                ->where('plant_id', $getplant_id)
+                                                                                ->where('debit_credit_id', 1)
+                                                                                ->where('gl_account_group_id', 1)?->sum('quantity');
 
-                                                                            $journal_entries = $get('journalEntries') ?? [];
+                                                                            $getjournalentriescredit = JournalEntry::where('material_master_id', $getmaterial_master_id)
+                                                                                ->where('plant_id', $getplant_id)
+                                                                                ->where('debit_credit_id', 2)
+                                                                                ->where('gl_account_group_id', 1)?->sum('quantity');
 
-                                                                            $accountdeterminations = AccountDeterminationItem::where('account_determination_id', $accountdeterminationdata->id)->where('is_active', 1)->get();
+                                                                            $availablestock = $getjournalentriesdebit - $getjournalentriescredit;
 
+                                                                            return (new HtmlString('Stok saat ini = <strong>' . $availablestock . '</strong>'));
+                                                                        })
+                                                                        ->afterStateUpdated(function ($state, Get $get, Set $set, $livewire, TextInput $component) {
 
-                                                                            $journal_entries_value = $accountdeterminations->map(function ($accountdetermination) use ($quantity, $module_aaa_id, $state, $material_master_id) {
-                                                                                return [
-                                                                                    'debit_credit_id' => $accountdetermination->debit_credit_id,
-                                                                                    'gl_account_group_id' => $accountdetermination->gl_account_group_id,
-                                                                                    'gl_account_id' => $accountdetermination->gl_account_id,
-                                                                                    'quantity' => $quantity,
-                                                                                    'module_aaa_id' => $module_aaa_id->module_aaa_id,
-                                                                                    'material_master_id' => $material_master_id,
-                                                                                    'plant_id' => $state,
-                                                                                ];
-                                                                            })->toArray();
+                                                                            $transaction_type_id = $get('../../transaction_type_id');
 
-                                                                            // dd($accountdeterminationdata);
+                                                                            $document_type_id = TransactionType::where('id', $transaction_type_id)?->first();
+
+                                                                            $module_aaa_id = DocumentType::where('id', $document_type_id->document_type_id)?->first();
+
+                                                                            if ($module_aaa_id->is_matdoc_zero_qty_check == 1) {
+
+                                                                                $livewire->validateOnly($component->getStatePath());
+
+                                                                                $transaction_type_id = $get('../../transaction_type_id');
+
+                                                                                $document_type_id = TransactionType::where('id', $transaction_type_id)?->first();
+
+                                                                                $module_aaa_id = DocumentType::where('id', $document_type_id->document_type_id)?->first();
+
+                                                                                if ($module_aaa_id->is_stock_transfer == 1) {
+                                                                                    $transaction_type_id = $get('../../transaction_type_id');
+
+                                                                                    $document_type_id = TransactionType::where('id', $transaction_type_id)?->first();
+
+                                                                                    $module_aaa_id = DocumentType::where('id', $document_type_id->document_type_id)?->first();
+
+                                                                                    $material_type_id = MaterialMaster::where('id', $get('material_master_id'))?->first();
+
+                                                                                    $accountdeterminationdata = AccountDetermination::where('module_aaa_id', $module_aaa_id->module_aaa_id)
+                                                                                        ->where('document_type_id', $document_type_id->document_type_id)
+                                                                                        ->where('transaction_type_id', $transaction_type_id)
+                                                                                        ->where('material_type_id', $material_type_id->material_type_id)->first();
+
+                                                                                    $movement_type_id = AccountDetermination::where('module_aaa_id', $module_aaa_id->module_aaa_id)
+                                                                                        ->where('document_type_id', $document_type_id->document_type_id)
+                                                                                        ->where('transaction_type_id', $transaction_type_id)
+                                                                                        ->where('material_type_id', $material_type_id->material_type_id)->first();
+
+                                                                                    $material_master_id = $get('material_master_id');
+
+                                                                                    $plant_id = $get('plant_id');
+
+                                                                                    $to_plant_id = $get('to_plant_id');
+
+                                                                                    $quantity = $get('quantity');
+
+                                                                                    $set('movement_type_id', $movement_type_id->movement_type_id);
+
+                                                                                    $journal_entries = $get('journalEntries') ?? [];
+
+                                                                                    $accountdeterminations = AccountDeterminationItem::where('account_determination_id', $accountdeterminationdata->id)->where('debit_credit_id', 2)->where('is_active', 1)->get();
+
+                                                                                    $journal_entries_value = $accountdeterminations->map(function ($accountdetermination) use ($module_aaa_id, $material_master_id, $quantity, $plant_id, $to_plant_id) {
+                                                                                        return [
+                                                                                            'debit_credit_id' => $accountdetermination->debit_credit_id,
+                                                                                            'gl_account_group_id' => $accountdetermination->gl_account_group_id,
+                                                                                            'gl_account_id' => $accountdetermination->gl_account_id,
+                                                                                            'quantity' => $quantity,
+                                                                                            'module_aaa_id' => $module_aaa_id->module_aaa_id,
+                                                                                            'material_master_id' => $material_master_id,
+                                                                                            'plant_id' => $plant_id,
+                                                                                        ];
+                                                                                    })->toArray();
+
+                                                                                    // dd($accountdeterminationdata);
                                                                 
-                                                                            array_replace(
-                                                                                $journal_entries,
-                                                                                ...$journal_entries_value
-                                                                            );
+                                                                                    array_push(
+                                                                                        $journal_entries,
+                                                                                        ...$journal_entries_value
+                                                                                    );
 
-                                                                            return $set('journalEntries', $journal_entries_value);
+                                                                                    return $set('journalEntries', $journal_entries_value);
+
+                                                                                } elseif ($module_aaa_id->is_stock_transfer == 0) {
+                                                                                    $transaction_type_id = $get('../../transaction_type_id');
+
+                                                                                    $document_type_id = TransactionType::where('id', $transaction_type_id)?->first();
+
+                                                                                    $module_aaa_id = DocumentType::where('id', $document_type_id->document_type_id)?->first();
+
+                                                                                    $material_type_id = MaterialMaster::where('id', $get('material_master_id'))?->first();
+
+                                                                                    $accountdeterminationdata = AccountDetermination::where('module_aaa_id', $module_aaa_id->module_aaa_id)
+                                                                                        ->where('document_type_id', $document_type_id->document_type_id)
+                                                                                        ->where('transaction_type_id', $transaction_type_id)
+                                                                                        ->where('material_type_id', $material_type_id->material_type_id)->first();
+
+                                                                                    $movement_type_id = AccountDetermination::where('module_aaa_id', $module_aaa_id->module_aaa_id)
+                                                                                        ->where('document_type_id', $document_type_id->document_type_id)
+                                                                                        ->where('transaction_type_id', $transaction_type_id)
+                                                                                        ->where('material_type_id', $material_type_id->material_type_id)->first();
+
+                                                                                    $material_master_id = $get('material_master_id');
+
+                                                                                    $plant_id = $get('plant_id');
+
+                                                                                    $to_plant_id = $get('to_plant_id');
+
+                                                                                    $quantity = $get('quantity');
+
+                                                                                    $set('movement_type_id', $movement_type_id->movement_type_id);
+
+                                                                                    $journal_entries = $get('journalEntries') ?? [];
+
+                                                                                    $accountdeterminations = AccountDeterminationItem::where('account_determination_id', $accountdeterminationdata->id)->where('is_active', 1)->get();
+
+
+                                                                                    $journal_entries_value = $accountdeterminations->map(function ($accountdetermination) use ($module_aaa_id, $material_master_id, $quantity, $plant_id, $to_plant_id) {
+                                                                                        return [
+                                                                                            'debit_credit_id' => $accountdetermination->debit_credit_id,
+                                                                                            'gl_account_group_id' => $accountdetermination->gl_account_group_id,
+                                                                                            'gl_account_id' => $accountdetermination->gl_account_id,
+                                                                                            'quantity' => $quantity,
+                                                                                            'module_aaa_id' => $module_aaa_id->module_aaa_id,
+                                                                                            'material_master_id' => $material_master_id,
+                                                                                            'plant_id' => $plant_id,
+                                                                                        ];
+                                                                                    })->toArray();
+
+                                                                                    // dd($accountdeterminationdata);
+                                                                
+                                                                                    array_replace(
+                                                                                        $journal_entries,
+                                                                                        ...$journal_entries_value
+                                                                                    );
+
+                                                                                    return $set('journalEntries', $journal_entries_value);
+                                                                                }
+
+                                                                            } elseif ($module_aaa_id->is_matdoc_zero_qty_check == 0) {
+
+                                                                                $transaction_type_id = $get('../../transaction_type_id');
+
+                                                                                $document_type_id = TransactionType::where('id', $transaction_type_id)?->first();
+
+                                                                                $module_aaa_id = DocumentType::where('id', $document_type_id->document_type_id)?->first();
+
+                                                                                if ($module_aaa_id->is_stock_transfer == 1) {
+                                                                                    $transaction_type_id = $get('../../transaction_type_id');
+
+                                                                                    $document_type_id = TransactionType::where('id', $transaction_type_id)?->first();
+
+                                                                                    $module_aaa_id = DocumentType::where('id', $document_type_id->document_type_id)?->first();
+
+                                                                                    $material_type_id = MaterialMaster::where('id', $get('material_master_id'))?->first();
+
+                                                                                    $accountdeterminationdata = AccountDetermination::where('module_aaa_id', $module_aaa_id->module_aaa_id)
+                                                                                        ->where('document_type_id', $document_type_id->document_type_id)
+                                                                                        ->where('transaction_type_id', $transaction_type_id)
+                                                                                        ->where('material_type_id', $material_type_id->material_type_id)->first();
+
+                                                                                    $movement_type_id = AccountDetermination::where('module_aaa_id', $module_aaa_id->module_aaa_id)
+                                                                                        ->where('document_type_id', $document_type_id->document_type_id)
+                                                                                        ->where('transaction_type_id', $transaction_type_id)
+                                                                                        ->where('material_type_id', $material_type_id->material_type_id)->first();
+
+                                                                                    $material_master_id = $get('material_master_id');
+
+                                                                                    $plant_id = $get('plant_id');
+
+                                                                                    $to_plant_id = $get('to_plant_id');
+
+                                                                                    $quantity = $get('quantity');
+
+                                                                                    $set('movement_type_id', $movement_type_id->movement_type_id);
+
+                                                                                    $journal_entries = $get('journalEntries') ?? [];
+
+                                                                                    $accountdeterminations = AccountDeterminationItem::where('account_determination_id', $accountdeterminationdata->id)->where('debit_credit_id', 2)->where('is_active', 1)->get();
+
+                                                                                    $journal_entries_value = $accountdeterminations->map(function ($accountdetermination) use ($module_aaa_id, $material_master_id, $quantity, $plant_id, $to_plant_id) {
+                                                                                        return [
+                                                                                            'debit_credit_id' => $accountdetermination->debit_credit_id,
+                                                                                            'gl_account_group_id' => $accountdetermination->gl_account_group_id,
+                                                                                            'gl_account_id' => $accountdetermination->gl_account_id,
+                                                                                            'quantity' => $quantity,
+                                                                                            'module_aaa_id' => $module_aaa_id->module_aaa_id,
+                                                                                            'material_master_id' => $material_master_id,
+                                                                                            'plant_id' => $plant_id,
+                                                                                        ];
+                                                                                    })->toArray();
+
+                                                                                    // dd($accountdeterminationdata);
+                                                                
+                                                                                    array_push(
+                                                                                        $journal_entries,
+                                                                                        ...$journal_entries_value
+                                                                                    );
+
+                                                                                    return $set('journalEntries', $journal_entries_value);
+
+                                                                                } elseif ($module_aaa_id->is_stock_transfer == 0) {
+                                                                                    $transaction_type_id = $get('../../transaction_type_id');
+
+                                                                                    $document_type_id = TransactionType::where('id', $transaction_type_id)?->first();
+
+                                                                                    $module_aaa_id = DocumentType::where('id', $document_type_id->document_type_id)?->first();
+
+                                                                                    $material_type_id = MaterialMaster::where('id', $get('material_master_id'))?->first();
+
+                                                                                    $accountdeterminationdata = AccountDetermination::where('module_aaa_id', $module_aaa_id->module_aaa_id)
+                                                                                        ->where('document_type_id', $document_type_id->document_type_id)
+                                                                                        ->where('transaction_type_id', $transaction_type_id)
+                                                                                        ->where('material_type_id', $material_type_id->material_type_id)->first();
+
+                                                                                    $movement_type_id = AccountDetermination::where('module_aaa_id', $module_aaa_id->module_aaa_id)
+                                                                                        ->where('document_type_id', $document_type_id->document_type_id)
+                                                                                        ->where('transaction_type_id', $transaction_type_id)
+                                                                                        ->where('material_type_id', $material_type_id->material_type_id)->first();
+
+                                                                                    $material_master_id = $get('material_master_id');
+
+                                                                                    $plant_id = $get('plant_id');
+
+                                                                                    $to_plant_id = $get('to_plant_id');
+
+                                                                                    $quantity = $get('quantity');
+
+                                                                                    $set('movement_type_id', $movement_type_id->movement_type_id);
+
+                                                                                    $journal_entries = $get('journalEntries') ?? [];
+
+                                                                                    $accountdeterminations = AccountDeterminationItem::where('account_determination_id', $accountdeterminationdata->id)->where('is_active', 1)->get();
+
+
+                                                                                    $journal_entries_value = $accountdeterminations->map(function ($accountdetermination) use ($module_aaa_id, $material_master_id, $quantity, $plant_id, $to_plant_id) {
+                                                                                        return [
+                                                                                            'debit_credit_id' => $accountdetermination->debit_credit_id,
+                                                                                            'gl_account_group_id' => $accountdetermination->gl_account_group_id,
+                                                                                            'gl_account_id' => $accountdetermination->gl_account_id,
+                                                                                            'quantity' => $quantity,
+                                                                                            'module_aaa_id' => $module_aaa_id->module_aaa_id,
+                                                                                            'material_master_id' => $material_master_id,
+                                                                                            'plant_id' => $plant_id,
+                                                                                        ];
+                                                                                    })->toArray();
+
+                                                                                    // dd($accountdeterminationdata);
+                                                                
+                                                                                    array_replace(
+                                                                                        $journal_entries,
+                                                                                        ...$journal_entries_value
+                                                                                    );
+
+                                                                                    return $set('journalEntries', $journal_entries_value);
+                                                                                }
+
+                                                                            }
                                                                         }),
 
-                                                                    Select::make('movement_type_id')
-                                                                        ->label('Movement Type')
-                                                                        ->options(MovementType::where('is_active', 1)->pluck('movement_type_desc', 'id'))
-                                                                        ->required()
-                                                                        ->disabled()
-                                                                        ->dehydrated()
-                                                                        ->native(false),
+                                                                    Hidden::make('movement_type_id'),
                                                                 ]),
 
+                                                            Select::make('to_plant_id')
+                                                                ->label('To Plant')
+                                                                ->options(function (Get $get) {
+
+                                                                    $material_master_id = $get('material_master_id');
+
+                                                                    $getmaterialmasterplant = MaterialMasterPlant::where('material_master_id', $material_master_id)->pluck('plant_id');
+
+                                                                    return (Plant::where('is_active', 1)->whereIn('id', $getmaterialmasterplant)->whereNotIn('id', array($get('plant_id')))->pluck('plant_name', 'id'));
+                                                                })
+                                                                ->required()
+                                                                ->disabled(fn(Get $get) =>
+                                                                    is_null($get('plant_id')))
+                                                                ->hidden(function (Get $get) {
+
+                                                                    $transaction_type_id = $get('../../transaction_type_id');
+
+                                                                    $document_type_id = TransactionType::where('id', $transaction_type_id)?->first();
+
+                                                                    $module_aaa_id = DocumentType::where('id', $document_type_id->document_type_id)?->first();
+
+                                                                    if ($module_aaa_id->is_stock_transfer == 1) {
+                                                                        return false;
+                                                                    } elseif ($module_aaa_id->is_stock_transfer == 0) {
+                                                                        return true;
+                                                                    }
+                                                                })
+                                                                ->native(false)
+                                                                ->live()
+                                                                ->afterStateUpdated(function (Get $get, Set $set) {
+
+                                                                    $transaction_type_id = $get('../../transaction_type_id');
+
+                                                                    $document_type_id = TransactionType::where('id', $transaction_type_id)?->first();
+
+                                                                    $module_aaa_id = DocumentType::where('id', $document_type_id->document_type_id)?->first();
+
+                                                                    $material_type_id = MaterialMaster::where('id', $get('material_master_id'))?->first();
+
+                                                                    $accountdeterminationdata = AccountDetermination::where('module_aaa_id', $module_aaa_id->module_aaa_id)
+                                                                        ->where('document_type_id', $document_type_id->document_type_id)
+                                                                        ->where('transaction_type_id', $transaction_type_id)
+                                                                        ->where('material_type_id', $material_type_id->material_type_id)->first();
+
+                                                                    $movement_type_id = AccountDetermination::where('module_aaa_id', $module_aaa_id->module_aaa_id)
+                                                                        ->where('document_type_id', $document_type_id->document_type_id)
+                                                                        ->where('transaction_type_id', $transaction_type_id)
+                                                                        ->where('material_type_id', $material_type_id->material_type_id)->first();
+
+                                                                    $material_master_id = $get('material_master_id');
+
+                                                                    $plant_id = $get('plant_id');
+
+                                                                    $to_plant_id = $get('to_plant_id');
+
+                                                                    $quantity = $get('quantity');
+
+                                                                    $set('movement_type_id', $movement_type_id->movement_type_id);
+
+                                                                    $journal_entries = $get('journalEntries') ?? [];
+
+                                                                    $accountdeterminations = AccountDeterminationItem::where('account_determination_id', $accountdeterminationdata->id)->where('debit_credit_id', 1)->where('is_active', 1)->get();
+
+                                                                    $journal_entries_value = $accountdeterminations->map(function ($accountdetermination) use ($module_aaa_id, $material_master_id, $quantity, $plant_id, $to_plant_id) {
+                                                                        return [
+                                                                            'debit_credit_id' => $accountdetermination->debit_credit_id,
+                                                                            'gl_account_group_id' => $accountdetermination->gl_account_group_id,
+                                                                            'gl_account_id' => $accountdetermination->gl_account_id,
+                                                                            'quantity' => $quantity,
+                                                                            'module_aaa_id' => $module_aaa_id->module_aaa_id,
+                                                                            'material_master_id' => $material_master_id,
+                                                                            'plant_id' => $to_plant_id,
+                                                                        ];
+                                                                    })->toArray();
+
+                                                                    array_push(
+                                                                        $journal_entries,
+                                                                        ...$journal_entries_value
+                                                                    );
+
+                                                                    return $set('journalEntries', $journal_entries);
+                                                                }),
+
                                                         ]),
+
+                                                ]),
+
+                                            Tab::make('Item Text')
+                                                // ->icon('heroicon-o-numbered-list')
+                                                ->schema([
+
+                                                    RichEditor::make('text_item')
+                                                        // ->label('Business Partner')
+                                                        ->hiddenLabel(),
 
                                                 ]),
 
