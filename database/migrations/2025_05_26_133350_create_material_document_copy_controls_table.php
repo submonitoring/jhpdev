@@ -5,45 +5,45 @@ use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration {
-    /**
-     * Run the migrations.
-     */
-    public function up(): void
-    {
-        Schema::create('material_document_copy_controls', function (Blueprint $table) {
-            $table->id();
+    // /**
+    //  * Run the migrations.
+    //  */
+    // public function up(): void
+    // {
+    //     Schema::create('material_document_copy_controls', function (Blueprint $table) {
+    //         $table->id();
 
-            $table->foreignId('transaction_type_id')->nullable()
-                ->constrained()
-                ->cascadeOnUpdate()
-                ->nullOnDelete();
+    //         $table->foreignId('transaction_type_id')->nullable()
+    //             ->constrained()
+    //             ->cascadeOnUpdate()
+    //             ->nullOnDelete();
 
-            $table->foreignId('transaction_reference_id')->nullable()
-                ->constrained()
-                ->cascadeOnUpdate()
-                ->nullOnDelete();
+    //         $table->foreignId('transaction_reference_id')->nullable()
+    //             ->constrained()
+    //             ->cascadeOnUpdate()
+    //             ->nullOnDelete();
 
-            $table->foreignId('reference_transaction_type_id')->nullable()
-                ->constrained()
-                ->cascadeOnUpdate()
-                ->nullOnDelete();
+    //         $table->foreignId('reference_transaction_type_id')->nullable()
+    //             ->constrained()
+    //             ->cascadeOnUpdate()
+    //             ->nullOnDelete();
 
-            $table->ulid('unique')->nullable();
-            $table->string('record_title')->nullable();
+    //         $table->ulid('unique')->nullable();
+    //         $table->string('record_title')->nullable();
 
-            $table->boolean('is_active')->nullable();
-            $table->string('created_by')->nullable();
-            $table->string('updated_by')->nullable();
+    //         $table->boolean('is_active')->nullable();
+    //         $table->string('created_by')->nullable();
+    //         $table->string('updated_by')->nullable();
 
-            $table->timestamps();
-        });
-    }
+    //         $table->timestamps();
+    //     });
+    // }
 
-    /**
-     * Reverse the migrations.
-     */
-    public function down(): void
-    {
-        Schema::dropIfExists('material_document_copy_controls');
-    }
+    // /**
+    //  * Reverse the migrations.
+    //  */
+    // public function down(): void
+    // {
+    //     Schema::dropIfExists('material_document_copy_controls');
+    // }
 };
