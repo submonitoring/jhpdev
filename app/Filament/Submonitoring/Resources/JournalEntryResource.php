@@ -81,59 +81,28 @@ class JournalEntryResource extends Resource
     {
         return $table
             ->columns([
-                Tables\Columns\TextColumn::make('sort')
-                    ->searchable(),
-                Tables\Columns\TextColumn::make('materialDocumentItem.material_document_id')
-                    ->sortable(),
 
                 Tables\Columns\TextColumn::make('materialDocumentItem.materialDocument.document_number')
                     ->searchable(isIndividual: true, isGlobal: false)
                     ->sortable(),
-                Tables\Columns\TextColumn::make('material_document_item_id')
-                    ->sortable(),
 
-                Tables\Columns\TextColumn::make('material_master_id')
-                    ->searchable(isIndividual: true, isGlobal: false)
-                    ->sortable(),
                 Tables\Columns\TextColumn::make('materialMaster.material_number')
                     ->searchable(isIndividual: true, isGlobal: false)
                     ->sortable(),
 
                 Tables\Columns\TextColumn::make('materialMaster.material_desc')
+                    ->searchable(isIndividual: true, isGlobal: false)
                     ->sortable(),
-                Tables\Columns\TextColumn::make('module_aaa_id')
+
+                Tables\Columns\TextColumn::make('debitCredit.debit_credit')
                     ->numeric()
                     ->sortable(),
-                Tables\Columns\TextColumn::make('debit_credit_id')
-                    ->numeric()
-                    ->sortable(),
-                Tables\Columns\TextColumn::make('gl_account_id')
+                Tables\Columns\TextColumn::make('glAccount.gl_account_name')
                     ->numeric()
                     ->sortable(),
                 Tables\Columns\TextColumn::make('quantity')
                     ->numeric()
                     ->sortable(),
-                Tables\Columns\TextColumn::make('amount')
-                    ->numeric()
-                    ->sortable(),
-                Tables\Columns\TextColumn::make('unique')
-                    ->searchable(),
-                Tables\Columns\TextColumn::make('record_title')
-                    ->searchable(),
-                Tables\Columns\IconColumn::make('is_active')
-                    ->boolean(),
-                Tables\Columns\TextColumn::make('created_by')
-                    ->searchable(),
-                Tables\Columns\TextColumn::make('updated_by')
-                    ->searchable(),
-                Tables\Columns\TextColumn::make('created_at')
-                    ->dateTime()
-                    ->sortable()
-                    ->toggleable(isToggledHiddenByDefault: true),
-                Tables\Columns\TextColumn::make('updated_at')
-                    ->dateTime()
-                    ->sortable()
-                    ->toggleable(isToggledHiddenByDefault: true),
             ])
             ->filters([
                 //

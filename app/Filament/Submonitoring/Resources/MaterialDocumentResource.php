@@ -820,7 +820,14 @@ class MaterialDocumentResource extends Resource
                                                         ->columnSpan('full')
                                                         ->defaultItems(0)
                                                         ->addable(false)
-                                                        ->orderColumn('sort'),
+                                                        ->orderColumn('sort')
+                                                        ->deletable(function () {
+                                                            if (auth()->user()->id == 1) {
+                                                                return true;
+                                                            } else {
+                                                                return false;
+                                                            }
+                                                        }),
 
                                                     // Repeater::make('journalEntries')
                                                     //     ->label(' ')
@@ -866,14 +873,6 @@ class MaterialDocumentResource extends Resource
         ];
     }
 
-    // public static function infolist(Infolist $infolist): Infolist
-    // {
-    //     return $infolist
-    //         ->schema([
-    //             TextEntry::make('nama'),
-    //         ]);
-    // }
-
     public static function table(Table $table): Table
     {
         return $table
@@ -882,6 +881,7 @@ class MaterialDocumentResource extends Resource
                 ColumnGroup::make('Material Document', [
                     TextColumn::make('document_number')
                         ->label('Document Number')
+                        ->searchable(isIndividual: true, isGlobal: false)
                         ->copyable()
                         ->copyableState(function ($state) {
                             return ($state);
@@ -891,6 +891,7 @@ class MaterialDocumentResource extends Resource
 
                     TextColumn::make('document_date')
                         ->label('Document Date')
+                        ->searchable(isIndividual: true, isGlobal: false)
                         ->copyable()
                         ->copyableState(function ($state) {
                             return ($state);
@@ -900,6 +901,7 @@ class MaterialDocumentResource extends Resource
 
                     TextColumn::make('transactionType.transaction_type_desc')
                         ->label('Transaction Type')
+                        ->searchable(isIndividual: true, isGlobal: false)
                         ->copyable()
                         ->copyableState(function ($state) {
                             return ($state);
@@ -912,6 +914,7 @@ class MaterialDocumentResource extends Resource
 
                     TextColumn::make('materialDocumentItems.materialMaster.material_desc')
                         ->label('Items')
+                        ->searchable(isIndividual: true, isGlobal: false)
                         ->listWithLineBreaks()
                         ->bulleted(),
 
@@ -922,6 +925,7 @@ class MaterialDocumentResource extends Resource
 
                     TextColumn::make('materialDocumentItems.plant.plant_name')
                         ->label('Plant')
+                        ->searchable(isIndividual: true, isGlobal: false)
                         ->listWithLineBreaks()
                         ->bulleted(),
 
