@@ -358,8 +358,23 @@ class MaterialDocumentResource extends Resource
                                                                         ->numeric()
                                                                         ->required()
                                                                         ->live()
-                                                                        ->disabled(fn(Get $get) =>
-                                                                            is_null($get('plant_id')))
+                                                                        // ->disabled(fn(Get $get, $livewire) =>
+                                                                        //     is_null($get('plant_id')) || (!is_null($livewire->record) && $get('transa')))
+                                                                        ->disabled(function (Get $get, $livewire) {
+
+                                                                            $transaction_type_id = $get('../../transaction_type_id');
+
+                                                                            $document_type_id = TransactionType::where('id', $transaction_type_id)?->first();
+
+                                                                            $module_aaa_id = DocumentType::where('id', $document_type_id->document_type_id)?->first();
+
+                                                                            if (is_null($get('plant_id')) || (!is_null($livewire->record) && $module_aaa_id->is_matdoc_zero_qty_check == 1)) {
+                                                                                return true;
+                                                                            } elseif (is_null($get('plant_id')) || !(!is_null($livewire->record) && $module_aaa_id->is_matdoc_zero_qty_check == 1)) {
+                                                                                return false;
+                                                                            }
+
+                                                                        })
                                                                         ->suffix(function (Get $get) {
 
                                                                             $getmaterial_master_id = MaterialMaster::where('id', $get('material_master_id'))->first();
