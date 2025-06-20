@@ -56,4 +56,16 @@ class CreateMaterialDocument extends CreateRecord
             ->modalDescription('Do you confirm that the data is correct?')
             ->modalSubmitActionLabel('Create');
     }
+
+    // $collection = collect($livewire->data['materialDocumentItems']);
+
+    //             $getarraykey = $collection->keys();
+
+    //             $arraykey = $getarraykey->get(0);
+
+    //             $journalentries = collect($livewire->data['materialDocumentItems'][$arraykey]['journalEntries']);
+
+    //             $values = $journalentries->flatten();
+
+    //             dd($values->values()->all());
 }

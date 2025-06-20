@@ -303,7 +303,7 @@ class MaterialDocumentResource extends Resource
                                                                 // ->preload()
                                                                 ->searchable() // Don't forget to make it searchable otherwise there is no choices.js magic!
                                                                 ->getSearchResultsUsing(function (string $search) {
-                                                                    $materials = MaterialMaster::where('material_desc', 'like', "%{$search}%")->limit(50)->get();
+                                                                    $materials = MaterialMaster::where('is_active', 1)->where('material_desc', 'like', "%{$search}%")->limit(50)->get();
 
                                                                     return $materials->mapWithKeys(function ($materialmaster) {
                                                                         return [$materialmaster->getKey() => static::getCleanOptionString($materialmaster)];
